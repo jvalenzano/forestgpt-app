@@ -67,7 +67,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const processedContent = await processContent(scrapedContent);
       
       // 4. Generate response with LLM
-      const { response, sources } = await generateResponse(message, processedContent);
+      const { response, sources, images } = await generateResponse(message, processedContent);
       
       // Store bot message
       const botMessage = await storage.createMessage({
@@ -75,6 +75,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         content: response,
         role: "bot",
         sources,
+        images,
       });
       
       // Store debug information if debug mode is enabled
@@ -115,6 +116,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           content: botMessage.content,
           timestamp: botMessage.timestamp,
           sources: botMessage.sources,
+          images: botMessage.images || [],
         },
         debugInfo,
       });

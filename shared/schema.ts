@@ -25,6 +25,7 @@ export const messages = pgTable("messages", {
   role: text("role").notNull(), // 'user', 'bot', 'system'
   timestamp: timestamp("timestamp").defaultNow().notNull(),
   sources: jsonb("sources").default([]),
+  images: jsonb("images").default([]),
 });
 
 export const insertMessageSchema = createInsertSchema(messages).pick({
@@ -32,6 +33,7 @@ export const insertMessageSchema = createInsertSchema(messages).pick({
   content: true,
   role: true,
   sources: true,
+  images: true,
 });
 
 export type InsertMessage = z.infer<typeof insertMessageSchema>;

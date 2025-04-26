@@ -71,7 +71,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
   if (isUser) {
     return (
       <motion.div 
-        className="flex items-start justify-end space-x-3"
+        className="flex items-start justify-end space-x-3 max-w-[95%] md:max-w-[85%] lg:max-w-[75%] ml-auto px-2 md:px-4"
         initial="initial"
         animate="animate"
         variants={{
@@ -80,21 +80,21 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
         }}
       >
         <motion.div 
-          className="user-message"
+          className="user-message bg-amber-100 p-4 rounded-lg rounded-tr-none shadow-sm border border-amber-300"
           variants={bubbleVariants}
         >
           <motion.div 
-            className="text-sm"
+            className="text-sm text-gray-800"
             variants={contentVariants}
           >
             {message.content}
           </motion.div>
         </motion.div>
         <motion.div 
-          className="user-avatar"
+          className="user-avatar bg-amber-200 w-8 h-8 rounded-full flex items-center justify-center"
           variants={iconVariants}
         >
-          <i className="fas fa-user"></i>
+          <i className="fas fa-user text-amber-800"></i>
         </motion.div>
       </motion.div>
     );
@@ -105,7 +105,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
   
   return (
     <motion.div 
-      className="flex items-start space-x-3"
+      className="flex items-start space-x-3 max-w-[95%] md:max-w-[85%] lg:max-w-[75%] px-2 md:px-4"
       initial="initial"
       animate="animate"
       variants={{
@@ -114,13 +114,13 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
       }}
     >
       <motion.div 
-        className="bot-avatar"
+        className="bot-avatar bg-emerald-200 w-8 h-8 rounded-full flex items-center justify-center"
         variants={iconVariants}
       >
-        <i className="fas fa-tree"></i>
+        <i className="fas fa-tree text-emerald-800"></i>
       </motion.div>
       <motion.div 
-        className="bot-message"
+        className="bot-message bg-emerald-100 p-4 rounded-lg rounded-tl-none shadow-sm border border-emerald-300"
         variants={bubbleVariants}
       >
         <motion.div 
@@ -148,51 +148,46 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
           variants={contentVariants}
         />
         
-        {/* Image gallery for bot responses */}
+        {/* Image display for bot responses - only showing 1 most relevant image */}
         {message.role === "bot" && message.images && message.images.length > 0 && (
           <motion.div 
-            className="mt-4 space-y-3"
+            className="mt-4"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}
           >
-            <div className="grid grid-cols-1 gap-3">
-              {message.images.map((image, index) => (
-                <motion.div 
-                  key={index}
-                  className="relative overflow-hidden rounded-md shadow-sm border border-forest-100"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3 + (index * 0.2) }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <a 
-                    href={image.fullUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="block"
-                    title={image.alt}
-                  >
-                    <img 
-                      src={image.fullUrl} 
-                      alt={image.alt} 
-                      className="w-full h-auto max-h-[300px] object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.onerror = null;
-                        target.src = "https://www.fs.usda.gov/sites/default/files/media_wysiwyg/fs_shield.png";
-                        target.className = "w-auto h-auto max-h-[80px] mx-auto my-4";
-                      }}
-                    />
-                    {image.alt && (
-                      <div className="bg-black bg-opacity-40 text-white text-xs p-2 absolute bottom-0 left-0 right-0">
-                        {image.alt}
-                      </div>
-                    )}
-                  </a>
-                </motion.div>
-              ))}
-            </div>
+            <motion.div 
+              className="relative overflow-hidden rounded-md shadow-sm border border-forest-100 max-w-md mx-auto"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <a 
+                href={message.images[0].fullUrl} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="block"
+                title={message.images[0].alt}
+              >
+                <img 
+                  src={message.images[0].fullUrl} 
+                  alt={message.images[0].alt} 
+                  className="w-full h-auto max-h-[250px] object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://www.fs.usda.gov/sites/default/files/media_wysiwyg/fs_shield.png";
+                    target.className = "w-auto h-auto max-h-[80px] mx-auto my-4";
+                  }}
+                />
+                {message.images[0].alt && (
+                  <div className="bg-black bg-opacity-60 text-white text-xs p-2 absolute bottom-0 left-0 right-0">
+                    {message.images[0].alt}
+                  </div>
+                )}
+              </a>
+            </motion.div>
           </motion.div>
         )}
         

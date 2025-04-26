@@ -482,33 +482,51 @@ export async function scrapRelevantContent(
       }
     });
     
-    // Deduplicate images by URL and limit to top 3 most relevant
+    // Deduplicate images by URL and limit to only the most relevant one
     const uniqueImageUrls = new Set<string>();
     const dedupedImages = allImages
       .filter(img => {
+        // Skip if no alt text or very short alt text (likely not informative)
+        if (!img.alt || img.alt.length < 10) {
+          return false;
+        }
+        
+        // Skip if duplicate URL
         if (uniqueImageUrls.has(img.fullUrl)) {
           return false;
         }
+        
+        // Skip images with generic terms that might not be relevant
+        const genericTerms = ['icon', 'logo', 'banner', 'button', 'thumbnail'];
+        if (genericTerms.some(term => img.alt.toLowerCase().includes(term))) {
+          return false;
+        }
+        
         uniqueImageUrls.add(img.fullUrl);
         return true;
       })
-      // Sort images by relevance - prioritize those with longer alt text that matches the query
-      .sort((a, b) => {
-        const aRelevance = query.toLowerCase().split(' ').filter(word => 
-          a.alt.toLowerCase().includes(word)
-        ).length;
-        const bRelevance = query.toLowerCase().split(' ').filter(word => 
-          b.alt.toLowerCase().includes(word)
+      // Calculate relevance score based on query match and context
+      .map(img => {
+        // Count how many query words appear in the alt text
+        const queryWords = query.toLowerCase().split(' ').filter(w => w.length > 3);
+        const matchScore = queryWords.filter(word => 
+          img.alt.toLowerCase().includes(word)
         ).length;
         
-        if (aRelevance !== bRelevance) {
-          return bRelevance - aRelevance;
-        }
+        // Bonus for longer, more descriptive alt text
+        const descriptionScore = Math.min(img.alt.length / 20, 3);
         
-        // If same relevance score, prefer longer alt text
-        return b.alt.length - a.alt.length;
+        // Calculate final score
+        const relevanceScore = matchScore * 2 + descriptionScore;
+        
+        return { ...img, relevanceScore };
       })
-      .slice(0, 3); // Limit to 3 most relevant images
+      // Sort by relevance score
+      .sort((a, b) => b.relevanceScore - a.relevanceScore)
+      // Take only the most relevant image
+      .slice(0, 1)
+      // Remove the temporary score property
+      .map(({ relevanceScore, ...img }) => img);
     
     console.log(`Found ${dedupedImages.length} unique relevant images`);
     

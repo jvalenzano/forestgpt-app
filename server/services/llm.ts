@@ -202,14 +202,50 @@ export async function generateResponse(
     // Format source URLs
     const sources: Source[] = filteredSourceUrls.map(url => ({ url }));
     
-    // Get the images from the processed data
-    const { images } = processedData;
+    // Only include images if they're from sources we actually used in the response
+    // and if we have at least one relevant source
+    let relevantImages: ImageInfo[] = [];
+    if (sources.length > 0 && processedData.images.length > 0) {
+      // Extract domains from sources we used
+      const sourceDomains = sources.map(source => {
+        try {
+          const url = new URL(source.url);
+          return url.hostname;
+        } catch {
+          return "";
+        }
+      }).filter(Boolean);
+      
+      // Only include images if they're from domains we actually used in the response
+      relevantImages = processedData.images.filter(image => {
+        try {
+          const imageUrl = new URL(image.fullUrl);
+          return sourceDomains.some(domain => imageUrl.hostname.includes(domain));
+        } catch {
+          return false;
+        }
+      });
+      
+      // If we have a relevant image and the query is likely to benefit from visual content,
+      // include it; otherwise, don't show any images
+      const visualTopics = ['forest', 'tree', 'wildlife', 'landscape', 'hiking', 'camping', 
+                           'trail', 'park', 'fire', 'conservation', 'map', 'diagram'];
+                           
+      const queryHasVisualTopic = visualTopics.some(topic => 
+        query.toLowerCase().includes(topic)
+      );
+      
+      // If query doesn't seem related to visual topics, don't show images
+      if (!queryHasVisualTopic) {
+        relevantImages = [];
+      }
+    }
     
     return {
       response: generatedResponse,
       sources,
       llmDetails: updatedLLMDetails,
-      images
+      images: relevantImages
     };
   } catch (error) {
     console.error("Error generating response:", error);

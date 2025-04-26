@@ -183,17 +183,28 @@ function extractUrls(content: string): string[] {
 }
 
 /**
+ * Image information from scraping
+ */
+export interface ImageInfo {
+  src: string;
+  alt: string;
+  fullUrl: string;
+}
+
+/**
  * Process content for the LLM
  */
 export async function processContent(scrapedContent: {
   content: string;
   urls: Array<{ url: string; status: string }>;
+  images?: ImageInfo[];
 }): Promise<{
   processedContent: string;
   sourceUrls: string[];
   processedSize: number;
   chunks: string[];
   llmDetails: LLMDetails;
+  images: ImageInfo[];
 }> {
   try {
     // Clean the HTML content
@@ -227,12 +238,16 @@ export async function processContent(scrapedContent: {
       processingTime: 0 // Will be updated during LLM processing
     };
     
+    // Get images from scraped content or use empty array if none provided
+    const images = scrapedContent.images || [];
+    
     return {
       processedContent: cleanedText,
       sourceUrls,
       processedSize,
       chunks,
-      llmDetails
+      llmDetails,
+      images
     };
   } catch (error) {
     console.error("Error processing content:", error);
@@ -245,7 +260,8 @@ export async function processContent(scrapedContent: {
         model: "gpt-4o",
         tokens: { input: 0, output: 0 },
         processingTime: 0
-      }
+      },
+      images: []
     };
   }
 }

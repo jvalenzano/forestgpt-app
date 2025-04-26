@@ -220,9 +220,104 @@ function generateSearchUrls(query: string, classification: { category: string; b
 }
 
 /**
+ * Image information extracted from HTML
+ */
+interface ImageInfo {
+  src: string;
+  alt: string;
+  fullUrl: string;
+}
+
+/**
+ * Extract images from HTML
+ */
+function extractImages(html: string, baseUrl: string): ImageInfo[] {
+  try {
+    const $ = cheerio.load(html);
+    const images: ImageInfo[] = [];
+    const seenUrls = new Set<string>();
+    
+    // Find all images in the content area
+    const mainContentSelectors = [
+      'main img', 
+      '#main img', 
+      '.main img', 
+      '#content img', 
+      '.content img', 
+      'article img', 
+      '.article img', 
+      '[role="main"] img',
+      '.field--name-body img',
+      '.usa-prose img',
+      '.page-content img',
+      '.main-content img',
+      '.align-center',  // Common class for Forest Service images
+      'img[width][height]', // Images with dimensions are usually content images
+      'img[class*="align"]' // Images with alignment classes
+    ];
+    
+    // Process each image within these selectors
+    mainContentSelectors.forEach(selector => {
+      $(selector).each((_, img) => {
+        const $img = $(img);
+        const src = $img.attr('src');
+        const alt = $img.attr('alt') || '';
+        
+        // Skip if no source or if it's a small icon (common class patterns for icons)
+        if (!src || 
+            $img.hasClass('icon') || 
+            $img.hasClass('logo') ||
+            src.includes('icon') || 
+            src.includes('logo') || 
+            alt.toLowerCase().includes('icon') || 
+            alt.toLowerCase().includes('logo')) {
+          return;
+        }
+        
+        // Create full URL
+        let fullUrl = src;
+        if (src.startsWith('/')) {
+          // Convert relative URL to absolute
+          const urlObj = new URL(baseUrl);
+          fullUrl = `${urlObj.origin}${src}`;
+        } else if (!src.startsWith('http')) {
+          // Handle other relative paths
+          fullUrl = new URL(src, baseUrl).toString();
+        }
+        
+        // Skip duplicate images
+        if (seenUrls.has(fullUrl)) {
+          return;
+        }
+        
+        // Prioritize images with descriptive alt text and skip tiny images
+        const $parent = $img.parent();
+        if (alt.length > 10 && 
+            !$parent.hasClass('icon') && 
+            !$parent.hasClass('logo')) {
+          images.push({ src, alt, fullUrl });
+          seenUrls.add(fullUrl);
+        }
+      });
+    });
+    
+    // Sort images by relevance (prefer images with more descriptive alt text)
+    return images
+      .sort((a, b) => b.alt.length - a.alt.length)
+      .slice(0, 5); // Limit to 5 most relevant images
+  } catch (error) {
+    console.error("Error extracting images:", error);
+    return [];
+  }
+}
+
+/**
  * Extract main content from HTML
  */
-function extractMainContent(html: string): string {
+function extractMainContent(html: string, baseUrl: string = ""): {
+  content: string;
+  images: ImageInfo[];
+} {
   try {
     const $ = cheerio.load(html);
     console.log("Loaded HTML with cheerio");
@@ -230,6 +325,10 @@ function extractMainContent(html: string): string {
     // Remove navigation, headers, footers, scripts, ads
     $('nav, header, footer, script, style, iframe, .advertisement, .banner, .sidebar').remove();
     console.log("Removed non-content elements");
+    
+    // Extract images before modifying the DOM further
+    const images = extractImages(html, baseUrl);
+    console.log(`Extracted ${images.length} images from page`);
     
     // First approach: Try to find main content area using common selectors
     let mainContent = '';
@@ -292,10 +391,10 @@ function extractMainContent(html: string): string {
     }
     
     console.log(`Extracted content length: ${mainContent.length} characters`);
-    return mainContent;
+    return { content: mainContent, images };
   } catch (error) {
     console.error("Error extracting content:", error);
-    return "";
+    return { content: "", images: [] };
   }
 }
 
@@ -310,6 +409,7 @@ export async function scrapRelevantContent(
   urls: Array<{ url: string; status: "success" | "error"; statusCode?: number }>;
   rawSize: number;
   preview: string;
+  images: ImageInfo[];
 }> {
   try {
     console.log(`Starting content scraping for query: "${query}"`);
@@ -337,18 +437,21 @@ export async function scrapRelevantContent(
             return {
               url,
               content: "",
+              images: [],
               status: "error" as const,
               statusCode: status
             };
           }
           
           console.log(`Successfully fetched content from ${url}, extracting main content...`);
-          const extractedContent = extractMainContent(html);
+          const { content: extractedContent, images } = extractMainContent(html, url);
           console.log(`Extracted content length: ${extractedContent.length} characters`);
+          console.log(`Extracted ${images.length} images from ${url}`);
           
           return {
             url,
             content: extractedContent,
+            images,
             status: "success" as const
           };
         } catch (error) {
@@ -356,6 +459,7 @@ export async function scrapRelevantContent(
           return {
             url,
             content: "",
+            images: [],
             status: "error" as const
           };
         }
@@ -369,6 +473,44 @@ export async function scrapRelevantContent(
     const allContent = successfulResults
       .map(result => result.content)
       .join("\n\n");
+    
+    // Collect all images from successful results
+    let allImages: ImageInfo[] = [];
+    successfulResults.forEach(result => {
+      if (result.images && result.images.length > 0) {
+        allImages = [...allImages, ...result.images];
+      }
+    });
+    
+    // Deduplicate images by URL and limit to top 3 most relevant
+    const uniqueImageUrls = new Set<string>();
+    const dedupedImages = allImages
+      .filter(img => {
+        if (uniqueImageUrls.has(img.fullUrl)) {
+          return false;
+        }
+        uniqueImageUrls.add(img.fullUrl);
+        return true;
+      })
+      // Sort images by relevance - prioritize those with longer alt text that matches the query
+      .sort((a, b) => {
+        const aRelevance = query.toLowerCase().split(' ').filter(word => 
+          a.alt.toLowerCase().includes(word)
+        ).length;
+        const bRelevance = query.toLowerCase().split(' ').filter(word => 
+          b.alt.toLowerCase().includes(word)
+        ).length;
+        
+        if (aRelevance !== bRelevance) {
+          return bRelevance - aRelevance;
+        }
+        
+        // If same relevance score, prefer longer alt text
+        return b.alt.length - a.alt.length;
+      })
+      .slice(0, 3); // Limit to 3 most relevant images
+    
+    console.log(`Found ${dedupedImages.length} unique relevant images`);
     
     // Calculate raw size
     const rawSize = Buffer.from(allContent).length;
@@ -393,7 +535,8 @@ export async function scrapRelevantContent(
       content: allContent,
       urls: urlsInfo,
       rawSize,
-      preview
+      preview,
+      images: dedupedImages
     };
   } catch (error) {
     console.error("Error scraping content:", error);
@@ -401,7 +544,8 @@ export async function scrapRelevantContent(
       content: "",
       urls: [],
       rawSize: 0,
-      preview: ""
+      preview: "",
+      images: []
     };
   }
 }

@@ -99,6 +99,7 @@ async function fetchUrl(url: string): Promise<{
  */
 function generateSearchUrls(query: string, classification: { category: string; baseUrl: string }): string[] {
   const { baseUrl } = classification;
+  console.log(`Generating URLs for category: ${classification.category}, baseUrl: ${baseUrl}`);
   
   // Base domain
   const domain = "www.fs.usda.gov";
@@ -110,60 +111,112 @@ function generateSearchUrls(query: string, classification: { category: string; b
     .split(/\s+/)
     .filter(term => term.length > 2);
   
+  console.log(`Extracted search terms: ${JSON.stringify(searchTerms)}`);
+  
   // Generate URLs based on classification and search terms
   const urls: string[] = [];
   
-  // Add category base URL
-  urls.push(baseUrl);
+  // Always add the forest service home page
+  urls.push(`https://${domain}`);
+  
+  // Add category base URL (make sure it's a full URL)
+  if (baseUrl.startsWith("http")) {
+    urls.push(baseUrl);
+  } else if (baseUrl.startsWith("www.")) {
+    urls.push(`https://${baseUrl}`);
+  } else {
+    urls.push(`https://www.${baseUrl}`);
+  }
   
   // Add specific search paths based on category
   switch (classification.category) {
     case "Visit":
-      urls.push(`${domain}/recreation`);
-      if (query.includes("trail") || query.includes("hik")) {
-        urls.push(`${domain}/recreation/hiking`);
+      urls.push(`https://${domain}/visit`);
+      urls.push(`https://${domain}/recreation`);
+      if (query.toLowerCase().includes("trail") || query.toLowerCase().includes("hik")) {
+        urls.push(`https://${domain}/recreation/hiking`);
+        urls.push(`https://${domain}/visit/hiking`);
       }
-      if (query.includes("camp")) {
-        urls.push(`${domain}/recreation/camping`);
+      if (query.toLowerCase().includes("camp")) {
+        urls.push(`https://${domain}/recreation/camping`);
+        urls.push(`https://${domain}/visit/camping`);
+      }
+      if (query.toLowerCase().includes("fish") || query.toLowerCase().includes("hunting")) {
+        urls.push(`https://${domain}/recreation/fishing`);
+        urls.push(`https://${domain}/visit/fishing`);
+      }
+      if (query.toLowerCase().includes("permit") || query.toLowerCase().includes("pass")) {
+        urls.push(`https://${domain}/passes-permits`);
       }
       break;
       
     case "Managing Land":
-      urls.push(`${domain}/managing-land/forest-management`);
-      if (query.includes("fire") || query.includes("wildfire")) {
-        urls.push(`${domain}/managing-land/fire`);
+      urls.push(`https://${domain}/managing-land`);
+      urls.push(`https://${domain}/managing-land/forest-management`);
+      if (query.toLowerCase().includes("fire") || query.toLowerCase().includes("wildfire")) {
+        urls.push(`https://${domain}/managing-land/fire`);
+        urls.push(`https://${domain}/fire`);
       }
-      if (query.includes("conserv") || query.includes("protect")) {
-        urls.push(`${domain}/managing-land/natural-resources`);
+      if (query.toLowerCase().includes("conserv") || query.toLowerCase().includes("protect") || 
+          query.toLowerCase().includes("environment") || query.toLowerCase().includes("wildlife")) {
+        urls.push(`https://${domain}/managing-land/natural-resources`);
+        urls.push(`https://${domain}/managing-land/natural-resources/wildlife`);
+      }
+      if (query.toLowerCase().includes("water") || query.toLowerCase().includes("river") || 
+          query.toLowerCase().includes("stream") || query.toLowerCase().includes("lake")) {
+        urls.push(`https://${domain}/managing-land/natural-resources/water-resources`);
       }
       break;
       
     case "About Agency":
-      urls.push(`${domain}/about-agency/what-we-believe`);
-      if (query.includes("mission") || query.includes("purpose")) {
-        urls.push(`${domain}/about-agency/what-we-believe/mission-motto`);
+      urls.push(`https://${domain}/about-agency`);
+      urls.push(`https://${domain}/about-agency/who-we-are`);
+      if (query.toLowerCase().includes("mission") || query.toLowerCase().includes("purpose") ||
+          query.toLowerCase().includes("value") || query.toLowerCase().includes("goal")) {
+        urls.push(`https://${domain}/about-agency/what-we-believe/mission-motto`);
+        urls.push(`https://${domain}/about-agency/what-we-believe`);
       }
-      if (query.includes("history")) {
-        urls.push(`${domain}/about-agency/history`);
+      if (query.toLowerCase().includes("history") || query.toLowerCase().includes("founded") ||
+          query.toLowerCase().includes("origin")) {
+        urls.push(`https://${domain}/about-agency/history`);
+      }
+      if (query.toLowerCase().includes("leader") || query.toLowerCase().includes("director") ||
+          query.toLowerCase().includes("secretary") || query.toLowerCase().includes("chief")) {
+        urls.push(`https://${domain}/about-agency/organization`);
       }
       break;
       
     case "Working with Us":
-      urls.push(`${domain}/working-with-us/jobs`);
-      if (query.includes("partner") || query.includes("volunteer")) {
-        urls.push(`${domain}/working-with-us/partnerships`);
+      urls.push(`https://${domain}/working-with-us`);
+      urls.push(`https://${domain}/working-with-us/jobs`);
+      if (query.toLowerCase().includes("partner") || query.toLowerCase().includes("volunteer") ||
+          query.toLowerCase().includes("collaborate")) {
+        urls.push(`https://${domain}/working-with-us/partnerships`);
+        urls.push(`https://${domain}/volunteers`);
       }
-      if (query.includes("career") || query.includes("job")) {
-        urls.push(`${domain}/working-with-us/jobs/career-paths`);
+      if (query.toLowerCase().includes("career") || query.toLowerCase().includes("job") ||
+          query.toLowerCase().includes("employ") || query.toLowerCase().includes("position")) {
+        urls.push(`https://${domain}/working-with-us/jobs/career-paths`);
+        urls.push(`https://${domain}/about-agency/jobs`);
+      }
+      if (query.toLowerCase().includes("contract") || query.toLowerCase().includes("business") ||
+          query.toLowerCase().includes("vendor")) {
+        urls.push(`https://${domain}/working-with-us/business`);
       }
       break;
   }
   
-  // Add site-wide search query as a last resort
-  const searchQuery = searchTerms.join("+");
-  urls.push(`${domain}/search?q=${searchQuery}`);
+  // Add site-wide search query URL
+  if (searchTerms.length > 0) {
+    const searchQuery = searchTerms.join("+");
+    urls.push(`https://${domain}/search?q=${searchQuery}`);
+  }
   
-  return urls;
+  // Remove duplicates
+  const uniqueUrls = Array.from(new Set(urls));
+  console.log(`Generated ${uniqueUrls.length} unique URLs for scraping`);
+  
+  return uniqueUrls;
 }
 
 /**
@@ -172,18 +225,73 @@ function generateSearchUrls(query: string, classification: { category: string; b
 function extractMainContent(html: string): string {
   try {
     const $ = cheerio.load(html);
+    console.log("Loaded HTML with cheerio");
     
     // Remove navigation, headers, footers, scripts, ads
     $('nav, header, footer, script, style, iframe, .advertisement, .banner, .sidebar').remove();
+    console.log("Removed non-content elements");
     
-    // Try to find main content area
-    let mainContent = $('main, #main, .main, #content, .content, article, .article, [role="main"]').html() || '';
+    // First approach: Try to find main content area using common selectors
+    let mainContent = '';
+    const mainContentSelectors = [
+      'main', 
+      '#main', 
+      '.main', 
+      '#content', 
+      '.content', 
+      'article', 
+      '.article', 
+      '[role="main"]',
+      '.field--name-body',
+      '.usa-prose',
+      '.page-content',
+      '.main-content'
+    ];
     
-    // If no specific content area found, use body content
-    if (!mainContent.trim()) {
-      mainContent = $('body').html() || '';
+    // Try each selector
+    for (const selector of mainContentSelectors) {
+      const content = $(selector).text();
+      if (content && content.trim().length > 100) {  // Only consider substantial content
+        console.log(`Found content using selector: ${selector}`);
+        mainContent += content + '\n\n';
+      }
     }
     
+    // Second approach: Extract all paragraphs if main content area wasn't found
+    if (!mainContent.trim()) {
+      console.log("Main content area not found, extracting paragraphs");
+      
+      $('p').each((_, el) => {
+        const text = $(el).text().trim();
+        if (text.length > 30) {  // Only include substantial paragraphs
+          mainContent += text + '\n\n';
+        }
+      });
+      
+      // Also get headings
+      $('h1, h2, h3, h4, h5, h6').each((_, el) => {
+        const text = $(el).text().trim();
+        if (text.length > 0) {
+          mainContent += '# ' + text + '\n\n';
+        }
+      });
+      
+      // Get list items
+      $('ul li, ol li').each((_, el) => {
+        const text = $(el).text().trim();
+        if (text.length > 0) {
+          mainContent += '- ' + text + '\n';
+        }
+      });
+    }
+    
+    // Third approach: If still no content, use the entire body text
+    if (!mainContent.trim()) {
+      console.log("No structured content found, using entire body text");
+      mainContent = $('body').text().replace(/\s+/g, ' ').trim();
+    }
+    
+    console.log(`Extracted content length: ${mainContent.length} characters`);
     return mainContent;
   } catch (error) {
     console.error("Error extracting content:", error);

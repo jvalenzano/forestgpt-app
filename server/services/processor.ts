@@ -5,6 +5,13 @@ import { LLMDetails } from "./llm";
  * Clean HTML and extract meaningful text
  */
 function cleanHtml(html: string): string {
+  // If the input is already plaintext (not HTML), return it directly
+  if (!html.includes('<') || !html.includes('>')) {
+    console.log("Input appears to be plain text, skipping HTML cleaning");
+    return html.trim();
+  }
+
+  console.log("Cleaning HTML content");
   const $ = cheerio.load(html);
   
   // Remove unnecessary elements
@@ -17,7 +24,12 @@ function cleanHtml(html: string): string {
     const text = $el.text().trim();
     
     if (href && text && !href.startsWith('#')) {
-      $el.replaceWith(`${text} (${href})`);
+      // Make sure to handle relative URLs
+      let fullHref = href;
+      if (href.startsWith('/')) {
+        fullHref = 'https://www.fs.usda.gov' + href;
+      }
+      $el.replaceWith(`${text} (${fullHref})`);
     }
   });
   
@@ -27,20 +39,30 @@ function cleanHtml(html: string): string {
   // Process headings
   $('h1, h2, h3, h4, h5, h6').each((_, el) => {
     const $el = $(el);
-    text += '\n# ' + $el.text().trim() + '\n\n';
+    const headingText = $el.text().trim();
+    if (headingText) {
+      text += '\n## ' + headingText + '\n\n';
+    }
   });
   
   // Process paragraphs
   $('p').each((_, el) => {
     const $el = $(el);
-    text += $el.text().trim() + '\n\n';
+    const paragraphText = $el.text().trim();
+    if (paragraphText) {
+      text += paragraphText + '\n\n';
+    }
   });
   
   // Process lists
   $('ul, ol').each((_, el) => {
     const $el = $(el);
+    text += '\n';
     $el.find('li').each((_, li) => {
-      text += '- ' + $(li).text().trim() + '\n';
+      const listItemText = $(li).text().trim();
+      if (listItemText) {
+        text += '- ' + listItemText + '\n';
+      }
     });
     text += '\n';
   });
@@ -68,7 +90,9 @@ function cleanHtml(html: string): string {
         rowData.push($(cell).text().trim());
       });
       
-      text += rowData.join(' | ') + '\n';
+      if (rowData.length > 0) {
+        text += rowData.join(' | ') + '\n';
+      }
     });
     
     text += '\n';
@@ -76,14 +100,18 @@ function cleanHtml(html: string): string {
   
   // If we didn't extract anything with the structured approach, fall back to getting all text
   if (!text.trim()) {
+    console.log("Structured extraction yielded no content, falling back to all text");
     text = $('body').text();
   }
   
   // Clean up whitespace
-  return text
-    .replace(/\n{3,}/g, '\n\n')
-    .replace(/\s{2,}/g, ' ')
-    .trim();
+  const cleanedText = text
+    .replace(/\n{3,}/g, '\n\n')  // Replace 3+ newlines with just 2
+    .replace(/\s{2,}/g, ' ')     // Replace multiple spaces with one
+    .trim();                     // Remove leading/trailing whitespace
+  
+  console.log(`Cleaned HTML content length: ${cleanedText.length} characters`);
+  return cleanedText;
 }
 
 /**

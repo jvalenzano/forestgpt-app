@@ -40,12 +40,12 @@ export default function ChatForm({ onSendMessage, disabled = false }: ChatFormPr
   const sendMessage = () => {
     setIsSending(true);
     
-    // Create a small delay to allow the animation to play
+    // Create a longer delay to allow the animation to play
     setTimeout(() => {
       onSendMessage(inputValue);
       setInputValue("");
       setIsSending(false);
-    }, 500); // This delay matches the animation duration
+    }, 850); // Increased delay for slower animation
   };
   
   // Animation variants for send button
@@ -53,6 +53,7 @@ export default function ChatForm({ onSendMessage, disabled = false }: ChatFormPr
     idle: {
       scale: 1,
       rotate: 0,
+      opacity: 1,
       transition: {
         type: "spring",
         damping: 10
@@ -71,14 +72,15 @@ export default function ChatForm({ onSendMessage, disabled = false }: ChatFormPr
       scale: 0.95
     },
     sending: {
-      scale: [1, 0.9, 1.1, 0],
-      y: [0, 0, -10, -80],
-      x: [0, 0, 10, 40],
-      rotate: [0, 0, 5, 15],
-      opacity: [1, 1, 1, 0],
+      scale: [1, 0.9, 1.1, 0.8, 0],
+      y: [0, 0, -10, -40, -80],
+      x: [0, 0, 5, 20, 40],
+      rotate: [0, 0, 5, 10, 15],
+      opacity: [1, 1, 1, 0.7, 0],
       transition: {
-        times: [0, 0.2, 0.5, 1],
-        duration: 0.5
+        times: [0, 0.2, 0.4, 0.7, 1],
+        duration: 0.8, // Slower animation
+        ease: "easeOut"
       }
     }
   };
@@ -92,20 +94,21 @@ export default function ChatForm({ onSendMessage, disabled = false }: ChatFormPr
       x: 0
     },
     animate: {
-      opacity: [0, 1, 1, 0],
-      scale: [0.6, 1, 1.1, 0.8],
-      y: [0, -20, -60, -100],
-      x: [0, 20, 40, 60],
+      opacity: [0, 1, 1, 0.8, 0],
+      scale: [0.6, 1, 1.1, 0.9, 0.7],
+      y: [0, -20, -40, -70, -100],
+      x: [0, 10, 20, 40, 60],
       transition: {
-        times: [0, 0.2, 0.6, 1],
-        duration: 0.5
+        times: [0, 0.2, 0.4, 0.7, 1],
+        duration: 0.8, // Slower animation
+        ease: "easeOut"
       }
     },
     exit: {
       opacity: 0,
       y: -100,
       transition: {
-        duration: 0.2
+        duration: 0.3
       }
     }
   };
@@ -187,7 +190,7 @@ export default function ChatForm({ onSendMessage, disabled = false }: ChatFormPr
           <i className="fas fa-paper-plane"></i>
         </motion.button>
         
-        {/* Button that appears after sending animation */}
+        {/* Loading spinner that appears after sending animation */}
         <AnimatePresence>
           {isSending && (
             <motion.div
@@ -198,15 +201,33 @@ export default function ChatForm({ onSendMessage, disabled = false }: ChatFormPr
                 scale: 1, 
                 rotate: 0,
                 transition: {
-                  delay: 0.25,
+                  delay: 0.35,
                   type: "spring",
-                  damping: 10,
-                  stiffness: 200
+                  damping: 12,
+                  stiffness: 150
+                }
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0,
+                transition: { 
+                  duration: 0.2 
                 }
               }}
               aria-label="Sending message"
             >
-              <i className="fas fa-circle-notch fa-spin"></i>
+              <motion.div
+                animate={{
+                  rotate: 360
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 1.5,
+                  ease: "linear"
+                }}
+              >
+                <i className="fas fa-paper-plane"></i>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>

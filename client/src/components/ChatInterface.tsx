@@ -104,8 +104,12 @@ export default function ChatInterface({
           className="flex-grow overflow-y-auto px-2 space-y-4"
           style={{ scrollBehavior: "smooth" }}
         >
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
+          {messages.map((message, index) => (
+            <ChatMessage 
+              key={message.id} 
+              message={message} 
+              previousMessage={index > 0 ? messages[index - 1] : undefined}
+            />
           ))}
           
           {isLoading && <LoadingIndicator />}

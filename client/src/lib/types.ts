@@ -6,12 +6,19 @@ export interface Source {
   title?: string;
 }
 
+export interface ImageInfo {
+  src: string;
+  alt: string;
+  fullUrl: string;
+}
+
 export interface ChatMessage {
   id: string;
   role: MessageRole;
   content: string;
   timestamp: Date;
   sources?: Source[];
+  images?: ImageInfo[];
 }
 
 export interface ChatResponse {

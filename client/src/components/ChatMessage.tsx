@@ -148,6 +148,54 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
           variants={contentVariants}
         />
         
+        {/* Image gallery for bot responses */}
+        {message.role === "bot" && message.images && message.images.length > 0 && (
+          <motion.div 
+            className="mt-4 space-y-3"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+          >
+            <div className="grid grid-cols-1 gap-3">
+              {message.images.map((image, index) => (
+                <motion.div 
+                  key={index}
+                  className="relative overflow-hidden rounded-md shadow-sm border border-forest-100"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 + (index * 0.2) }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <a 
+                    href={image.fullUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="block"
+                    title={image.alt}
+                  >
+                    <img 
+                      src={image.fullUrl} 
+                      alt={image.alt} 
+                      className="w-full h-auto max-h-[300px] object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = "https://www.fs.usda.gov/sites/default/files/media_wysiwyg/fs_shield.png";
+                        target.className = "w-auto h-auto max-h-[80px] mx-auto my-4";
+                      }}
+                    />
+                    {image.alt && (
+                      <div className="bg-black bg-opacity-40 text-white text-xs p-2 absolute bottom-0 left-0 right-0">
+                        {image.alt}
+                      </div>
+                    )}
+                  </a>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+        
         {/* Compact collapsible sources section */}
         {message.sources && message.sources.length > 0 && message.sources[0].url !== "No relevant information found" && message.sources[0].url !== "Error processing request" && (
           <motion.div 

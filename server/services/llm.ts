@@ -18,6 +18,12 @@ interface Source {
   title?: string;
 }
 
+interface ImageInfo {
+  src: string;
+  alt: string;
+  fullUrl: string;
+}
+
 /**
  * Generate a response using OpenAI's GPT model based on scraped content
  */
@@ -28,11 +34,13 @@ export async function generateResponse(
     sourceUrls: string[];
     chunks: string[];
     llmDetails: LLMDetails;
+    images: ImageInfo[];
   }
 ): Promise<{
   response: string;
   sources: Source[];
   llmDetails: LLMDetails;
+  images: ImageInfo[];
 }> {
   const startTime = Date.now();
   
@@ -97,7 +105,8 @@ export async function generateResponse(
           ...llmDetails,
           tokens: { input: 0, output: 0 },
           processingTime
-        }
+        },
+        images: []
       };
     }
     
@@ -193,10 +202,14 @@ export async function generateResponse(
     // Format source URLs
     const sources: Source[] = filteredSourceUrls.map(url => ({ url }));
     
+    // Get the images from the processed data
+    const { images } = processedData;
+    
     return {
       response: generatedResponse,
       sources,
-      llmDetails: updatedLLMDetails
+      llmDetails: updatedLLMDetails,
+      images
     };
   } catch (error) {
     console.error("Error generating response:", error);
@@ -218,7 +231,8 @@ export async function generateResponse(
         model: "gpt-4o",
         tokens: { input: 0, output: 0 },
         processingTime
-      }
+      },
+      images: []
     };
   }
 }

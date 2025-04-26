@@ -50,9 +50,9 @@ export async function generateResponse(
       4. NEVER use phrases like "based on the Forest Service website" or "the context doesn't mention" or "not explicitly stated".
       5. Present ALL information as definitive Forest Service fact - speak with complete confidence.
       6. Format your response in HTML for better readability (<p>, <ul>, <li>, <strong> tags are supported).
-      7. If asked "how to" do something, provide specific, step-by-step instructions. 
-      8. If you don't have complete information, provide what you know with authority, then say "You can find additional details at [relevant URL] or by contacting your local Forest Service office."
-      9. When referring users to websites, include the full URLs if they are in the context.
+      7. If asked "how to" do something, provide specific, step-by-step instructions.
+      8. DO NOT include statements like "You can find additional details at fs.usda.gov or by contacting your local Forest Service office" - this is redundant as sources are displayed separately.
+      9. NEVER include generic URLs like "https://www.fs.usda.gov" in your response text - only include specific, directly relevant pages if needed.
       10. Maintain an authoritative, knowledgeable tone throughout all responses.
       11. Never acknowledge limitations in your knowledge - simply provide the information you do have confidently.
       12. Be concise and direct - avoid unnecessary qualifiers like "generally" or "typically" unless they add essential meaning.
@@ -114,8 +114,10 @@ export async function generateResponse(
       - If the question asks HOW TO do something, provide STEP-BY-STEP instructions
       - Include SPECIFIC details relevant to the question (locations, requirements, contacts, etc.)
       - NEVER say "based on the Forest Service website" or "the context doesn't mention" - simply provide the information directly
+      - DO NOT include generic closing statements like "You can find more information at fs.usda.gov" - this is redundant
+      - DO NOT add URLs to generic Forest Service pages - only include specific, directly relevant page links if essential
       - Speak as if you have complete knowledge of all Forest Service information
-      - For partial information, present what you know confidently, then direct to other resources
+      - Be concise and to the point - avoid unnecessary filler text
       - Format your response to be EASY TO READ (use lists, paragraphs, bold as appropriate)
       
       Forest Service Website Content:
@@ -161,8 +163,35 @@ export async function generateResponse(
       processingTime
     };
     
+    // Filter and format sources to only include the most relevant ones
+    let filteredSourceUrls = sourceUrls.filter(url => {
+      // Skip generic top-level URLs
+      if (url === "https://www.fs.usda.gov") {
+        return false;
+      }
+      
+      // Keep more specific URLs (deeper paths)
+      return true;
+    });
+    
+    // If we have search URLs, prioritize the most specific content URLs
+    const searchUrls = filteredSourceUrls.filter(url => url.includes("/search?"));
+    const contentUrls = filteredSourceUrls.filter(url => !url.includes("/search?"));
+    
+    // If we have both content and search URLs, prefer content URLs
+    if (contentUrls.length > 0) {
+      // Sort URLs by specificity (roughly estimated by path length)
+      contentUrls.sort((a, b) => b.length - a.length);
+      
+      // Only keep up to 2 most specific content URLs
+      filteredSourceUrls = contentUrls.slice(0, 2);
+    } else if (searchUrls.length > 0) {
+      // If we only have search URLs, use just one
+      filteredSourceUrls = searchUrls.slice(0, 1);
+    }
+    
     // Format source URLs
-    const sources: Source[] = sourceUrls.map(url => ({ url }));
+    const sources: Source[] = filteredSourceUrls.map(url => ({ url }));
     
     return {
       response: generatedResponse,

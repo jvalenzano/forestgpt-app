@@ -148,8 +148,8 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
           variants={contentVariants}
         />
         
-        {/* Collapsible sources section */}
-        {message.sources && message.sources.length > 0 && (
+        {/* Compact collapsible sources section */}
+        {message.sources && message.sources.length > 0 && message.sources[0].url !== "No relevant information found" && message.sources[0].url !== "Error processing request" && (
           <motion.div 
             className="text-xs text-gray-500 mt-3 pt-2 border-t border-forest-100"
             initial={{ opacity: 0 }}
@@ -162,8 +162,8 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
               aria-expanded={showSources}
               aria-controls="source-links"
             >
-              <i className="fas fa-quote-left text-forest-400 mr-1.5"></i>
-              <span>Sources</span>
+              <i className="fas fa-link text-forest-500 mr-1.5"></i>
+              <span>View Source{message.sources.length > 1 ? 's' : ''}</span>
               <motion.span 
                 className="ml-1 text-forest-500 inline-block" 
                 animate={{ rotateZ: showSources ? 180 : 0 }}
@@ -177,28 +177,59 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
               {showSources && (
                 <motion.div 
                   id="source-links" 
-                  className="mt-2 pl-3 border-l-2 border-forest-200 space-y-1 py-1 bg-forest-50 rounded-r-md"
+                  className="mt-2 pl-3 border-l-2 border-forest-200 space-y-2 py-2 bg-forest-50 rounded-r-md"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {message.sources.map((source, index) => (
-                    <motion.a 
-                      key={index}
-                      href={source.url.startsWith("http") ? source.url : "#"} 
-                      className={`block truncate ${source.url.startsWith("http") ? "text-forest-600 hover:text-forest-800 hover:underline" : ""}`}
-                      target={source.url.startsWith("http") ? "_blank" : undefined}
-                      rel={source.url.startsWith("http") ? "noopener noreferrer" : undefined}
-                      title={source.url}
-                      initial={{ opacity: 0, x: -5 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 * index }}
-                    >
-                      <i className="fas fa-link text-forest-400 mr-1.5 text-xs"></i>
-                      {source.url}
-                    </motion.a>
-                  ))}
+                  {message.sources.map((source, index) => {
+                    // Format URL for display
+                    let displayUrl = source.url;
+                    try {
+                      // Try to parse URL and format for display
+                      const urlObj = new URL(source.url);
+                      const path = urlObj.pathname;
+                      // Remove trailing slashes
+                      const cleanPath = path.replace(/\/$/, "");
+                      // Get the last part of the path for display
+                      const pathSegments = cleanPath.split('/').filter(Boolean);
+                      const lastSegment = pathSegments.length > 0 ? pathSegments[pathSegments.length - 1] : '';
+                      
+                      // Create a friendly display format
+                      let displayName = lastSegment.length > 0 
+                        ? lastSegment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                        : urlObj.hostname.replace('www.', '');
+                        
+                      // For search results, show a cleaner label
+                      if (source.url.includes('/search?')) {
+                        displayName = "Forest Service Search Results";
+                      }
+                      
+                      displayUrl = displayName;
+                    } catch (e) {
+                      // If URL parsing fails, use the original URL
+                      console.error("Error parsing URL:", e);
+                    }
+                    
+                    return (
+                      <motion.a 
+                        key={index}
+                        href={source.url.startsWith("http") ? source.url : "#"} 
+                        className="flex items-center px-2 py-1.5 bg-white rounded-md shadow-sm border border-forest-100 hover:border-forest-300 transition-colors"
+                        target={source.url.startsWith("http") ? "_blank" : undefined}
+                        rel={source.url.startsWith("http") ? "noopener noreferrer" : undefined}
+                        title={source.url}
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 * index }}
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        <i className="fas fa-external-link-alt text-forest-500 mr-2"></i>
+                        <span className="font-medium text-forest-700">{displayUrl}</span>
+                      </motion.a>
+                    );
+                  })}
                 </motion.div>
               )}
             </AnimatePresence>

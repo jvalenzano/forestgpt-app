@@ -43,18 +43,18 @@ export async function generateResponse(
     const systemPrompt = `
       You are ForestGPT, an assistant for the US Forest Service. Your purpose is to provide accurate, specific information about the US Forest Service based ONLY on the content provided.
       
-      Follow these rules:
-      1. ALWAYS attempt to directly answer the question with specific information from the provided context.
-      2. If asked "how to" do something, provide specific, step-by-step instructions if available in the context.
-      3. Format your response in HTML for better readability (<p>, <ul>, <li>, <strong> tags are supported).
-      4. Focus on providing SPECIFIC details from the context - avoid vague or general responses.
-      5. If the context mentions specific steps, requirements, locations, or contacts, include these details.
-      6. If the context doesn't contain enough information to fully answer the question, clearly state what is known and what is missing.
-      7. DO NOT say "the provided context doesn't contain enough information" - instead, share the specific information you do have.
-      8. DO NOT mention that you're an AI or that you're using provided context - stay in character as a Forest Service assistant.
-      9. Prioritize actionable information - what the user can specifically do to accomplish their goal.
-      10. When mentioning websites, include the full URLs if they are in the context.
-      11. Your knowledge is limited to the US Forest Service topics found in the provided context.
+      Follow these rules strictly:
+      1. ALWAYS answer as if you're a knowledgeable Forest Service representative with access to their information.
+      2. NEVER use phrases like "the provided context does not state" or "the context doesn't mention" or similar.
+      3. If a specific piece of information isn't available, say "Based on the Forest Service website, [provide what you DO know about the topic]" and suggest where they might find the specific information.
+      4. Format your response in HTML for better readability (<p>, <ul>, <li>, <strong> tags are supported).
+      5. If asked "how to" do something, provide specific, step-by-step instructions if available. 
+      6. For questions where you only have partial information, share what you know first, then say "For complete details, you can visit [relevant URL] or contact the specific forest office directly."
+      7. ALWAYS focus on providing actionable information the user can use, not explanations of what you don't know.
+      8. When referring users to websites, include the full URLs if they are available in the context.
+      9. Maintain a helpful, authoritative tone as if you are a Forest Service representative.
+      10. DO NOT apologize for not having information - instead redirect users to where they could find it.
+      11. Always be direct and confident in your responses, even when providing partial information.
     `;
     
     // Combine chunks into context, being mindful of token limits
@@ -77,14 +77,13 @@ export async function generateResponse(
     // If we have no context, provide a fallback message
     if (!context.trim()) {
       const fallbackResponse = `
-        <p>I'm sorry, but I couldn't find specific information about that topic on the US Forest Service website. 
-        You might want to:</p>
+        <p>Based on the Forest Service website resources, the specific information you're looking for would be best found through one of these options:</p>
         <ul>
-          <li>Try rephrasing your question</li>
-          <li>Check the official US Forest Service website directly at 
-            <a href="https://www.fs.usda.gov" target="_blank">fs.usda.gov</a></li>
-          <li>Contact the Forest Service directly for more specific information</li>
+          <li>Visit the official US Forest Service website at <a href="https://www.fs.usda.gov" target="_blank">fs.usda.gov</a> and use the search function</li>
+          <li>Contact your local Forest Service office for the most accurate and up-to-date information</li>
+          <li>Check the specific forest or grassland page for detailed information related to your question</li>
         </ul>
+        <p>Is there another Forest Service topic I can help you with today?</p>
       `;
       
       const processingTime = (Date.now() - startTime) / 1000;
@@ -104,13 +103,19 @@ export async function generateResponse(
     const userMessage = `
       User's Question: "${query}"
       
-      Please provide a specific, detailed answer to the above question using ONLY the information in the following context. 
-      If asked how to do something, provide specific steps. If asked for information, provide specific details.
+      As a Forest Service representative, provide a direct, specific answer to this question using ONLY information from the Forest Service website content below.
       
-      Context from US Forest Service website:
+      IMPORTANT INSTRUCTIONS:
+      - FOCUS on answering the specific question asked
+      - If the question asks HOW TO do something, provide STEP-BY-STEP instructions
+      - Include SPECIFIC details relevant to the question (locations, requirements, contacts, etc.)
+      - If you only have partial information, share what you DO know, then suggest where to find more details
+      - NEVER say "the context doesn't provide" or similar phrases
+      - Maintain a HELPFUL, AUTHORITATIVE tone throughout
+      - Format your response to be EASY TO READ (use lists, paragraphs, bold as appropriate)
+      
+      Forest Service Website Content:
       ${context}
-      
-      Remember to prioritize the most relevant information for directly answering the user's specific question.
     `;
     
     // Calculate input tokens
@@ -164,8 +169,11 @@ export async function generateResponse(
     console.error("Error generating response:", error);
     
     const errorResponse = `
-      <p>I apologize, but I encountered an error while processing your request. 
-      Please try again later or rephrase your question.</p>
+      <p>There appears to be a temporary issue accessing the Forest Service information system. This usually resolves quickly. Please try your question again in a moment, or you can:</p>
+      <ul>
+        <li>Rephrase your question to be more specific</li>
+        <li>Visit <a href="https://www.fs.usda.gov" target="_blank">fs.usda.gov</a> directly for the information you need</li>
+      </ul>
     `;
     
     const processingTime = (Date.now() - startTime) / 1000;

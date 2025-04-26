@@ -1,4 +1,4 @@
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent, ChangeEvent, KeyboardEvent } from "react";
 
 interface ChatFormProps {
   onSendMessage: (message: string) => void;
@@ -25,38 +25,63 @@ export default function ChatForm({ onSendMessage, disabled = false }: ChatFormPr
     setInputValue("");
   };
   
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (inputValue.trim() && !disabled) {
+        onSendMessage(inputValue);
+        setInputValue("");
+      }
+    }
+  };
+  
+  const handleSendClick = () => {
+    if (inputValue.trim() && !disabled) {
+      onSendMessage(inputValue);
+      setInputValue("");
+    }
+  };
+  
   return (
-    <form onSubmit={handleSubmit} className="mt-4 flex items-center space-x-2">
-      <div className="relative flex-grow">
+    <form onSubmit={handleSubmit} className="mt-4">
+      <div className="relative w-full">
         <input
           type="text"
           value={inputValue}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           placeholder="Ask about the US Forest Service..."
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none"
+          className="w-full bg-white border-2 border-forest-200 rounded-full px-6 py-3 pr-16 shadow-sm hover:shadow focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none transition-all"
           disabled={disabled}
           autoComplete="off"
         />
+        
+        {/* Clear button */}
         {inputValue && (
           <button 
             type="button" 
             onClick={handleClear}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            className="absolute right-16 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center"
           >
             <i className="fas fa-times-circle"></i>
           </button>
         )}
+        
+        {/* Send button inside input */}
+        <button
+          type="button"
+          onClick={handleSendClick}
+          className={`absolute right-2 top-1/2 transform -translate-y-1/2 bg-forest-600 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-forest-700 transition-colors ${
+            disabled || !inputValue.trim() ? "opacity-50 cursor-not-allowed" : "shadow-md hover:shadow-lg"
+          }`}
+          disabled={disabled || !inputValue.trim()}
+        >
+          <i className="fas fa-paper-plane"></i>
+        </button>
       </div>
-      <button
-        type="submit"
-        className={`bg-forest-600 text-white rounded-lg px-4 py-2 hover:bg-forest-700 transition-colors flex items-center space-x-1 ${
-          disabled ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-        disabled={disabled || !inputValue.trim()}
-      >
-        <span>Send</span>
-        <i className="fas fa-paper-plane"></i>
-      </button>
+      
+      {/* Accessibility improvement: hidden submit button to support form submission */}
+      <button type="submit" className="sr-only">Send</button>
     </form>
   );
 }

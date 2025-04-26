@@ -91,17 +91,24 @@ export default function ChatInterface({
 
   return (
     <section className="flex-grow md:w-3/4 flex flex-col h-[calc(100vh-8rem)]">
-      <div className="bg-white rounded-lg shadow-md p-4 flex-grow flex flex-col overflow-hidden">
-        <div className="border-b pb-3 mb-4">
-          <h2 className="text-lg font-semibold text-forest-900">Chat with ForestGPT</h2>
-          <p className="text-sm text-gray-600">
+      <div className="bg-white rounded-xl shadow-lg p-4 flex-grow flex flex-col overflow-hidden border border-forest-100">
+        <div className="border-b border-forest-100 pb-4 mb-4">
+          <div className="flex items-center space-x-2 mb-1">
+            <div className="bg-forest-600 text-white rounded-full p-1.5 w-8 h-8 flex items-center justify-center shadow-sm">
+              <i className="fas fa-tree"></i>
+            </div>
+            <h2 className="text-xl font-bold text-forest-900 bg-gradient-to-r from-forest-700 to-forest-500 bg-clip-text text-transparent">
+              Chat with ForestGPT
+            </h2>
+          </div>
+          <p className="text-sm text-gray-600 pl-10">
             Ask questions about the US Forest Service. All responses are based on content from fs.usda.gov
           </p>
         </div>
         
         {/* Chat Messages Container */}
         <div 
-          className="flex-grow overflow-y-auto px-2 space-y-4"
+          className="flex-grow overflow-y-auto px-2 space-y-5 py-2 scrollbar-thin scrollbar-thumb-forest-200 scrollbar-track-transparent"
           style={{ scrollBehavior: "smooth" }}
         >
           {messages.map((message, index) => (
@@ -118,7 +125,9 @@ export default function ChatInterface({
         </div>
         
         {/* Chat Input Form */}
-        <ChatForm onSendMessage={handleSendMessage} disabled={isLoading} />
+        <div className="pt-2 border-t border-forest-100">
+          <ChatForm onSendMessage={handleSendMessage} disabled={isLoading} />
+        </div>
       </div>
     </section>
   );

@@ -7,6 +7,7 @@ import { classifyQuery } from "./services/query-router";
 import { scrapRelevantContent } from "./services/scraper";
 import { processContent } from "./services/processor";
 import { generateResponse } from "./services/llm";
+import { testScrapeForestService } from "./services/test";
 
 // Session management - in memory for simplicity
 const sessions = new Map<string, { debugMode: boolean }>();
@@ -194,6 +195,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error getting debug info:", error);
       return res.status(500).json({ message: "Internal server error" });
+    }
+  });
+  
+  // Test endpoint to check scraping functionality
+  app.get("/api/test/scrape", async (req: Request, res: Response) => {
+    try {
+      console.log("Running test scrape");
+      const startTime = Date.now();
+      
+      // Run the test scrape
+      await testScrapeForestService();
+      
+      const duration = (Date.now() - startTime) / 1000;
+      return res.json({ 
+        success: true, 
+        message: "Test scrape completed, check server logs for details",
+        duration: `${duration.toFixed(2)} seconds` 
+      });
+    } catch (error) {
+      console.error("Error running test scrape:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Test scrape failed, check server logs for details",
+        error: error instanceof Error ? error.message : String(error)
+      });
     }
   });
 

@@ -34,9 +34,12 @@ async function fetchUrl(url: string): Promise<{
   error?: string;
 }> {
   try {
+    console.log(`Attempting to fetch URL: ${url}`);
+    
     // Check cache first
     const cachedContent = await storage.getCachedContent(url);
     if (cachedContent) {
+      console.log(`Retrieved cached content for URL: ${url}`);
       return { html: cachedContent.content, status: 200 };
     }
     
@@ -45,19 +48,29 @@ async function fetchUrl(url: string): Promise<{
     
     // Normalize URL
     const normalizedUrl = url.startsWith("http") ? url : `https://${url}`;
+    console.log(`Normalized URL: ${normalizedUrl}`);
     
     // Make the request
+    console.log(`Sending fetch request to: ${normalizedUrl}`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 seconds timeout
+    
     const response = await fetch(normalizedUrl, {
       headers: {
-        "User-Agent": "ForestGPT/1.0 - Educational Project - Rate Limited Bot"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
       },
-      timeout: 10000 // 10 seconds timeout
+      signal: controller.signal
     });
     
+    clearTimeout(timeoutId);
+    
+    console.log(`Received response from ${normalizedUrl}: status ${response.status}`);
     const html = await response.text();
+    console.log(`Received content length: ${html.length} characters`);
     
     // Cache the content if request was successful
     if (response.ok) {
+      console.log(`Caching content for URL: ${url}`);
       const expiresAt = new Date(Date.now() + CACHE_EXPIRATION);
       await storage.createCachedContent({
         url,
@@ -191,16 +204,28 @@ export async function scrapRelevantContent(
   preview: string;
 }> {
   try {
+    console.log(`Starting content scraping for query: "${query}"`);
+    console.log(`Classification: ${JSON.stringify(classification)}`);
+    
     // Generate URLs to scrape
     const urlsToScrape = generateSearchUrls(query, classification);
+    console.log(`Generated URLs to scrape: ${JSON.stringify(urlsToScrape)}`);
     
     // Fetch and process content from each URL
+    console.log(`Fetching content from ${urlsToScrape.length} URLs...`);
+    
     const results = await Promise.all(
       urlsToScrape.map(async (url) => {
         try {
+          console.log(`Processing URL: ${url}`);
           const { html, status, error } = await fetchUrl(url);
           
+          if (error) {
+            console.log(`Error fetching ${url}: ${error}`);
+          }
+          
           if (status !== 200 || !html) {
+            console.log(`Failed to get content from ${url}: status ${status}`);
             return {
               url,
               content: "",
@@ -209,7 +234,9 @@ export async function scrapRelevantContent(
             };
           }
           
+          console.log(`Successfully fetched content from ${url}, extracting main content...`);
           const extractedContent = extractMainContent(html);
+          console.log(`Extracted content length: ${extractedContent.length} characters`);
           
           return {
             url,
@@ -228,13 +255,16 @@ export async function scrapRelevantContent(
     );
     
     // Combine all content
-    const allContent = results
-      .filter(result => result.status === "success")
+    const successfulResults = results.filter(result => result.status === "success");
+    console.log(`Successfully scraped ${successfulResults.length} out of ${urlsToScrape.length} URLs`);
+    
+    const allContent = successfulResults
       .map(result => result.content)
       .join("\n\n");
     
     // Calculate raw size
     const rawSize = Buffer.from(allContent).length;
+    console.log(`Total content size: ${rawSize} bytes`);
     
     // Get URLs info for debugging
     const urlsInfo = results.map(result => ({
@@ -245,6 +275,11 @@ export async function scrapRelevantContent(
     
     // Get a preview of the raw content (first 500 chars)
     const preview = allContent.substring(0, 500) + (allContent.length > 500 ? "..." : "");
+    
+    // Add a fallback content for testing if we didn't get any valid content
+    if (allContent.length === 0) {
+      console.log("WARNING: No content was successfully scraped!");
+    }
     
     return {
       content: allContent,

@@ -1,10 +1,10 @@
 export default function LoadingIndicator() {
   return (
     <div className="flex items-start space-x-3">
-      <div className="bg-forest-600 text-white rounded-full p-2 w-9 h-9 flex items-center justify-center shadow-sm flex-shrink-0">
+      <div className="bot-avatar">
         <i className="fas fa-tree"></i>
       </div>
-      <div className="bg-white border border-forest-100 rounded-2xl p-4 max-w-[85%] shadow-sm flex items-center">
+      <div className="bot-message flex items-center relative">
         <div className="text-sm font-semibold text-forest-800 mr-2">ForestGPT</div>
         <span className="typing-dots flex space-x-1.5">
           <span className="h-2.5 w-2.5 bg-forest-400 rounded-full animate-pulse"></span>

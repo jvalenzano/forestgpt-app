@@ -13,6 +13,25 @@ export default {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        forest: {
+          "50": "hsl(var(--forest-50))",
+          "100": "hsl(var(--forest-100))",
+          "200": "hsl(var(--forest-200))",
+          "300": "hsl(var(--forest-300))",
+          "400": "hsl(var(--forest-400))",
+          "500": "hsl(var(--forest-500))",
+          "600": "hsl(var(--forest-600))",
+          "700": "hsl(var(--forest-700))",
+          "800": "hsl(var(--forest-800))",
+          "900": "hsl(var(--forest-900))",
+          "950": "hsl(var(--forest-950))",
+        },
+        amber: {
+          accent: "hsl(var(--accent-amber))",
+        },
+        brown: {
+          accent: "hsl(var(--accent-brown))",
+        },
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -79,10 +98,22 @@ export default {
             height: "0",
           },
         },
+        "pulse-slow": {
+          '0%, 100%': {
+            opacity: '1',
+          },
+          '50%': {
+            opacity: '0.5',
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-slow": "pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      boxShadow: {
+        'forest': '0 4px 14px 0 rgba(74, 124, 74, 0.15)',
       },
     },
   },

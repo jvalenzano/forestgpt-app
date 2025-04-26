@@ -91,24 +91,63 @@ export default function ChatInterface({
 
   return (
     <section className="flex-grow md:w-3/4 flex flex-col h-[calc(100vh-8rem)]">
-      <div className="bg-white rounded-xl shadow-lg p-4 flex-grow flex flex-col overflow-hidden border border-forest-100">
-        <div className="border-b border-forest-100 pb-4 mb-4">
-          <div className="flex items-center space-x-2 mb-1">
-            <div className="bg-forest-600 text-white rounded-full p-1.5 w-8 h-8 flex items-center justify-center shadow-sm">
-              <i className="fas fa-tree"></i>
+      <div className="chat-container p-4 flex-grow flex flex-col overflow-hidden">
+        <div className="border-b border-forest-100 pb-4 mb-6">
+          <div className="flex items-center space-x-3 mb-2">
+            <div className="bot-avatar w-12 h-12 bg-gradient-to-br from-forest-600 to-forest-700">
+              <i className="fas fa-tree text-lg"></i>
             </div>
-            <h2 className="text-xl font-bold text-forest-900 bg-gradient-to-r from-forest-700 to-forest-500 bg-clip-text text-transparent">
-              Chat with ForestGPT
-            </h2>
+            <div>
+              <h2 className="text-2xl forest-gradient-text">
+                ForestGPT
+              </h2>
+              <p className="text-sm text-gray-600">
+                Your US Forest Service virtual assistant
+              </p>
+            </div>
           </div>
-          <p className="text-sm text-gray-600 pl-10">
+          <p className="text-sm text-gray-600 pl-2 border-l-4 border-forest-200 ml-2 mt-3">
             Ask questions about the US Forest Service. All responses are based on content from fs.usda.gov
           </p>
         </div>
         
+        {/* Initial welcome message if no messages */}
+        {messages.length === 0 && (
+          <div className="flex items-start space-x-3 mb-6">
+            <div className="bot-avatar">
+              <i className="fas fa-tree"></i>
+            </div>
+            <div className="bot-message">
+              <div className="text-sm font-semibold text-forest-800 mb-2">ForestGPT</div>
+              <div className="prose prose-sm text-gray-700">
+                <p>Hello! I'm ForestGPT, your US Forest Service assistant. I can help answer questions about:</p>
+                <ul className="pl-5 mt-2 space-y-1">
+                  <li className="flex items-center">
+                    <i className="fas fa-campground text-forest-500 mr-2"></i>
+                    Recreation and visiting national forests
+                  </li>
+                  <li className="flex items-center">
+                    <i className="fas fa-leaf text-forest-500 mr-2"></i>
+                    Forest management and conservation
+                  </li>
+                  <li className="flex items-center">
+                    <i className="fas fa-sitemap text-forest-500 mr-2"></i>
+                    The Forest Service organization
+                  </li>
+                  <li className="flex items-center">
+                    <i className="fas fa-handshake text-forest-500 mr-2"></i>
+                    Career opportunities and partnerships
+                  </li>
+                </ul>
+                <p className="mt-3">What would you like to know about today?</p>
+              </div>
+            </div>
+          </div>
+        )}
+        
         {/* Chat Messages Container */}
         <div 
-          className="flex-grow overflow-y-auto px-2 space-y-5 py-2 scrollbar-thin scrollbar-thumb-forest-200 scrollbar-track-transparent"
+          className="flex-grow overflow-y-auto px-2 space-y-6 py-2"
           style={{ scrollBehavior: "smooth" }}
         >
           {messages.map((message, index) => (
@@ -125,7 +164,7 @@ export default function ChatInterface({
         </div>
         
         {/* Chat Input Form */}
-        <div className="pt-2 border-t border-forest-100">
+        <div className="pt-4 border-t border-forest-100 mt-4">
           <ChatForm onSendMessage={handleSendMessage} disabled={isLoading} />
         </div>
       </div>

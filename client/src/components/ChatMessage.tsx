@@ -13,10 +13,10 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
   if (isUser) {
     return (
       <div className="flex items-start justify-end space-x-3">
-        <div className="bg-gradient-to-br from-forest-600 to-forest-700 text-white rounded-2xl py-3 px-4 max-w-[85%] shadow-sm">
+        <div className="user-message">
           <div className="text-sm">{message.content}</div>
         </div>
-        <div className="bg-gray-200 text-forest-700 rounded-full p-2 w-9 h-9 flex items-center justify-center shadow-sm flex-shrink-0">
+        <div className="user-avatar">
           <i className="fas fa-user"></i>
         </div>
       </div>
@@ -28,10 +28,10 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
   
   return (
     <div className="flex items-start space-x-3">
-      <div className="bg-forest-600 text-white rounded-full p-2 w-9 h-9 flex items-center justify-center shadow-sm flex-shrink-0">
+      <div className="bot-avatar">
         <i className="fas fa-tree"></i>
       </div>
-      <div className="bg-white border border-forest-100 rounded-2xl p-4 max-w-[85%] shadow-sm">
+      <div className="bot-message">
         <div className="text-sm font-semibold text-forest-800 mb-1">ForestGPT</div>
         
         {/* Echo the user's query in italics if available */}
@@ -42,7 +42,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
         )}
         
         <div 
-          className="prose prose-sm text-gray-700 font-serif"
+          className="prose prose-sm text-gray-700"
           dangerouslySetInnerHTML={{ __html: message.content }}
         />
         
@@ -55,6 +55,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
               aria-expanded={showSources}
               aria-controls="source-links"
             >
+              <i className="fas fa-quote-left text-forest-400 mr-1.5"></i>
               <span>Sources</span>
               <span className="ml-1 text-forest-500 transition-transform duration-200" 
                 style={{ transform: showSources ? 'rotate(180deg)' : 'rotate(0deg)' }}>
@@ -63,7 +64,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
             </button>
             
             {showSources && (
-              <div id="source-links" className="mt-2 pl-3 border-l-2 border-forest-200 space-y-1 py-1">
+              <div id="source-links" className="mt-2 pl-3 border-l-2 border-forest-200 space-y-1 py-1 bg-forest-50 rounded-r-md">
                 {message.sources.map((source, index) => (
                   <a 
                     key={index}
@@ -73,7 +74,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
                     rel={source.url.startsWith("http") ? "noopener noreferrer" : undefined}
                     title={source.url}
                   >
-                    <i className="fas fa-link text-forest-400 mr-1 text-xs"></i>
+                    <i className="fas fa-link text-forest-400 mr-1.5 text-xs"></i>
                     {source.url}
                   </a>
                 ))}

@@ -227,12 +227,12 @@ export async function generateResponse(
     return {
       response: errorResponse,
       sources: [{ url: "Error processing request" }],
+      images: [],
       llmDetails: {
         model: "gpt-4o",
         tokens: { input: 0, output: 0 },
         processingTime
-      },
-      images: []
+      }
     };
   }
 }

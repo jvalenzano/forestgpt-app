@@ -89,7 +89,7 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
   if (isUser) {
     return (
       <motion.div 
-        className="flex items-start justify-end space-x-3 max-w-[95%] md:max-w-[85%] lg:max-w-[75%] ml-auto px-2 md:px-4"
+        className="flex items-start justify-end max-w-[95%] md:max-w-[85%] lg:max-w-[75%] ml-auto px-2 md:px-4"
         initial="initial"
         animate="animate"
         variants={{
@@ -98,7 +98,7 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
         }}
       >
         <motion.div 
-          className="user-message bg-amber-100 p-4 rounded-lg rounded-tr-none shadow-sm border border-amber-300"
+          className="user-message bg-amber-100 p-4 rounded-lg shadow-sm border border-amber-300 w-full"
           variants={bubbleVariants}
         >
           <motion.div 
@@ -108,12 +108,7 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
             {message.content}
           </motion.div>
         </motion.div>
-        <motion.div 
-          className="user-avatar bg-amber-200 w-8 h-8 rounded-full flex items-center justify-center"
-          variants={iconVariants}
-        >
-          <i className="fas fa-user text-amber-800"></i>
-        </motion.div>
+        {/* User avatar removed for consistency */}
       </motion.div>
     );
   }
@@ -123,7 +118,7 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
   
   return (
     <motion.div 
-      className="flex items-start space-x-3 max-w-[95%] md:max-w-[85%] lg:max-w-[75%] px-2 md:px-4"
+      className="flex items-start max-w-[95%] md:max-w-[85%] lg:max-w-[75%] px-2 md:px-4"
       initial="initial"
       animate="animate"
       variants={{
@@ -133,7 +128,7 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
     >
       {/* Tree avatar removed as requested */}
       <motion.div 
-        className="bot-message forest-element p-4 rounded-lg rounded-tl-none shadow-md"
+        className="bot-message forest-element p-4 rounded-lg shadow-md w-full"
         variants={bubbleVariants}
       >
         <div className="leaf"></div>

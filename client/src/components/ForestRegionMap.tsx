@@ -2,14 +2,6 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Define the regions of the US Forest Service
-interface State {
-  code: string;
-  name: string;
-  description: string;
-  nationalForests: string[];
-  regionId: string;
-}
-
 interface ForestRegion {
   id: string;
   name: string;
@@ -94,176 +86,20 @@ const forestRegions: ForestRegion[] = [
   },
 ];
 
-interface StateInfo {
-  name: string;
-  region: string;
-  regionName: string;
-  url: string;
-  quickFacts: string[];
-  nationalForests: string[];
-  path?: string; // SVG path data for state outline
-}
-
 interface ForestRegionMapProps {
   isVisible: boolean;
   onClose: () => void;
 }
 
-const stateInfo: Record<string, StateInfo> = {
-  'MT': {
-    name: 'Montana',
-    region: 'northern',
-    regionName: 'Northern Region (R1)',
-    url: 'https://www.fs.usda.gov/main/r1/home',
-    quickFacts: [
-      'Home to several national forests',
-      'Over 3.7 million acres of wilderness',
-      'Features the Bob Marshall Wilderness Complex'
-    ],
-    nationalForests: [
-      'Beaverhead-Deerlodge National Forest',
-      'Bitterroot National Forest',
-      'Custer Gallatin National Forest',
-      'Flathead National Forest',
-      'Helena-Lewis and Clark National Forest',
-      'Kootenai National Forest',
-      'Lolo National Forest'
-    ]
-  },
-  'ID': {
-    name: 'Idaho',
-    region: 'northern',
-    regionName: 'Northern Region (R1)',
-    url: 'https://www.fs.usda.gov/main/r1/home',
-    quickFacts: [
-      'Contains portions of the Rocky Mountains',
-      'Home to diverse wildlife including elk and wolves',
-      'Features pristine alpine lakes and rivers'
-    ],
-    nationalForests: [
-      'Idaho Panhandle National Forests',
-      'Clearwater National Forest', 
-      'Nez Perce National Forest'
-    ]
-  },
-  'WA': {
-    name: 'Washington',
-    region: 'pacific-northwest',
-    regionName: 'Pacific Northwest Region (R6)',
-    url: 'https://www.fs.usda.gov/main/r6/home',
-    quickFacts: [
-      'Features forests in both Cascade and Olympic mountains',
-      'Home to temperate rainforests',
-      'Includes Mt. Baker-Snoqualmie, one of the most visited forests'
-    ],
-    nationalForests: [
-      'Colville National Forest',
-      'Gifford Pinchot National Forest',
-      'Mt. Baker-Snoqualmie National Forest',
-      'Okanogan-Wenatchee National Forest',
-      'Olympic National Forest'
-    ]
-  },
-  'CA': {
-    name: 'California',
-    region: 'pacific-southwest',
-    regionName: 'Pacific Southwest Region (R5)',
-    url: 'https://www.fs.usda.gov/main/r5/home',
-    quickFacts: [
-      'Home to the iconic Sierra Nevada mountains',
-      'Contains the tallest trees in the world in redwood forests',
-      'Features diverse ecosystems from coastal to alpine'
-    ],
-    nationalForests: [
-      'Angeles National Forest',
-      'Eldorado National Forest',
-      'Klamath National Forest',
-      'Lake Tahoe Basin Management Unit',
-      'Lassen National Forest',
-      'Los Padres National Forest',
-      'Mendocino National Forest',
-      'Modoc National Forest',
-      'Sequoia National Forest',
-      'Shasta-Trinity National Forest',
-      'Sierra National Forest',
-      'Stanislaus National Forest',
-      'Tahoe National Forest'
-    ]
-  },
-  'FL': {
-    name: 'Florida',
-    region: 'southern',
-    regionName: 'Southern Region (R8)',
-    url: 'https://www.fs.usda.gov/main/r8/home',
-    quickFacts: [
-      'Features unique subtropical forest ecosystems',
-      'Contains the largest National Forest in Florida',
-      'Home to diverse wildlife including the Florida black bear'
-    ],
-    nationalForests: [
-      'Apalachicola National Forest',
-      'Ocala National Forest',
-      'Osceola National Forest'
-    ]
-  },
-  'GA': {
-    name: 'Georgia',
-    region: 'southern',
-    regionName: 'Southern Region (R8)',
-    url: 'https://www.fs.usda.gov/main/r8/home',
-    quickFacts: [
-      'Chattahoochee-Oconee National Forests cover over 867,000 acres',
-      'Features the southern terminus of the Appalachian Trail',
-      'Contains diverse ecosystems from mountains to piedmont'
-    ],
-    nationalForests: [
-      'Chattahoochee-Oconee National Forests'
-    ]
-  },
-  'CO': {
-    name: 'Colorado',
-    region: 'rocky-mountain',
-    regionName: 'Rocky Mountain Region (R2)',
-    url: 'https://www.fs.usda.gov/main/r2/home',
-    quickFacts: [
-      'Features 11 national forests covering over 14 million acres',
-      'Contains 54 mountain peaks over 14,000 feet',
-      'Home to diverse wildlife including elk, moose, and bighorn sheep'
-    ],
-    nationalForests: [
-      'Arapaho and Roosevelt National Forests',
-      'Grand Mesa, Uncompahgre and Gunnison National Forests',
-      'Pike and San Isabel National Forests',
-      'Rio Grande National Forest',
-      'San Juan National Forest',
-      'White River National Forest'
-    ]
-  }
-};
-
 const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose }) => {
   const [selectedRegion, setSelectedRegion] = useState<ForestRegion | null>(null);
-  const [selectedState, setSelectedState] = useState<StateInfo | null>(null);
-  const [hoveredState, setHoveredState] = useState<string | null>(null);
 
   const handleRegionClick = (region: ForestRegion) => {
     setSelectedRegion(region);
-    setSelectedState(null); // Clear selected state when a region is clicked
-  };
-
-  const handleStateClick = (stateCode: string) => {
-    if (stateInfo[stateCode]) {
-      setSelectedState(stateInfo[stateCode]);
-    }
-  };
-  
-  const handleStateHover = (stateCode: string | null) => {
-    setHoveredState(stateCode);
   };
 
   const handleClose = () => {
     setSelectedRegion(null);
-    setSelectedState(null);
     onClose();
   };
 
@@ -271,7 +107,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 z-40 flex items-center justify-center bg-black/50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -392,85 +228,19 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                   </g>
                 </svg>
 
-                {/* Interactive clickable states overlay */}
-                <svg 
-                  viewBox="0 0 960 600"
-                  className="w-full h-full absolute top-0 left-0 z-20"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <g>
-                    {/* Interactive state paths - simplified shapes for example states */}
-                    <path 
-                      d="M232,142 l40,20 l30,35 l-5,35 l-20,15 l-25,-5 l-15,-20 l-5,-25 z" 
-                      className={`state-path fill-transparent ${hoveredState === 'MT' ? 'highlighted' : ''}`}
-                      onMouseEnter={() => handleStateHover('MT')}
-                      onMouseLeave={() => handleStateHover(null)}
-                      onClick={() => handleStateClick('MT')}
-                      data-state="MT"
-                    />
-                    <path 
-                      d="M170,140 l40,10 l20,25 l-5,30 l-25,10 l-30,-5 l-15,-20 z" 
-                      className={`state-path fill-transparent ${hoveredState === 'ID' ? 'highlighted' : ''}`}
-                      onMouseEnter={() => handleStateHover('ID')}
-                      onMouseLeave={() => handleStateHover(null)}
-                      onClick={() => handleStateClick('ID')}
-                      data-state="ID"
-                    />
-                    <path 
-                      d="M63,152 l50,20 l15,25 l-10,25 l-30,10 l-25,-10 l-10,-30 z" 
-                      className={`state-path fill-transparent ${hoveredState === 'WA' ? 'highlighted' : ''}`}
-                      onMouseEnter={() => handleStateHover('WA')}
-                      onMouseLeave={() => handleStateHover(null)}
-                      onClick={() => handleStateClick('WA')}
-                      data-state="WA"
-                    />
-                    <path 
-                      d="M60,250 l40,20 l25,30 l0,40 l-30,30 l-35,-15 l-15,-40 z" 
-                      className={`state-path fill-transparent ${hoveredState === 'CA' ? 'highlighted' : ''}`}
-                      onMouseEnter={() => handleStateHover('CA')}
-                      onMouseLeave={() => handleStateHover(null)}
-                      onClick={() => handleStateClick('CA')}
-                      data-state="CA"
-                    />
-                    <path 
-                      d="M600,400 l30,10 l10,20 l-5,15 l-30,10 l-20,-5 l-10,-25 z" 
-                      className={`state-path fill-transparent ${hoveredState === 'FL' ? 'highlighted' : ''}`}
-                      onMouseEnter={() => handleStateHover('FL')}
-                      onMouseLeave={() => handleStateHover(null)}
-                      onClick={() => handleStateClick('FL')}
-                      data-state="FL"
-                    />
-                    <path 
-                      d="M500,350 l25,10 l20,20 l-5,20 l-25,10 l-20,-10 l-5,-25 z" 
-                      className={`state-path fill-transparent ${hoveredState === 'GA' ? 'highlighted' : ''}`}
-                      onMouseEnter={() => handleStateHover('GA')}
-                      onMouseLeave={() => handleStateHover(null)}
-                      onClick={() => handleStateClick('GA')}
-                      data-state="GA"
-                    />
-                    <path 
-                      d="M232,250 l40,20 l15,30 l-5,30 l-30,15 l-20,-10 l-10,-35 z" 
-                      className={`state-path fill-transparent ${hoveredState === 'CO' ? 'highlighted' : ''}`}
-                      onMouseEnter={() => handleStateHover('CO')}
-                      onMouseLeave={() => handleStateHover(null)}
-                      onClick={() => handleStateClick('CO')}
-                      data-state="CO"
-                    />
-                  </g>
-                </svg>
 
                 {/* Clickable region dots */}
                 {forestRegions.map((region) => (
                   <motion.button
                     key={region.id}
                     className={`absolute w-8 h-8 rounded-full ${region.color} flex items-center justify-center 
-                    shadow-lg border-2 border-white/70 hover:border-white hover:shadow-green-400/50 hover:shadow-xl transition-all z-10 region-marker`}
+                    shadow-lg border-2 border-white/70 hover:border-white transition-all z-10 region-marker`}
                     style={{
                       left: `${region.position.x}%`,
                       top: `${region.position.y}%`,
                     }}
                     onClick={() => handleRegionClick(region)}
-                    whileHover={{ scale: 1.3, backgroundColor: "#4ade80" }}
+                    whileHover={{ scale: 1.2 }}
                     whileTap={{ scale: 0.9 }}
                     title={region.name}
                   >
@@ -505,92 +275,44 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
 
               {/* Region information sidebar */}
               <div className="w-full md:w-1/3 h-[400px] overflow-y-auto bg-green-950/50 rounded-lg p-4 border border-green-800">
-                {selectedState ? (
-                <div className="text-green-100 relative z-50">
-                  <div className="flex items-center mb-2">
-                    <div className="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center mr-2 forest-element">
-                      <i className="fas fa-tree text-green-200"></i>
-                      <div className="leaf"></div>
+                {selectedRegion ? (
+                  <div className="text-green-100">
+                    <div className="flex items-center mb-2">
+                      <div className="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center mr-2 forest-element">
+                        <i className="fas fa-tree text-green-200"></i>
+                        <div className="leaf"></div>
+                      </div>
+                      <h3 className="text-lg font-bold">{selectedRegion.name}</h3>
                     </div>
-                    <h3 className="text-lg font-bold">{selectedState.name}</h3>
-                  </div>
-                  <a 
-                    href={selectedState.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-green-400 hover:text-green-300 underline mb-3 block"
-                  >
-                    Visit {selectedState.name} Forest Service
-                  </a>
-                  <div className="mt-4">
-                    <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center mb-2">
-                      <i className="fas fa-info-circle mr-1"></i> Quick Facts
-                    </h4>
-                    <ul className="text-xs space-y-2">
-                      {selectedState.quickFacts.map((fact, index) => (
-                        <li key={index} className="flex items-start">
-                          <span className="text-green-400 mr-2">•</span>
-                          <span>{fact}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="mt-4">
-                    <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center mb-2">
-                      <i className="fas fa-tree mr-1"></i> National Forests
-                    </h4>
-                    <ul className="text-xs space-y-2">
-                      {selectedState.nationalForests.map((forest, index) => (
-                        <li key={index} className="flex items-start">
-                          <span className="text-green-400 mr-2">•</span>
-                          <span>{forest}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ) : selectedRegion ? (
-                <div className="text-green-100">
-                  <div className="flex items-center mb-2">
-                    <div className="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center mr-2 forest-element">
-                      <i className="fas fa-tree text-green-200"></i>
-                      <div className="leaf"></div>
-                    </div>
-                    <h3 className="text-lg font-bold">{selectedRegion.name}</h3>
-                  </div>
-                  <p className="text-sm mb-3">{selectedRegion.description}</p>
-                  <div className="mt-4 space-y-3">
-                    <div>
-                      <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
-                        <i className="fas fa-map-marker-alt mr-1"></i> States
-                      </h4>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {selectedRegion.states.map((state) => (
-                          <button
-                            key={state}
-                            className="inline-block px-2 py-1 text-xs bg-green-900 rounded-md hover:bg-green-800 transition-colors"
-                            onClick={() => setSelectedState(stateInfo[state] || null)}
-                            onMouseEnter={() => setSelectedState(stateInfo[state] || null)}
-                            onMouseLeave={() => setSelectedState(null)}
-                          >
-                            {state}
-                          </button>
-                        ))}
+                    <p className="text-sm mb-3">{selectedRegion.description}</p>
+                    <div className="mt-4 space-y-3">
+                      <div>
+                        <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
+                          <i className="fas fa-map-marker-alt mr-1"></i> States
+                        </h4>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {selectedRegion.states.map((state) => (
+                            <span
+                              key={state}
+                              className="inline-block px-2 py-1 text-xs bg-green-900 rounded-md"
+                            >
+                              {state}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
+                          <i className="fas fa-seedling mr-1"></i> Key Features
+                        </h4>
+                        <ul className="text-xs mt-1 pl-4 space-y-1 list-disc text-green-200">
+                          <li>Multiple national forests and grasslands</li>
+                          <li>Diverse recreation opportunities</li>
+                          <li>Important watershed protection</li>
+                        </ul>
                       </div>
                     </div>
-                    <div>
-                      <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
-                        <i className="fas fa-seedling mr-1"></i> Key Features
-                      </h4>
-                      <ul className="text-xs mt-1 pl-4 space-y-1 list-disc text-green-200">
-                        <li>Multiple national forests and grasslands</li>
-                        <li>Diverse recreation opportunities</li>
-                        <li>Important watershed protection</li>
-                      </ul>
-                    </div>
                   </div>
-                </div>
                 ) : (
                   <div className="text-green-300 h-full flex flex-col items-center justify-center">
                     <div className="w-12 h-12 bg-green-800 rounded-full flex items-center justify-center mb-3 forest-element">
@@ -609,10 +331,6 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
               <p className="text-green-600/70 flex items-center justify-center">
                 <i className="fas fa-info-circle mr-1"></i>
                 Click on the region markers (R1-R10) to explore details about each Forest Service region
-              </p>
-              <p className="text-green-600/70 flex items-center justify-center mt-1">
-                <i className="fas fa-mouse-pointer mr-1"></i>
-                You can also hover over and click on individual states to see state-specific information
               </p>
             </div>
           </motion.div>

@@ -182,7 +182,17 @@ function generateSearchUrls(query: string, classification: { category: string; b
       }
       if (query.toLowerCase().includes("leader") || query.toLowerCase().includes("director") ||
           query.toLowerCase().includes("secretary") || query.toLowerCase().includes("chief")) {
+        // Add more specific URLs for leadership and chief information
         urls.push(`https://${domain}/about-agency/organization`);
+        urls.push(`https://${domain}/about-agency/meet-forest-service`);
+        urls.push(`https://${domain}/about-agency/biographies`);
+        urls.push(`https://${domain}/about-agency/leadership`);
+        
+        // Explicit page for forest service chief if asking about the chief
+        if (query.toLowerCase().includes("chief")) {
+          urls.push(`https://${domain}/about-agency/biographies/randy-moore`);
+          urls.push(`https://${domain}/about-agency/leadership/chief`);
+        }
       }
       break;
       
@@ -290,11 +300,35 @@ function extractImages(html: string, baseUrl: string): ImageInfo[] {
           return;
         }
         
+        // Check for biography images and images of people
+        const isPossiblePersonImage = 
+          alt.toLowerCase().includes('chief') || 
+          alt.toLowerCase().includes('director') ||
+          alt.toLowerCase().includes('secretary') ||
+          alt.toLowerCase().includes('ranger') ||
+          alt.toLowerCase().includes('supervisor') ||
+          alt.toLowerCase().includes('leadership') ||
+          alt.toLowerCase().includes('staff');
+          
+        // Check if image has minimum width/height attributes (to avoid tiny icons)
+        const width = parseInt($img.attr('width') || '0', 10);
+        const height = parseInt($img.attr('height') || '0', 10);
+        const hasSufficientSize = (width > 100 || height > 100);
+        
+        // Special handling for biography images - always include these
+        if (isPossiblePersonImage) {
+          console.log(`Found potential person image: "${alt}", URL: ${fullUrl}`);
+          images.push({ src, alt, fullUrl });
+          seenUrls.add(fullUrl);
+          return;
+        }
+        
         // Prioritize images with descriptive alt text and skip tiny images
         const $parent = $img.parent();
-        if (alt.length > 10 && 
-            !$parent.hasClass('icon') && 
-            !$parent.hasClass('logo')) {
+        const isNotIconOrLogo = !$parent.hasClass('icon') && !$parent.hasClass('logo');
+        
+        // Be more lenient with alt text length - require just 5 chars for general images
+        if ((alt.length > 5 && isNotIconOrLogo) || hasSufficientSize) {
           images.push({ src, alt, fullUrl });
           seenUrls.add(fullUrl);
         }
@@ -486,8 +520,25 @@ export async function scrapRelevantContent(
     const uniqueImageUrls = new Set<string>();
     const dedupedImages = allImages
       .filter(img => {
+        // Allow short alt text for person images with key terms (for biographies)
+        const isPossiblePersonImage = 
+          img.alt.toLowerCase().includes('chief') || 
+          img.alt.toLowerCase().includes('director') ||
+          img.alt.toLowerCase().includes('secretary') ||
+          img.alt.toLowerCase().includes('ranger') ||
+          img.alt.toLowerCase().includes('supervisor') ||
+          img.alt.toLowerCase().includes('leadership') ||
+          img.alt.toLowerCase().includes('staff');
+          
+        // Person images are important for specific queries - always include
+        if (isPossiblePersonImage && query.toLowerCase().includes('chief')) {
+          console.log(`Including person image for chief query: "${img.alt}", URL: ${img.fullUrl}`);
+          uniqueImageUrls.add(img.fullUrl);
+          return true;
+        }
+        
         // Skip if no alt text or very short alt text (likely not informative)
-        if (!img.alt || img.alt.length < 10) {
+        if (!img.alt || img.alt.length < 5) {
           return false;
         }
         
@@ -498,7 +549,7 @@ export async function scrapRelevantContent(
         
         // Skip images with generic terms that might not be relevant
         const genericTerms = ['icon', 'logo', 'banner', 'button', 'thumbnail'];
-        if (genericTerms.some(term => img.alt.toLowerCase().includes(term))) {
+        if (genericTerms.some(term => img.alt.toLowerCase().includes(term)) && !isPossiblePersonImage) {
           return false;
         }
         
@@ -507,6 +558,16 @@ export async function scrapRelevantContent(
       })
       // Calculate relevance score based on query match and context
       .map(img => {
+        // Check for person images or chief images
+        const isPossiblePersonImage = 
+          img.alt.toLowerCase().includes('chief') || 
+          img.alt.toLowerCase().includes('director') ||
+          img.alt.toLowerCase().includes('secretary') ||
+          img.alt.toLowerCase().includes('ranger') ||
+          img.alt.toLowerCase().includes('supervisor') ||
+          img.alt.toLowerCase().includes('leadership') ||
+          img.alt.toLowerCase().includes('staff');
+        
         // Count how many query words appear in the alt text
         const queryWords = query.toLowerCase().split(' ').filter(w => w.length > 3);
         const matchScore = queryWords.filter(word => 
@@ -516,8 +577,24 @@ export async function scrapRelevantContent(
         // Bonus for longer, more descriptive alt text
         const descriptionScore = Math.min(img.alt.length / 20, 3);
         
+        // Huge bonus for person images in person queries
+        let personBonus = 0;
+        if (isPossiblePersonImage) {
+          if (query.toLowerCase().includes('chief') && img.alt.toLowerCase().includes('chief')) {
+            personBonus = 20; // Massive priority for chief images when asking about chief
+            console.log(`Major boost for chief image: "${img.alt}", score +${personBonus}`);
+          } else if (query.toLowerCase().includes('director') && img.alt.toLowerCase().includes('director')) {
+            personBonus = 15; // High priority for director images
+          } else if (query.toLowerCase().includes('leadership') && 
+                   (img.alt.toLowerCase().includes('leadership') || img.alt.toLowerCase().includes('staff'))) {
+            personBonus = 10; // Priority for leadership team images
+          } else if (isPossiblePersonImage) {
+            personBonus = 5; // General person image bonus
+          }
+        }
+        
         // Calculate final score
-        const relevanceScore = matchScore * 2 + descriptionScore;
+        const relevanceScore = matchScore * 2 + descriptionScore + personBonus;
         
         return { ...img, relevanceScore };
       })

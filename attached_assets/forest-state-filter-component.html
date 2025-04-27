@@ -1,0 +1,469 @@
+<!-- ForestGPT State Filter UI Component -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForestGPT State Filter</title>
+    <style>
+        :root {
+            --forest-green: #2c5e1a;
+            --forest-green-light: #4a7c3a;
+            --forest-brown: #785733;
+            --forest-tan: #d2b48c;
+            --forest-white: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--forest-white);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .forest-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .forest-logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .forest-title {
+            font-size: 24px;
+            color: var(--forest-green);
+            margin: 0;
+        }
+
+        .filter-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--forest-green);
+        }
+
+        .states-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .state-chip {
+            display: inline-block;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .state-chip:hover {
+            background-color: #e0e0e0;
+        }
+
+        .state-chip.active {
+            background-color: var(--forest-green);
+            color: white;
+            border-color: var(--forest-green);
+        }
+
+        .region-selector {
+            margin-bottom: 15px;
+        }
+
+        .region-btn {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .region-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .region-btn.active {
+            background-color: var(--forest-green-light);
+            color: white;
+            border-color: var(--forest-green);
+        }
+
+        .search-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-input-container {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+        }
+
+        .search-btn {
+            background-color: var(--forest-green);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            padding: 0 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-btn:hover {
+            background-color: var(--forest-green-light);
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .filter-tag {
+            background-color: var(--forest-tan);
+            color: var(--forest-brown);
+            border-radius: 4px;
+            padding: 4px 10px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tag-remove {
+            margin-left: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .chat-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+
+        .message-user {
+            align-self: flex-end;
+            background-color: var(--forest-green-light);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 18px 18px 0 18px;
+            margin-left: auto;
+        }
+
+        .message-bot {
+            align-self: flex-start;
+            background-color: #f0f0f0;
+            padding: 10px 15px;
+            border-radius: 18px 18px 18px 0;
+        }
+
+        .source-citation {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .states-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="forest-header">
+            <div class="forest-logo">
+                <!-- Tree icon placeholder - replace with actual logo -->
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L7 12H17L12 22" stroke="#2c5e1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h1 class="forest-title">ForestGPT - U.S. Forest Service Assistant</h1>
+        </div>
+
+        <div class="filter-container">
+            <h2 class="filter-title">Filter by State or Region</h2>
+            
+            <div class="region-selector">
+                <button class="region-btn">All States</button>
+                <button class="region-btn">Northeast</button>
+                <button class="region-btn">Southeast</button>
+                <button class="region-btn">Midwest</button>
+                <button class="region-btn">Southwest</button>
+                <button class="region-btn">West</button>
+                <button class="region-btn">Pacific</button>
+            </div>
+
+            <div class="states-grid" id="statesGrid">
+                <!-- States will be populated by JavaScript -->
+            </div>
+
+            <div class="filter-tags" id="filterTags">
+                <!-- Active filters will appear here -->
+                <div class="filter-tag">
+                    California <span class="tag-remove">×</span>
+                </div>
+                <div class="filter-tag">
+                    Permits <span class="tag-remove">×</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <div class="search-input-container">
+                <input type="text" class="search-input" placeholder="Ask about U.S. forests, parks, permits, or wildlife...">
+                <button class="search-btn">Ask</button>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message message-bot">
+                    Welcome to ForestGPT! I can help you find information about U.S. National Forests, parks, permits, recreation, and conservation. You can filter by state or topic to get more specific information.
+                </div>
+                <div class="message message-user">
+                    What permits do I need for camping in California?
+                </div>
+                <div class="message message-bot">
+                    For camping in California's National Forests, you generally need a campfire permit if you plan to have a fire or use a stove. Some popular areas also require wilderness permits or reservations for campgrounds, especially during peak seasons.
+                    <div class="source-citation">Source: fs.usda.gov/california</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array of all 50 US states
+        const states = [
+            'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+            'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
+            'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+            'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland',
+            'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri',
+            'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
+            'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
+            'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina',
+            'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+            'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+        ];
+
+        // Regional groupings
+        const regions = {
+            'Northeast': ['Connecticut', 'Maine', 'Massachusetts', 'New Hampshire', 'Rhode Island', 'Vermont', 'New Jersey', 'New York', 'Pennsylvania'],
+            'Southeast': ['Alabama', 'Arkansas', 'Florida', 'Georgia', 'Kentucky', 'Louisiana', 'Mississippi', 'North Carolina', 'South Carolina', 'Tennessee', 'Virginia', 'West Virginia'],
+            'Midwest': ['Illinois', 'Indiana', 'Iowa', 'Kansas', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'North Dakota', 'Ohio', 'South Dakota', 'Wisconsin'],
+            'Southwest': ['Arizona', 'New Mexico', 'Oklahoma', 'Texas'],
+            'West': ['Colorado', 'Idaho', 'Montana', 'Nevada', 'Utah', 'Wyoming'],
+            'Pacific': ['Alaska', 'California', 'Hawaii', 'Oregon', 'Washington']
+        };
+
+        // Function to generate state chips
+        function populateStates() {
+            const statesGrid = document.getElementById('statesGrid');
+            statesGrid.innerHTML = '';
+
+            states.forEach(state => {
+                const stateChip = document.createElement('div');
+                stateChip.className = 'state-chip';
+                stateChip.textContent = state;
+                stateChip.dataset.state = state;
+                stateChip.addEventListener('click', toggleStateSelection);
+                statesGrid.appendChild(stateChip);
+            });
+        }
+
+        // Function to toggle state selection
+        function toggleStateSelection(event) {
+            const stateChip = event.target;
+            stateChip.classList.toggle('active');
+            updateFilterTags();
+        }
+
+        // Function to update filter tags display
+        function updateFilterTags() {
+            const filterTags = document.getElementById('filterTags');
+            filterTags.innerHTML = '';
+
+            // Get all active states
+            const activeStates = document.querySelectorAll('.state-chip.active');
+            activeStates.forEach(stateElement => {
+                const state = stateElement.dataset.state;
+                
+                // Create filter tag
+                const filterTag = document.createElement('div');
+                filterTag.className = 'filter-tag';
+                filterTag.innerHTML = `${state} <span class="tag-remove" data-state="${state}">×</span>`;
+                
+                // Add event listener to remove button
+                filterTag.querySelector('.tag-remove').addEventListener('click', (e) => {
+                    // Find and deactivate the corresponding state chip
+                    document.querySelector(`.state-chip[data-state="${state}"]`).classList.remove('active');
+                    filterTag.remove();
+                });
+                
+                filterTags.appendChild(filterTag);
+            });
+        }
+
+        // Function to select states by region
+        function selectRegion(region) {
+            // Clear current selections
+            document.querySelectorAll('.state-chip.active').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            
+            // If "All States" is selected, don't select any specific states
+            if (region === 'All States') {
+                updateFilterTags();
+                return;
+            }
+            
+            // Select states in the region
+            regions[region].forEach(state => {
+                const stateChip = document.querySelector(`.state-chip[data-state="${state}"]`);
+                if (stateChip) {
+                    stateChip.classList.add('active');
+                }
+            });
+            
+            updateFilterTags();
+        }
+
+        // Add event listeners to region buttons
+        document.querySelectorAll('.region-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                // Remove active class from all region buttons
+                document.querySelectorAll('.region-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                e.target.classList.add('active');
+                
+                // Select states in the region
+                selectRegion(e.target.textContent);
+            });
+        });
+
+        // Populate the states grid on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            populateStates();
+        });
+
+        // Function to generate Forest Service URLs for selected states
+        function getForestServiceUrls() {
+            const selectedStates = Array.from(document.querySelectorAll('.state-chip.active'))
+                .map(chip => chip.dataset.state);
+            
+            return selectedStates.map(state => {
+                // Format state name for URL (lowercase, replace spaces with hyphens)
+                const formattedState = state.toLowerCase().replace(/\s+/g, '-');
+                return {
+                    state: state,
+                    url: `https://www.fs.usda.gov/fs-tags/${formattedState}`
+                };
+            });
+        }
+
+        // Add event listener to the search button
+        document.querySelector('.search-btn').addEventListener('click', () => {
+            const query = document.querySelector('.search-input').value.trim();
+            if (!query) return;
+            
+            // Get selected states for filtering
+            const selectedStates = getForestServiceUrls();
+            
+            // Add user message to chat
+            addMessage(query, 'user');
+            
+            // In a real implementation, you would send the query and selected states to your backend
+            // For demo purposes, we'll just simulate a response
+            setTimeout(() => {
+                const botResponse = "This is a simulated response based on your query. In the actual implementation, this would contain information scraped from the Forest Service website for the selected states.";
+                addMessage(botResponse, 'bot', selectedStates.length > 0 ? selectedStates[0].url : 'fs.usda.gov');
+            }, 1000);
+            
+            // Clear input
+            document.querySelector('.search-input').value = '';
+        });
+
+        // Function to add messages to the chat
+        function addMessage(text, sender, source = null) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message message-${sender}`;
+            messageDiv.textContent = text;
+            
+            // Add source citation for bot messages if available
+            if (sender === 'bot' && source) {
+                const sourceDiv = document.createElement('div');
+                sourceDiv.className = 'source-citation';
+                sourceDiv.textContent = `Source: ${source}`;
+                messageDiv.appendChild(sourceDiv);
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+</body>
+</html>

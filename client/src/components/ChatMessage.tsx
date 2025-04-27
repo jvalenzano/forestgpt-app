@@ -159,98 +159,7 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
           variants={contentVariants}
         />
         
-        {/* Image display for bot responses with special handling for Chief queries */}
-        {message.role === "bot" && (
-          (message.content.toLowerCase().includes("randy moore") && 
-           userQuery && (
-             userQuery.toLowerCase().includes("chief") || 
-             userQuery.toLowerCase().includes("leadership") || 
-             userQuery.toLowerCase().includes("who is in charge") || 
-             userQuery.toLowerCase().includes("who runs")
-           )) ? (
-            // Special case for Forest Service Chief
-            <motion.div 
-              className="mt-4"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-            >
-              <motion.div 
-                className="relative overflow-hidden rounded-md shadow-sm border border-emerald-300 max-w-md mx-auto"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <a 
-                  href="https://upload.wikimedia.org/wikipedia/commons/e/e8/Randy_Moore_Headshot.jpg" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="block"
-                  title="Randy Moore, Chief of the Forest Service"
-                >
-                  <img 
-                    src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Randy_Moore_Headshot.jpg" 
-                    alt="Randy Moore, Chief of the Forest Service" 
-                    className="w-full h-auto max-h-[250px] object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.onerror = null;
-                      target.src = "https://www.fs.usda.gov/sites/default/files/media_wysiwyg/fs_shield.png";
-                      target.className = "w-auto h-auto max-h-[80px] mx-auto my-4";
-                    }}
-                  />
-                  <div className="bg-emerald-900 bg-opacity-80 text-white text-xs p-2 absolute bottom-0 left-0 right-0">
-                    Randy Moore, Chief of the Forest Service
-                  </div>
-                </a>
-              </motion.div>
-            </motion.div>
-          ) : (
-            // Standard image display for regular queries
-            message.images && message.images.length > 0 && (
-              <motion.div 
-                className="mt-4"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-              >
-                <motion.div 
-                  className="relative overflow-hidden rounded-md shadow-sm border border-emerald-300 max-w-md mx-auto"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <a 
-                    href={message.images[0].fullUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="block"
-                    title={message.images[0].alt}
-                  >
-                    <img 
-                      src={message.images[0].fullUrl} 
-                      alt={message.images[0].alt} 
-                      className="w-full h-auto max-h-[250px] object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.onerror = null;
-                        target.src = "https://www.fs.usda.gov/sites/default/files/media_wysiwyg/fs_shield.png";
-                        target.className = "w-auto h-auto max-h-[80px] mx-auto my-4";
-                      }}
-                    />
-                    {message.images[0].alt && (
-                      <div className="bg-emerald-900 bg-opacity-80 text-white text-xs p-2 absolute bottom-0 left-0 right-0">
-                        {message.images[0].alt}
-                      </div>
-                    )}
-                  </a>
-                </motion.div>
-              </motion.div>
-            )
-          )
-        )}
+        {/* Images have been removed as requested */}
         
         {/* Region map button if region content is detected */}
         {hasRegionInfo && onShowRegionMap && (
@@ -345,7 +254,7 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
                       }
                     } else {
                       // For non-URL sources, use a generic name or title if available
-                      displayUrl = source.title || "Additional Information";
+                      displayUrl = source.title || "Forest Service Resource";
                     }
                     
                     // Determine if this is a clickable link

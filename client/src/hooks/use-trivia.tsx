@@ -10,15 +10,16 @@ type UseTriviaOptions = {
 export function useTrivia({
   initialDelay = 20000, // Default 20 seconds initial delay
   interval = 120000,    // Default 2 minutes between popups
-  duration = 5000,      // Default 5 seconds display time (reduced from 10s)
+  duration = 10000,     // Default 10 seconds display time
   enabled = true        // Enabled by default
 }: UseTriviaOptions = {}) {
   const [isTriviaVisible, setIsTriviaVisible] = useState<boolean>(false);
   const [isFirstTriviaShown, setIsFirstTriviaShown] = useState<boolean>(false);
+  const [isTriviaEnabled, setIsTriviaEnabled] = useState<boolean>(enabled);
 
   // Handle showing trivia on a timer
   useEffect(() => {
-    if (!enabled) return;
+    if (!isTriviaEnabled) return;
 
     // Initial trivia display after delay
     const initialTimer = setTimeout(() => {
@@ -49,7 +50,7 @@ export function useTrivia({
       clearTimeout(initialTimer);
       clearInterval(intervalTimer);
     };
-  }, [enabled, initialDelay, interval, duration, isFirstTriviaShown]);
+  }, [isTriviaEnabled, initialDelay, interval, duration, isFirstTriviaShown]);
 
   // Function to manually hide trivia
   const hideTrivia = () => {
@@ -58,6 +59,8 @@ export function useTrivia({
 
   // Function to manually show trivia
   const showTrivia = () => {
+    if (!isTriviaEnabled) return; // Don't show if disabled
+    
     setIsTriviaVisible(true);
     setIsFirstTriviaShown(true);
     
@@ -67,9 +70,21 @@ export function useTrivia({
     }, duration);
   };
 
+  // Function to toggle trivia feature on/off
+  const toggleTrivia = () => {
+    setIsTriviaEnabled(prev => !prev);
+    
+    // If turning off, also hide any visible trivia
+    if (isTriviaEnabled) {
+      setIsTriviaVisible(false);
+    }
+  };
+
   return {
     isTriviaVisible,
+    isTriviaEnabled,
     hideTrivia,
-    showTrivia
+    showTrivia,
+    toggleTrivia
   };
 }

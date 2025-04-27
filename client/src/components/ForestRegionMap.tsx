@@ -566,6 +566,17 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                 <i className="fas fa-lightbulb mr-1"></i>
                 Click on state abbreviations to discover interesting forest facts
               </p>
+              <p className="text-blue-400/80 flex items-center justify-center mt-1 text-[11px]">
+                <i className="fas fa-map-marked mr-1"></i>
+                <a 
+                  href="https://www.fs.usda.gov/mapfinder/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:underline hover:text-blue-300 transition-colors"
+                >
+                  Visit the official Forest Service Map Finder for detailed maps
+                </a>
+              </p>
             </div>
           </motion.div>
         </motion.div>

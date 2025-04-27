@@ -41,10 +41,10 @@ export default function ChatInterface({
   const { toast } = useToast();
   
   // Initialize trivia hook with custom settings
-  const { isTriviaVisible, hideTrivia, showTrivia } = useTrivia({
+  const { isTriviaVisible, isTriviaEnabled, hideTrivia, showTrivia, toggleTrivia } = useTrivia({
     initialDelay: 20000,   // First trivia appears after 20 seconds
     interval: 180000,      // New trivia every 3 minutes
-    duration: 5000,        // Each trivia shows for 5 seconds
+    duration: 10000,       // Each trivia shows for 10 seconds
     enabled: true          // Trivia is enabled by default
   });
   
@@ -155,7 +155,18 @@ export default function ChatInterface({
                 Your US Forest Service virtual assistant
               </p>
             </div>
-            <div className="ml-auto">
+            <div className="ml-auto flex items-center space-x-2">
+              {/* Toggle trivia button */}
+              <button 
+                onClick={toggleTrivia}
+                className={`text-xs ${isTriviaEnabled ? 'bg-amber-700 hover:bg-amber-600' : 'bg-gray-700 hover:bg-gray-600'} text-gray-100 py-1 px-3 rounded-full flex items-center space-x-1 transition-colors`}
+                title={isTriviaEnabled ? "Turn off forest facts" : "Turn on forest facts"}
+              >
+                <i className={`fas fa-lightbulb ${isTriviaEnabled ? 'text-amber-300' : 'text-gray-400'} mr-1`}></i>
+                <span>Facts {isTriviaEnabled ? 'On' : 'Off'}</span>
+              </button>
+              
+              {/* Forest Regions map button */}
               <button 
                 onClick={() => setIsRegionMapVisible(true)}
                 className="text-xs bg-green-900 hover:bg-green-800 text-green-100 py-1 px-3 rounded-full flex items-center space-x-1 transition-colors"

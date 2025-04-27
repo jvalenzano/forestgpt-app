@@ -126,7 +126,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
               </h2>
               <button
                 onClick={handleClose}
-                className="text-green-300 hover:text-white transition-colors"
+                className="w-8 h-8 rounded-full bg-green-800 flex items-center justify-center text-green-300 hover:text-white hover:bg-green-700 transition-colors"
                 aria-label="Close map"
               >
                 <i className="fas fa-times"></i>
@@ -135,7 +135,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
 
             <div className="flex flex-col md:flex-row gap-6">
               {/* Map of US with clickable regions */}
-              <div className="relative w-full md:w-2/3 h-[300px] bg-gray-900 rounded-lg border border-green-900 overflow-hidden forest-element">
+              <div className="relative w-full md:w-2/3 h-[300px] map-container rounded-lg border border-green-900 overflow-hidden forest-element">
                 <div className="leaf"></div>
                 <div className="leaf"></div>
                 <div className="leaf"></div>
@@ -165,7 +165,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                   <motion.button
                     key={region.id}
                     className={`absolute w-6 h-6 rounded-full ${region.color} flex items-center justify-center 
-                    shadow-lg border border-white/40 hover:border-white transition-all z-10`}
+                    shadow-lg border border-white/40 hover:border-white transition-all z-10 region-marker`}
                     style={{
                       left: `${region.position.x}%`,
                       top: `${region.position.y}%`,
@@ -201,33 +201,61 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
               <div className="w-full md:w-1/3 bg-green-950/50 rounded-lg p-4 border border-green-800">
                 {selectedRegion ? (
                   <div className="text-green-100">
-                    <h3 className="text-lg font-bold mb-2">{selectedRegion.name}</h3>
+                    <div className="flex items-center mb-2">
+                      <div className="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center mr-2 forest-element">
+                        <i className="fas fa-tree text-green-200"></i>
+                        <div className="leaf"></div>
+                      </div>
+                      <h3 className="text-lg font-bold">{selectedRegion.name}</h3>
+                    </div>
                     <p className="text-sm mb-3">{selectedRegion.description}</p>
-                    <div className="mt-2">
-                      <h4 className="text-xs font-semibold text-green-400 uppercase">States</h4>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {selectedRegion.states.map((state) => (
-                          <span
-                            key={state}
-                            className="inline-block px-2 py-1 text-xs bg-green-900 rounded-md"
-                          >
-                            {state}
-                          </span>
-                        ))}
+                    <div className="mt-4 space-y-3">
+                      <div>
+                        <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
+                          <i className="fas fa-map-marker-alt mr-1"></i> States
+                        </h4>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {selectedRegion.states.map((state) => (
+                            <span
+                              key={state}
+                              className="inline-block px-2 py-1 text-xs bg-green-900 rounded-md"
+                            >
+                              {state}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
+                          <i className="fas fa-seedling mr-1"></i> Key Features
+                        </h4>
+                        <ul className="text-xs mt-1 pl-4 space-y-1 list-disc text-green-200">
+                          <li>Multiple national forests and grasslands</li>
+                          <li>Diverse recreation opportunities</li>
+                          <li>Important watershed protection</li>
+                        </ul>
                       </div>
                     </div>
                   </div>
                 ) : (
                   <div className="text-green-300 h-full flex flex-col items-center justify-center">
-                    <i className="fas fa-map-marked-alt text-2xl mb-2"></i>
+                    <div className="w-12 h-12 bg-green-800 rounded-full flex items-center justify-center mb-3 forest-element">
+                      <i className="fas fa-map-marked-alt text-xl text-green-200"></i>
+                      <div className="leaf"></div>
+                      <div className="leaf"></div>
+                    </div>
                     <p className="text-center">Click on a region marker to view information about that U.S. Forest Service region.</p>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="mt-4 text-xs text-green-500 text-center">
+            <div className="mt-4 text-xs text-green-500 text-center space-y-1">
               <p>The U.S. Forest Service manages 154 national forests and 20 grasslands across the country.</p>
+              <p className="text-green-600/70 flex items-center justify-center">
+                <i className="fas fa-info-circle mr-1"></i>
+                Click on the pulsing markers to explore each Forest Service region
+              </p>
             </div>
           </motion.div>
         </motion.div>

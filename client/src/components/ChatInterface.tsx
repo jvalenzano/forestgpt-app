@@ -140,8 +140,8 @@ export default function ChatInterface({
         <div className="leaf"></div>
         <div className="leaf"></div>
         <div className="border-b border-green-800 pb-4 mb-6">
-          <div className="flex items-center space-x-3 mb-2">
-            <div className="bot-avatar w-12 h-12 forest-element">
+          <div className="flex items-center mb-2">
+            <div className="bot-avatar w-12 h-12 forest-element mr-3">
               <i className="fas fa-tree text-lg"></i>
               <div className="leaf"></div>
               <div className="leaf"></div>
@@ -154,6 +154,15 @@ export default function ChatInterface({
               <p className="text-sm text-green-300">
                 Your US Forest Service virtual assistant
               </p>
+            </div>
+            <div className="ml-auto">
+              <button 
+                onClick={() => setIsRegionMapVisible(true)}
+                className="text-xs bg-green-900 hover:bg-green-800 text-green-100 py-1 px-3 rounded-full flex items-center space-x-1 transition-colors"
+              >
+                <i className="fas fa-map-marked-alt text-green-400 mr-1"></i>
+                <span>Forest Regions</span>
+              </button>
             </div>
           </div>
           <p className="text-sm text-green-300 pl-2 border-l-4 border-green-700 ml-2 mt-3">

@@ -124,7 +124,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
         variants={bubbleVariants}
       >
         <motion.div 
-          className="text-sm font-semibold text-forest-800 mb-1"
+          className="text-sm font-semibold text-emerald-800 mb-1"
           variants={contentVariants}
         >
           ForestGPT
@@ -133,7 +133,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
         {/* Echo the user's query in italics if available */}
         {userQuery && (
           <motion.div 
-            className="text-xs italic text-gray-500 mb-2 border-l-2 border-forest-200 pl-2"
+            className="text-xs italic text-gray-500 mb-2 border-l-2 border-emerald-200 pl-2"
             initial={{ opacity: 0, x: -5 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
@@ -157,7 +157,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
             transition={{ delay: 0.5, duration: 0.5 }}
           >
             <motion.div 
-              className="relative overflow-hidden rounded-md shadow-sm border border-forest-100 max-w-md mx-auto"
+              className="relative overflow-hidden rounded-md shadow-sm border border-emerald-300 max-w-md mx-auto"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}

@@ -254,24 +254,67 @@ export async function generateResponse(
         
         // Exact matches for important entities (people, places, specific concepts)
         const entities = [
-          // Names and titles
-          'chief', 'secretary', 'ranger', 'supervisor', 'director',
-          // Places and landmarks
-          'forest', 'park', 'trail', 'mountain', 'river', 'lake',
-          // Specific topics
-          'permit', 'camping', 'hiking', 'conservation', 'wildlife'
+          // Names and titles (prioritized very high)
+          {term: 'chief', weight: 10},
+          {term: 'secretary', weight: 10},
+          {term: 'ranger', weight: 8},
+          {term: 'supervisor', weight: 8},
+          {term: 'director', weight: 8},
+          {term: 'forester', weight: 8},
+          {term: 'employee', weight: 7},
+          {term: 'staff', weight: 7},
+          {term: 'official', weight: 7},
+          // Places and landmarks (medium priority)
+          {term: 'forest', weight: 6},
+          {term: 'park', weight: 6},
+          {term: 'trail', weight: 6},
+          {term: 'mountain', weight: 6},
+          {term: 'river', weight: 5},
+          {term: 'lake', weight: 5},
+          // Specific topics (lower priority)
+          {term: 'permit', weight: 5},
+          {term: 'camping', weight: 4},
+          {term: 'hiking', weight: 4},
+          {term: 'conservation', weight: 4},
+          {term: 'wildlife', weight: 4}
         ];
         
         entities.forEach(entity => {
-          // Extra points for direct entity matches
-          if (query.toLowerCase().includes(entity) && altText.includes(entity)) {
-            score += 5;
+          // Extra points for direct entity matches with weighted importance
+          if (query.toLowerCase().includes(entity.term) && altText.includes(entity.term)) {
+            score += entity.weight;
           }
         });
+        
+        // Special boost for person/people images when query is about people
+        const personRelatedTerms = ['chief', 'secretary', 'director', 'ranger', 'forester', 'employee', 'staff', 'person', 'people'];
+        const queryContainsPerson = personRelatedTerms.some(term => query.toLowerCase().includes(term));
+        
+        // Strong boost for person-related images when the query is about a person
+        if (queryContainsPerson && (altText.includes('person') || altText.includes('people'))) {
+          score += 8;
+        }
+        
+        // Significant boost for images of people in uniform when asking about forest service staff
+        if (queryContainsPerson && (altText.includes('uniform') || altText.includes('official'))) {
+          score += 10;
+        }
+        
+        // Special case for Chief of Forest Service
+        if (query.toLowerCase().includes('chief') || query.toLowerCase().includes('director')) {
+          if (altText.toLowerCase().includes('chief') || altText.toLowerCase().includes('director')) {
+            score += 15; // Very high priority for chief/director images
+          }
+        }
         
         // Downgrade scores for generic images
         if (altText.includes('logo') || altText.includes('icon')) {
           score -= 5;
+        }
+        
+        // Significantly downgrade low-information images
+        if (altText.length < 10 || altText.includes('banner') || altText.includes('header')) {
+          score -= 8;
         }
         
         return { image, score };
@@ -281,9 +324,21 @@ export async function generateResponse(
       scoredImages.sort((a, b) => b.score - a.score);
       
       // Only include the top scoring image if it has a reasonable score
-      if (scoredImages.length > 0 && scoredImages[0].score > 3) {
+      // Higher threshold for better relevance
+      if (scoredImages.length > 0 && scoredImages[0].score > 5) {
         relevantImages = [scoredImages[0].image];
+        
+        // Debug image selection
+        console.log(`Selected image: "${scoredImages[0].image.alt}" with score: ${scoredImages[0].score}`);
+        if (scoredImages.length > 1) {
+          console.log(`Next best image: "${scoredImages[1].image.alt}" with score: ${scoredImages[1].score}`);
+        }
       } else {
+        // No image scored high enough
+        console.log(`No images matched well enough for query: "${query}"`);
+        if (scoredImages.length > 0) {
+          console.log(`Best image only scored ${scoredImages[0].score}: "${scoredImages[0].image.alt}"`);
+        }
         relevantImages = [];
       }
     }

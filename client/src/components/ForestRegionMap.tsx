@@ -459,14 +459,6 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                     transition={{ repeat: Infinity, duration: 1.5 }}
                   />
                 )}
-                {/* Resize handle */}
-                <div 
-                  className="absolute bottom-0 left-0 right-0 h-6 flex items-center justify-center cursor-ns-resize bg-gradient-to-t from-green-950/80 to-transparent"
-                  onMouseDown={handleResizeStart}
-                >
-                  <div className="w-24 h-1 bg-green-500/60 rounded-full"></div>
-                  <span className="absolute text-green-300 text-xs font-medium">Resize</span>
-                </div>
               </div>
 
               {/* Region information sidebar */}
@@ -482,7 +474,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                       <h3 className="text-lg font-bold">{selectedRegion.name}</h3>
                     </div>
                     <p className="text-sm mb-3">{selectedRegion.description}</p>
-                    <div className="mt-4 space-y-3">
+                    <div className="mt-4 space-y-4">
                       <div>
                         <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
                           <i className="fas fa-map-marker-alt mr-1"></i> States
@@ -491,10 +483,10 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                           {selectedRegion.states.map((state) => (
                             <button
                               key={state}
-                              className={`inline-block px-2 py-1 text-xs rounded-md cursor-pointer transition-colors ${
+                              className={`inline-block px-2 py-1 text-xs rounded-md cursor-pointer transition-all ${
                                 selectedState === state 
-                                  ? 'bg-green-700 border border-green-400' 
-                                  : 'bg-green-900 hover:bg-green-800'
+                                  ? 'bg-green-600 border border-green-400 shadow-md scale-110' 
+                                  : 'bg-green-900 hover:bg-green-800 hover:scale-105 hover:shadow-sm'
                               }`}
                               onClick={() => handleStateClick(state)}
                             >
@@ -517,15 +509,27 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                       {/* Did you know section */}
                       {fact && (
                         <motion.div 
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-4 bg-green-900/40 border border-green-800/80 rounded-lg p-3"
+                          initial={{ opacity: 0, y: 20, height: 0 }}
+                          animate={{ opacity: 1, y: 0, height: 'auto' }}
+                          exit={{ opacity: 0, y: 20, height: 0 }}
+                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                          className="mt-4 bg-green-900/40 border border-green-800/80 rounded-lg p-3 shadow-lg"
                         >
                           <div className="flex gap-2">
-                            <div className="flex-shrink-0 text-yellow-300 text-lg mt-1">
+                            <motion.div 
+                              className="flex-shrink-0 text-yellow-300 text-lg mt-1"
+                              animate={{ 
+                                opacity: [0.7, 1, 0.7],
+                                scale: [1, 1.1, 1]
+                              }}
+                              transition={{ 
+                                repeat: Infinity, 
+                                duration: 2,
+                                ease: "easeInOut"
+                              }}
+                            >
                               <i className="fas fa-lightbulb"></i>
-                            </div>
+                            </motion.div>
                             <div>
                               <h5 className="font-bold text-yellow-200 text-sm">Did you know?</h5>
                               <p className="text-green-100 text-xs mt-1">{fact}</p>
@@ -553,6 +557,10 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
               <p className="text-green-600/70 flex items-center justify-center">
                 <i className="fas fa-info-circle mr-1"></i>
                 Click on the region markers (R1-R10) to explore details about each Forest Service region
+              </p>
+              <p className="text-yellow-600/70 flex items-center justify-center">
+                <i className="fas fa-lightbulb mr-1"></i>
+                Click on state abbreviations to discover interesting forest facts
               </p>
             </div>
           </motion.div>

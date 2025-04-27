@@ -104,22 +104,28 @@ export default function ChatInterface({
       {/* Forest Trivia Component */}
       <ForestTrivia isVisible={isTriviaVisible} onClose={hideTrivia} />
       
-      <div className="chat-container p-4 flex-grow flex flex-col overflow-hidden">
-        <div className="border-b border-emerald-200 pb-4 mb-6">
+      <div className="chat-container p-4 flex-grow flex flex-col overflow-hidden forest-element">
+        <div className="leaf"></div>
+        <div className="leaf"></div>
+        <div className="leaf"></div>
+        <div className="border-b border-green-800 pb-4 mb-6">
           <div className="flex items-center space-x-3 mb-2">
-            <div className="bot-avatar w-12 h-12">
+            <div className="bot-avatar w-12 h-12 forest-element">
               <i className="fas fa-tree text-lg"></i>
+              <div className="leaf"></div>
+              <div className="leaf"></div>
+              <div className="leaf"></div>
             </div>
             <div>
               <h2 className="text-2xl forest-gradient-text">
                 ForestGPT
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-green-300">
                 Your US Forest Service virtual assistant
               </p>
             </div>
           </div>
-          <p className="text-sm text-gray-600 pl-2 border-l-4 border-emerald-300 ml-2 mt-3">
+          <p className="text-sm text-green-300 pl-2 border-l-4 border-green-700 ml-2 mt-3">
             Ask questions about the US Forest Service. All responses are based on content from fs.usda.gov
           </p>
         </div>
@@ -127,28 +133,34 @@ export default function ChatInterface({
         {/* Initial welcome message if no messages */}
         {messages.length === 0 && (
           <div className="flex items-start space-x-3 mb-6">
-            <div className="bot-avatar">
+            <div className="bot-avatar forest-element">
               <i className="fas fa-tree"></i>
+              <div className="leaf"></div>
+              <div className="leaf"></div>
+              <div className="leaf"></div>
             </div>
-            <div className="bot-message">
-              <div className="text-sm font-semibold text-forest-800 mb-2">ForestGPT</div>
-              <div className="prose prose-sm text-gray-700">
+            <div className="bot-message forest-element">
+              <div className="leaf"></div>
+              <div className="leaf"></div>
+              <div className="leaf"></div>
+              <div className="text-sm font-semibold text-green-100 mb-2">ForestGPT</div>
+              <div className="prose prose-invert prose-sm">
                 <p>Hello! I'm ForestGPT, your US Forest Service assistant. I can help answer questions about:</p>
                 <ul className="pl-5 mt-2 space-y-1">
                   <li className="flex items-center">
-                    <i className="fas fa-campground text-emerald-600 mr-2"></i>
+                    <i className="fas fa-campground text-green-400 mr-2"></i>
                     Recreation and visiting national forests
                   </li>
                   <li className="flex items-center">
-                    <i className="fas fa-leaf text-emerald-600 mr-2"></i>
+                    <i className="fas fa-leaf text-green-400 mr-2"></i>
                     Forest management and conservation
                   </li>
                   <li className="flex items-center">
-                    <i className="fas fa-sitemap text-emerald-600 mr-2"></i>
+                    <i className="fas fa-sitemap text-green-400 mr-2"></i>
                     The Forest Service organization
                   </li>
                   <li className="flex items-center">
-                    <i className="fas fa-handshake text-emerald-600 mr-2"></i>
+                    <i className="fas fa-handshake text-green-400 mr-2"></i>
                     Career opportunities and partnerships
                   </li>
                 </ul>
@@ -177,7 +189,7 @@ export default function ChatInterface({
         </div>
         
         {/* Chat Input Form */}
-        <div className="pt-4 border-t border-emerald-200 mt-4">
+        <div className="pt-4 border-t border-green-800 mt-4">
           <ChatForm onSendMessage={handleSendMessage} disabled={isLoading} />
         </div>
       </div>

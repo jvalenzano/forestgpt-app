@@ -2,9 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import ChatMessage from "./ChatMessage";
 import ChatForm from "./ChatForm";
 import LoadingIndicator from "./LoadingIndicator";
+import ForestTrivia from "./ForestTrivia";
 import { ChatMessage as ChatMessageType } from "@/lib/types";
 import { sendChatMessage } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { useTrivia } from "@/hooks/use-trivia";
 
 interface ChatInterfaceProps {
   debugMode: boolean;
@@ -35,6 +37,14 @@ export default function ChatInterface({
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  
+  // Initialize trivia hook with custom settings
+  const { isTriviaVisible, hideTrivia, showTrivia } = useTrivia({
+    initialDelay: 20000,   // First trivia appears after 20 seconds
+    interval: 180000,      // New trivia every 3 minutes
+    duration: 12000,       // Each trivia shows for 12 seconds
+    enabled: true          // Trivia is enabled by default
+  });
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -91,8 +101,11 @@ export default function ChatInterface({
 
   return (
     <section className="flex-grow md:w-3/4 flex flex-col h-[calc(100vh-8rem)]">
+      {/* Forest Trivia Component */}
+      <ForestTrivia isVisible={isTriviaVisible} onClose={hideTrivia} />
+      
       <div className="chat-container p-4 flex-grow flex flex-col overflow-hidden">
-        <div className="border-b border-forest-100 pb-4 mb-6">
+        <div className="border-b border-emerald-200 pb-4 mb-6">
           <div className="flex items-center space-x-3 mb-2">
             <div className="bot-avatar w-12 h-12 bg-gradient-to-br from-forest-600 to-forest-700">
               <i className="fas fa-tree text-lg"></i>
@@ -106,7 +119,7 @@ export default function ChatInterface({
               </p>
             </div>
           </div>
-          <p className="text-sm text-gray-600 pl-2 border-l-4 border-forest-200 ml-2 mt-3">
+          <p className="text-sm text-gray-600 pl-2 border-l-4 border-emerald-300 ml-2 mt-3">
             Ask questions about the US Forest Service. All responses are based on content from fs.usda.gov
           </p>
         </div>
@@ -164,7 +177,7 @@ export default function ChatInterface({
         </div>
         
         {/* Chat Input Form */}
-        <div className="pt-4 border-t border-forest-100 mt-4">
+        <div className="pt-4 border-t border-emerald-200 mt-4">
           <ChatForm onSendMessage={handleSendMessage} disabled={isLoading} />
         </div>
       </div>

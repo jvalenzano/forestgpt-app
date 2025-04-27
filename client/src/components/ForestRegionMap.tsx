@@ -127,7 +127,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -254,13 +254,13 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                   <motion.button
                     key={region.id}
                     className={`absolute w-8 h-8 rounded-full ${region.color} flex items-center justify-center 
-                    shadow-lg border-2 border-white/70 hover:border-white transition-all z-10 region-marker`}
+                    shadow-lg border-2 border-white/70 hover:border-white hover:shadow-green-400/50 hover:shadow-xl transition-all z-10 region-marker`}
                     style={{
                       left: `${region.position.x}%`,
                       top: `${region.position.y}%`,
                     }}
                     onClick={() => handleRegionClick(region)}
-                    whileHover={{ scale: 1.2 }}
+                    whileHover={{ scale: 1.3, backgroundColor: "#4ade80" }}
                     whileTap={{ scale: 0.9 }}
                     title={region.name}
                   >
@@ -296,7 +296,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
               {/* Region information sidebar */}
               <div className="w-full md:w-1/3 h-[400px] overflow-y-auto bg-green-950/50 rounded-lg p-4 border border-green-800">
                 {selectedState ? (
-                <div className="text-green-100">
+                <div className="text-green-100 relative z-50">
                   <div className="flex items-center mb-2">
                     <div className="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center mr-2 forest-element">
                       <i className="fas fa-tree text-green-200"></i>

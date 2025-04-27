@@ -216,8 +216,12 @@ export async function generateResponse(
         }
       }).filter(Boolean);
       
-      // Only include images if they're from domains we actually used in the response
-      relevantImages = processedData.images.filter(image => {
+      // Improved image selection logic for better context matching
+      const queryKeywords = query.toLowerCase().split(/\s+/);
+      const responseKeywords = generatedResponse.toLowerCase().split(/\s+/);
+      
+      // Filter for images from domains we used in the response
+      let candidateImages = processedData.images.filter(image => {
         try {
           const imageUrl = new URL(image.fullUrl);
           return sourceDomains.some(domain => imageUrl.hostname.includes(domain));
@@ -226,17 +230,60 @@ export async function generateResponse(
         }
       });
       
-      // If we have a relevant image and the query is likely to benefit from visual content,
-      // include it; otherwise, don't show any images
-      const visualTopics = ['forest', 'tree', 'wildlife', 'landscape', 'hiking', 'camping', 
-                           'trail', 'park', 'fire', 'conservation', 'map', 'diagram'];
-                           
-      const queryHasVisualTopic = visualTopics.some(topic => 
-        query.toLowerCase().includes(topic)
-      );
+      // Score each image based on its alt text's relevance to the query and response
+      const scoredImages = candidateImages.map(image => {
+        const altText = image.alt.toLowerCase();
+        const altKeywords = altText.split(/\s+/);
+        
+        // Calculate relevance score based on keyword matches
+        let score = 0;
+        
+        // Check for query keyword matches in alt text (higher weight)
+        queryKeywords.forEach(keyword => {
+          if (keyword.length > 3 && altText.includes(keyword)) {
+            score += 3;
+          }
+        });
+        
+        // Check for response keyword matches in alt text
+        responseKeywords.forEach(keyword => {
+          if (keyword.length > 3 && altText.includes(keyword)) {
+            score += 1;
+          }
+        });
+        
+        // Exact matches for important entities (people, places, specific concepts)
+        const entities = [
+          // Names and titles
+          'chief', 'secretary', 'ranger', 'supervisor', 'director',
+          // Places and landmarks
+          'forest', 'park', 'trail', 'mountain', 'river', 'lake',
+          // Specific topics
+          'permit', 'camping', 'hiking', 'conservation', 'wildlife'
+        ];
+        
+        entities.forEach(entity => {
+          // Extra points for direct entity matches
+          if (query.toLowerCase().includes(entity) && altText.includes(entity)) {
+            score += 5;
+          }
+        });
+        
+        // Downgrade scores for generic images
+        if (altText.includes('logo') || altText.includes('icon')) {
+          score -= 5;
+        }
+        
+        return { image, score };
+      });
       
-      // If query doesn't seem related to visual topics, don't show images
-      if (!queryHasVisualTopic) {
+      // Sort by score and take the most relevant image
+      scoredImages.sort((a, b) => b.score - a.score);
+      
+      // Only include the top scoring image if it has a reasonable score
+      if (scoredImages.length > 0 && scoredImages[0].score > 3) {
+        relevantImages = [scoredImages[0].image];
+      } else {
         relevantImages = [];
       }
     }

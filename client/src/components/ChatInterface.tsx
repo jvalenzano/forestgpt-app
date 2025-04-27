@@ -107,7 +107,7 @@ export default function ChatInterface({
       <div className="chat-container p-4 flex-grow flex flex-col overflow-hidden">
         <div className="border-b border-emerald-200 pb-4 mb-6">
           <div className="flex items-center space-x-3 mb-2">
-            <div className="bot-avatar w-12 h-12 bg-gradient-to-br from-forest-600 to-forest-700">
+            <div className="bot-avatar w-12 h-12">
               <i className="fas fa-tree text-lg"></i>
             </div>
             <div>

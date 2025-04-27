@@ -436,6 +436,15 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                   </motion.button>
                 ))}
 
+                {/* Resize handle */}
+                <div 
+                  className="absolute bottom-0 left-0 right-0 h-8 flex items-center justify-center cursor-ns-resize bg-gradient-to-t from-green-950/80 to-transparent"
+                  onMouseDown={handleResizeStart}
+                >
+                  <div className="w-24 h-1 bg-green-500/60 rounded-full"></div>
+                  <span className="absolute text-green-300 text-xs font-medium">Resize</span>
+                </div>
+
                 {/* Region highlight if selected */}
                 {selectedRegion && (
                   <motion.div
@@ -480,12 +489,17 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                         </h4>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {selectedRegion.states.map((state) => (
-                            <span
+                            <button
                               key={state}
-                              className="inline-block px-2 py-1 text-xs bg-green-900 rounded-md"
+                              className={`inline-block px-2 py-1 text-xs rounded-md cursor-pointer transition-colors ${
+                                selectedState === state 
+                                  ? 'bg-green-700 border border-green-400' 
+                                  : 'bg-green-900 hover:bg-green-800'
+                              }`}
+                              onClick={() => handleStateClick(state)}
                             >
                               {state}
-                            </span>
+                            </button>
                           ))}
                         </div>
                       </div>
@@ -499,6 +513,26 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                           <li>Important watershed protection</li>
                         </ul>
                       </div>
+                      
+                      {/* Did you know section */}
+                      {fact && (
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-4 bg-green-900/40 border border-green-800/80 rounded-lg p-3"
+                        >
+                          <div className="flex gap-2">
+                            <div className="flex-shrink-0 text-yellow-300 text-lg mt-1">
+                              <i className="fas fa-lightbulb"></i>
+                            </div>
+                            <div>
+                              <h5 className="font-bold text-yellow-200 text-sm">Did you know?</h5>
+                              <p className="text-green-100 text-xs mt-1">{fact}</p>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
                     </div>
                   </div>
                 ) : (

@@ -8,6 +8,7 @@ import { ChatMessage as ChatMessageType } from "@/lib/types";
 import { sendChatMessage } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useTrivia } from "@/hooks/use-trivia";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ChatInterfaceProps {
   debugMode: boolean;
@@ -18,18 +19,23 @@ export default function ChatInterface({
   debugMode, 
   onUpdateDebugInfo 
 }: ChatInterfaceProps) {
+  const isMobile = useIsMobile();
   const [messages, setMessages] = useState<ChatMessageType[]>([
     {
       id: "welcome",
       role: "bot",
-      content: `<p>Hello! I'm ForestGPT, your US Forest Service assistant. I can help answer questions about:</p>
-      <ul class="list-disc pl-5 mt-2">
-        <li>Recreation and visiting national forests</li>
-        <li>Forest management and conservation</li>
-        <li>The Forest Service organization</li>
-        <li>Career opportunities and partnerships</li>
-      </ul>
-      <p class="mt-2">What would you like to know about today?</p>`,
+      content: isMobile 
+        ? `<p>Hello! I'm ForestGPT, your Forest Service assistant.</p>
+          <p class="mt-2">I can answer questions about forest recreation, conservation, organization, and careers.</p>
+          <p class="mt-2">What would you like to know?</p>`
+        : `<p>Hello! I'm ForestGPT, your US Forest Service assistant. I can help answer questions about:</p>
+          <ul class="list-disc pl-5 mt-2">
+            <li>Recreation and visiting national forests</li>
+            <li>Forest management and conservation</li>
+            <li>The Forest Service organization</li>
+            <li>Career opportunities and partnerships</li>
+          </ul>
+          <p class="mt-2">What would you like to know about today?</p>`,
       timestamp: new Date(),
       sources: [{ url: "Internal system message" }]
     }
@@ -151,9 +157,11 @@ export default function ChatInterface({
               <h2 className="text-2xl forest-gradient-text">
                 ForestGPT
               </h2>
-              <p className="text-sm text-green-300">
-                Your US Forest Service virtual assistant
-              </p>
+              {!isMobile && (
+                <p className="text-sm text-green-300">
+                  Your US Forest Service virtual assistant
+                </p>
+              )}
             </div>
             <div className="ml-auto flex items-center space-x-2">
               {/* Toggle trivia button */}
@@ -163,7 +171,7 @@ export default function ChatInterface({
                 title={isTriviaEnabled ? "Turn off forest trivia" : "Turn on forest trivia"}
               >
                 <i className={`fas fa-toggle-${isTriviaEnabled ? 'on' : 'off'} ${isTriviaEnabled ? 'text-amber-300' : 'text-gray-400'} mr-1`}></i>
-                <span>Trivia</span>
+                <span className={isMobile ? "sr-only" : ""}>Trivia</span>
               </button>
               
               {/* Regions map button */}
@@ -172,13 +180,15 @@ export default function ChatInterface({
                 className="text-xs bg-green-900 hover:bg-green-800 text-green-100 py-1 px-3 rounded-full flex items-center space-x-1 transition-colors"
               >
                 <i className="fas fa-map-marked-alt text-green-400 mr-1"></i>
-                <span>Regions</span>
+                <span className={isMobile ? "sr-only" : ""}>Regions</span>
               </button>
             </div>
           </div>
-          <p className="text-sm text-green-300 pl-2 border-l-4 border-green-700 ml-2 mt-3">
-            Ask questions about the US Forest Service. All responses are based on content from fs.usda.gov
-          </p>
+          {!isMobile && (
+            <p className="text-sm text-green-300 pl-2 border-l-4 border-green-700 ml-2 mt-3">
+              Ask questions about the US Forest Service. All responses are based on content from fs.usda.gov
+            </p>
+          )}
         </div>
         
         {/* Initial welcome message if no messages */}
@@ -195,28 +205,36 @@ export default function ChatInterface({
               <div className="leaf"></div>
               <div className="leaf"></div>
               <div className="text-sm font-semibold text-green-100 mb-2">ForestGPT</div>
-              <div className="prose prose-invert prose-sm">
-                <p>Hello! I'm ForestGPT, your US Forest Service assistant. I can help answer questions about:</p>
-                <ul className="pl-5 mt-2 space-y-1">
-                  <li className="flex items-center">
-                    <i className="fas fa-campground text-green-400 mr-2"></i>
-                    Recreation and visiting national forests
-                  </li>
-                  <li className="flex items-center">
-                    <i className="fas fa-leaf text-green-400 mr-2"></i>
-                    Forest management and conservation
-                  </li>
-                  <li className="flex items-center">
-                    <i className="fas fa-sitemap text-green-400 mr-2"></i>
-                    The Forest Service organization
-                  </li>
-                  <li className="flex items-center">
-                    <i className="fas fa-handshake text-green-400 mr-2"></i>
-                    Career opportunities and partnerships
-                  </li>
-                </ul>
-                <p className="mt-3">What would you like to know about today?</p>
-              </div>
+              {isMobile ? (
+                <div className="prose prose-invert prose-sm">
+                  <p>Hello! I'm ForestGPT, your Forest Service assistant.</p>
+                  <p className="mt-2">I can answer questions about forest recreation, conservation, organization, and careers.</p>
+                  <p className="mt-2">What would you like to know?</p>
+                </div>
+              ) : (
+                <div className="prose prose-invert prose-sm">
+                  <p>Hello! I'm ForestGPT, your US Forest Service assistant. I can help answer questions about:</p>
+                  <ul className="pl-5 mt-2 space-y-1">
+                    <li className="flex items-center">
+                      <i className="fas fa-campground text-green-400 mr-2"></i>
+                      Recreation and visiting national forests
+                    </li>
+                    <li className="flex items-center">
+                      <i className="fas fa-leaf text-green-400 mr-2"></i>
+                      Forest management and conservation
+                    </li>
+                    <li className="flex items-center">
+                      <i className="fas fa-sitemap text-green-400 mr-2"></i>
+                      The Forest Service organization
+                    </li>
+                    <li className="flex items-center">
+                      <i className="fas fa-handshake text-green-400 mr-2"></i>
+                      Career opportunities and partnerships
+                    </li>
+                  </ul>
+                  <p className="mt-3">What would you like to know about today?</p>
+                </div>
+              )}
             </div>
           </div>
         )}

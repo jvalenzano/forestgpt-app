@@ -105,7 +105,7 @@
   }
   
   .forest-gradient-text {
-    @apply font-bold bg-gradient-to-r from-forest-700 to-forest-500 bg-clip-text text-transparent;
+    @apply font-bold bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent;
   }
   
   .user-message {

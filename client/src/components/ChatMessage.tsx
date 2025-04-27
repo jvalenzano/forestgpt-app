@@ -201,11 +201,11 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
           >
             <button 
               onClick={() => setShowSources(!showSources)}
-              className="flex items-center font-medium text-emerald-600 hover:text-emerald-700 focus:outline-none transition-colors"
+              className="flex items-center px-2 py-1 rounded-md bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 focus:outline-none font-medium text-emerald-700 transition-colors"
               aria-expanded={showSources}
               aria-controls="source-links"
             >
-              <i className="fas fa-link text-emerald-500 mr-1.5"></i>
+              <i className="fas fa-link text-emerald-600 mr-1.5"></i>
               <span>View Source{message.sources.length > 1 ? 's' : ''}</span>
               <motion.span 
                 className="ml-1 text-emerald-500 inline-block" 

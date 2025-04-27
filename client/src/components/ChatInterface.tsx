@@ -136,19 +136,19 @@ export default function ChatInterface({
                 <p>Hello! I'm ForestGPT, your US Forest Service assistant. I can help answer questions about:</p>
                 <ul className="pl-5 mt-2 space-y-1">
                   <li className="flex items-center">
-                    <i className="fas fa-campground text-forest-500 mr-2"></i>
+                    <i className="fas fa-campground text-emerald-600 mr-2"></i>
                     Recreation and visiting national forests
                   </li>
                   <li className="flex items-center">
-                    <i className="fas fa-leaf text-forest-500 mr-2"></i>
+                    <i className="fas fa-leaf text-emerald-600 mr-2"></i>
                     Forest management and conservation
                   </li>
                   <li className="flex items-center">
-                    <i className="fas fa-sitemap text-forest-500 mr-2"></i>
+                    <i className="fas fa-sitemap text-emerald-600 mr-2"></i>
                     The Forest Service organization
                   </li>
                   <li className="flex items-center">
-                    <i className="fas fa-handshake text-forest-500 mr-2"></i>
+                    <i className="fas fa-handshake text-emerald-600 mr-2"></i>
                     Career opportunities and partnerships
                   </li>
                 </ul>

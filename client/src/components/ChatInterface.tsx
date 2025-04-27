@@ -86,13 +86,8 @@ export default function ChatInterface({
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     
-    // Check if the message contains region-related keywords to show the map
-    if (containsRegionKeywords(message)) {
-      // Show the map with a slight delay to allow the message to be sent first
-      setTimeout(() => {
-        setIsRegionMapVisible(true);
-      }, 500);
-    }
+    // Auto keyword detection for map display has been disabled
+    // Map will only be shown when the user clicks the Regions button
     
     try {
       // Send message to server
@@ -105,10 +100,8 @@ export default function ChatInterface({
         onUpdateDebugInfo(response.debugInfo);
       }
       
-      // Also check bot response for region keywords to show map
-      if (!isRegionMapVisible && containsRegionKeywords(response.message.content)) {
-        setIsRegionMapVisible(true);
-      }
+      // Automatic map display from bot response has been disabled
+      // Map will only be shown when the user clicks the Regions button
     } catch (error) {
       console.error("Error sending message:", error);
       toast({

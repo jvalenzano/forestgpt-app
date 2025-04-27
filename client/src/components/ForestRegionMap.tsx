@@ -86,13 +86,33 @@ const forestRegions: ForestRegion[] = [
   },
 ];
 
+interface StateInfo {
+  name: string;
+  url: string;
+  quickFacts: string[];
+}
+
 interface ForestRegionMapProps {
   isVisible: boolean;
   onClose: () => void;
 }
 
+const stateInfo: Record<string, StateInfo> = {
+  'MT': {
+    name: 'Montana',
+    url: 'https://www.fs.usda.gov/montana',
+    quickFacts: [
+      'Home to 10 national forests',
+      'Over 3.7 million acres of wilderness',
+      'Features the Bob Marshall Wilderness Complex'
+    ]
+  },
+  // Add more states as needed
+};
+
 const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose }) => {
   const [selectedRegion, setSelectedRegion] = useState<ForestRegion | null>(null);
+  const [selectedState, setSelectedState] = useState<StateInfo | null>(null);
 
   const handleRegionClick = (region: ForestRegion) => {
     setSelectedRegion(region);
@@ -275,44 +295,78 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
 
               {/* Region information sidebar */}
               <div className="w-full md:w-1/3 h-[400px] overflow-y-auto bg-green-950/50 rounded-lg p-4 border border-green-800">
-                {selectedRegion ? (
-                  <div className="text-green-100">
-                    <div className="flex items-center mb-2">
-                      <div className="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center mr-2 forest-element">
-                        <i className="fas fa-tree text-green-200"></i>
-                        <div className="leaf"></div>
-                      </div>
-                      <h3 className="text-lg font-bold">{selectedRegion.name}</h3>
+                {selectedState ? (
+                <div className="text-green-100">
+                  <div className="flex items-center mb-2">
+                    <div className="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center mr-2 forest-element">
+                      <i className="fas fa-tree text-green-200"></i>
+                      <div className="leaf"></div>
                     </div>
-                    <p className="text-sm mb-3">{selectedRegion.description}</p>
-                    <div className="mt-4 space-y-3">
-                      <div>
-                        <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
-                          <i className="fas fa-map-marker-alt mr-1"></i> States
-                        </h4>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {selectedRegion.states.map((state) => (
-                            <span
-                              key={state}
-                              className="inline-block px-2 py-1 text-xs bg-green-900 rounded-md"
-                            >
-                              {state}
-                            </span>
-                          ))}
-                        </div>
+                    <h3 className="text-lg font-bold">{selectedState.name}</h3>
+                  </div>
+                  <a 
+                    href={selectedState.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-green-400 hover:text-green-300 underline mb-3 block"
+                  >
+                    Visit {selectedState.name} Forest Service
+                  </a>
+                  <div className="mt-4">
+                    <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center mb-2">
+                      <i className="fas fa-info-circle mr-1"></i> Quick Facts
+                    </h4>
+                    <ul className="text-xs space-y-2">
+                      {selectedState.quickFacts.map((fact, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="text-green-400 mr-2">•</span>
+                          <span>{fact}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : selectedRegion ? (
+                <div className="text-green-100">
+                  <div className="flex items-center mb-2">
+                    <div className="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center mr-2 forest-element">
+                      <i className="fas fa-tree text-green-200"></i>
+                      <div className="leaf"></div>
+                    </div>
+                    <h3 className="text-lg font-bold">{selectedRegion.name}</h3>
+                  </div>
+                  <p className="text-sm mb-3">{selectedRegion.description}</p>
+                  <div className="mt-4 space-y-3">
+                    <div>
+                      <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
+                        <i className="fas fa-map-marker-alt mr-1"></i> States
+                      </h4>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {selectedRegion.states.map((state) => (
+                          <button
+                            key={state}
+                            className="inline-block px-2 py-1 text-xs bg-green-900 rounded-md hover:bg-green-800 transition-colors"
+                            onClick={() => setSelectedState(stateInfo[state] || null)}
+                            onMouseEnter={() => setSelectedState(stateInfo[state] || null)}
+                            onMouseLeave={() => setSelectedState(null)}
+                          >
+                            {state}
+                          </button>
+                        ))}
                       </div>
-                      <div>
-                        <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
-                          <i className="fas fa-seedling mr-1"></i> Key Features
-                        </h4>
-                        <ul className="text-xs mt-1 pl-4 space-y-1 list-disc text-green-200">
-                          <li>Multiple national forests and grasslands</li>
-                          <li>Diverse recreation opportunities</li>
-                          <li>Important watershed protection</li>
-                        </ul>
-                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
+                        <i className="fas fa-seedling mr-1"></i> Key Features
+                      </h4>
+                      <ul className="text-xs mt-1 pl-4 space-y-1 list-disc text-green-200">
+                        <li>Multiple national forests and grasslands</li>
+                        <li>Diverse recreation opportunities</li>
+                        <li>Important watershed protection</li>
+                      </ul>
                     </div>
                   </div>
+                </div>
                 ) : (
                   <div className="text-green-300 h-full flex flex-col items-center justify-center">
                     <div className="w-12 h-12 bg-green-800 rounded-full flex items-center justify-center mb-3 forest-element">

@@ -229,6 +229,9 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
   const [mapHeight, setMapHeight] = useState<number>(400); // Default height
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [fact, setFact] = useState<string | null>(null);
+  // Store the starting point of drag and initial height
+  const [startY, setStartY] = useState<number | null>(null);
+  const [initialHeight, setInitialHeight] = useState<number | null>(null);
 
   const handleRegionClick = (region: ForestRegion) => {
     setSelectedRegion(region);
@@ -262,17 +265,24 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
+    setStartY(e.clientY);
+    setInitialHeight(mapHeight);
   };
   
   const handleResizeEnd = () => {
     setIsDragging(false);
+    setStartY(null);
   };
   
+  
   const handleResize = (e: React.MouseEvent) => {
-    if (isDragging) {
-      const containerRect = e.currentTarget.getBoundingClientRect();
-      // Allow moving both up and down, with min height of 300px and max of 700px
-      const newHeight = Math.max(300, Math.min(700, e.clientY - containerRect.top));
+    if (isDragging && startY !== null && initialHeight !== null) {
+      // Calculate the difference from the start position
+      const diff = e.clientY - startY;
+      
+      // Apply the difference to the initial height
+      // This allows both increasing and decreasing height
+      const newHeight = Math.max(300, Math.min(700, initialHeight + diff));
       setMapHeight(newHeight);
       
       // Prevent text selection during resize
@@ -446,7 +456,10 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                   onMouseDown={handleResizeStart}
                 >
                   <div className="w-24 h-1 bg-green-500/60 rounded-full"></div>
-                  <span className="absolute text-green-300 text-xs font-medium">Resize</span>
+                  <span className="absolute text-green-300 text-xs font-medium">
+                    <i className="fas fa-arrows-alt-v mr-1"></i>
+                    Resize
+                  </span>
                 </div>
 
                 {/* Region highlight if selected */}

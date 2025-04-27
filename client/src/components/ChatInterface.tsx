@@ -163,7 +163,7 @@ export default function ChatInterface({
                 title={isTriviaEnabled ? "Turn off forest facts" : "Turn on forest facts"}
               >
                 <i className={`fas fa-toggle-${isTriviaEnabled ? 'on' : 'off'} ${isTriviaEnabled ? 'text-amber-300' : 'text-gray-400'} mr-1`}></i>
-                <span>Facts</span>
+                <span>Trivia</span>
               </button>
               
               {/* Forest Regions map button */}

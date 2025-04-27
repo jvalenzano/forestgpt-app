@@ -40,12 +40,14 @@ export default function ChatForm({ onSendMessage, disabled = false }: ChatFormPr
   const sendMessage = () => {
     setIsSending(true);
     
-    // Create a longer delay to allow the animation to play
+    // Send message immediately without animation delay
+    onSendMessage(inputValue);
+    setInputValue("");
+    
+    // Just a short delay to show loading indicator
     setTimeout(() => {
-      onSendMessage(inputValue);
-      setInputValue("");
       setIsSending(false);
-    }, 850); // Increased delay for slower animation
+    }, 300);
   };
   
   // Animation variants for send button
@@ -145,90 +147,41 @@ export default function ChatForm({ onSendMessage, disabled = false }: ChatFormPr
             </motion.button>
           )}
           
-          {/* Animated floating bubble that appears during sending */}
-          <AnimatePresence>
-            {isSending && inputValue.trim() && (
-              <motion.div
-                className="user-message absolute z-10 text-sm px-4 py-3 shadow-md"
-                style={{ 
-                  top: '-20px', 
-                  right: '40px',
-                  maxWidth: '80%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }}
-                variants={floatingBubbleVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-              >
-                {inputValue}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* No floating bubble animation */}
         </div>
         
-        {/* Send button with animations */}
-        <motion.button
+        {/* Send button - fixed, non-animated */}
+        <button
           ref={sendButtonRef}
           type="button"
           onClick={isSending ? undefined : sendMessage}
-          className={`ml-2 bg-gradient-to-br from-forest-600 to-forest-700 text-white rounded-full w-12 h-12 flex items-center justify-center ${
+          className={`ml-2 bg-gradient-to-br from-green-800 to-green-900 text-white rounded-full w-12 h-12 flex items-center justify-center ${
             disabled || !inputValue.trim() || isSending
             ? "opacity-50 cursor-not-allowed" 
-            : "shadow-md"
+            : "shadow-md hover:bg-green-800 transition-colors"
           }`}
           disabled={disabled || !inputValue.trim() || isSending}
-          variants={sendButtonVariants}
-          initial="idle"
-          animate={isSending ? "sending" : "idle"}
-          whileHover={disabled || !inputValue.trim() || isSending ? {} : "hover"}
-          whileTap={disabled || !inputValue.trim() || isSending ? {} : "tap"}
           aria-label="Send message"
         >
           <i className="fas fa-paper-plane"></i>
-        </motion.button>
+        </button>
         
-        {/* Loading spinner that appears after sending animation */}
+        {/* Loading indicator that appears during sending */}
         <AnimatePresence>
           {isSending && (
-            <motion.div
-              className="absolute right-0 ml-2 bg-gradient-to-br from-forest-600 to-forest-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md"
-              initial={{ opacity: 0, scale: 0, rotate: -15 }}
-              animate={{ 
-                opacity: 1, 
-                scale: 1, 
-                rotate: 0,
-                transition: {
-                  delay: 0.35,
-                  type: "spring",
-                  damping: 12,
-                  stiffness: 150
-                }
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0,
-                transition: { 
-                  duration: 0.2 
-                }
-              }}
-              aria-label="Sending message"
-            >
+            <div className="absolute right-0 w-12 h-12 flex items-center justify-center">
               <motion.div
+                className="w-5 h-5 border-4 border-green-200 border-t-green-800 rounded-full"
                 animate={{
                   rotate: 360
                 }}
                 transition={{
                   repeat: Infinity,
-                  duration: 1.5,
+                  duration: 1,
                   ease: "linear"
                 }}
-              >
-                <i className="fas fa-paper-plane"></i>
-              </motion.div>
-            </motion.div>
+              />
+            </div>
           )}
         </AnimatePresence>
       </div>

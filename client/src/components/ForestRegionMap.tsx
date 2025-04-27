@@ -474,7 +474,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
 
               {/* Region information sidebar */}
               <div className="w-full md:w-1/3 overflow-y-auto bg-green-950/50 rounded-lg p-4 border border-green-800 max-h-[40vh] md:max-h-none"
-                   style={{ height: `${mapHeight}px` }}>
+                   style={{ height: '280px' }}>
                 {selectedRegion ? (
                   <div className="text-green-100">
                     <div className="flex items-center mb-2">

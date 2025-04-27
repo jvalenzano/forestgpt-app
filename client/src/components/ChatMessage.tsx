@@ -150,13 +150,13 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
         
         {/* Image display for bot responses with special handling for Chief queries */}
         {message.role === "bot" && (
-          message.content.toLowerCase().includes("randy moore") && 
-          userQuery && (
-            userQuery.toLowerCase().includes("chief") || 
-            userQuery.toLowerCase().includes("leadership") || 
-            userQuery.toLowerCase().includes("who is in charge") || 
-            userQuery.toLowerCase().includes("who runs")
-          ) ? (
+          (message.content.toLowerCase().includes("randy moore") && 
+           userQuery && (
+             userQuery.toLowerCase().includes("chief") || 
+             userQuery.toLowerCase().includes("leadership") || 
+             userQuery.toLowerCase().includes("who is in charge") || 
+             userQuery.toLowerCase().includes("who runs")
+           )) ? (
             // Special case for Forest Service Chief
             <motion.div 
               className="mt-4"
@@ -172,14 +172,14 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
                 whileHover={{ scale: 1.02 }}
               >
                 <a 
-                  href="https://www.fs.usda.gov/sites/default/files/2021-08/Randy%20Moore%20photo.jpg" 
+                  href="https://upload.wikimedia.org/wikipedia/commons/e/e8/Randy_Moore_Headshot.jpg" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="block"
                   title="Randy Moore, Chief of the Forest Service"
                 >
                   <img 
-                    src="https://www.fs.usda.gov/sites/default/files/2021-08/Randy%20Moore%20photo.jpg" 
+                    src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Randy_Moore_Headshot.jpg" 
                     alt="Randy Moore, Chief of the Forest Service" 
                     className="w-full h-auto max-h-[250px] object-cover"
                     onError={(e) => {

@@ -220,6 +220,7 @@ export default function ChatInterface({
               key={message.id} 
               message={message} 
               previousMessage={index > 0 ? messages[index - 1] : undefined}
+              onShowRegionMap={() => setIsRegionMapVisible(true)}
             />
           ))}
           

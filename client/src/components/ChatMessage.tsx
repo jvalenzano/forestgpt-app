@@ -2,14 +2,32 @@ import React, { useState } from "react";
 import { ChatMessage as ChatMessageType } from "@/lib/types";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Function to check if message contains region-related content
+const containsRegionKeywords = (content: string): boolean => {
+  const regionKeywords = [
+    'region', 'regions', 'map', 'location', 'where', 'area', 'areas', 
+    'forest service regions', 'forest regions', 'national forest locations',
+    'northern region', 'southern region', 'eastern region', 'western region', 
+    'pacific', 'rocky mountain', 'alaska', 'southwestern', 'intermountain',
+    'pacific southwest', 'pacific northwest'
+  ];
+  
+  const lowercaseContent = content.toLowerCase();
+  return regionKeywords.some(keyword => lowercaseContent.includes(keyword));
+};
+
 interface ChatMessageProps {
   message: ChatMessageType;
   previousMessage?: ChatMessageType;
+  onShowRegionMap?: () => void;
 }
 
-export default function ChatMessage({ message, previousMessage }: ChatMessageProps) {
+export default function ChatMessage({ message, previousMessage, onShowRegionMap }: ChatMessageProps) {
   const [showSources, setShowSources] = useState(false);
   const isUser = message.role === "user";
+  
+  // Check if message contains region-related content
+  const hasRegionInfo = !isUser && containsRegionKeywords(message.content);
   
   // Animation variants
   const bubbleVariants = {
@@ -245,6 +263,24 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
               </motion.div>
             )
           )
+        )}
+        
+        {/* Region map button if region content is detected */}
+        {hasRegionInfo && onShowRegionMap && (
+          <motion.div 
+            className="flex items-center mt-3 mb-1"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <button
+              onClick={onShowRegionMap}
+              className="flex items-center text-xs bg-green-800 hover:bg-green-700 text-green-100 py-1 px-3 rounded-full transition-colors space-x-1"
+            >
+              <i className="fas fa-map-marked-alt text-green-300 mr-1.5"></i>
+              <span>View Forest Regions Map</span>
+            </button>
+          </motion.div>
         )}
         
         {/* Compact collapsible sources section */}

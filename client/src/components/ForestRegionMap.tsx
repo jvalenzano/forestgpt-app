@@ -392,6 +392,72 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                   </g>
                 </svg>
 
+                {/* Interactive clickable states overlay */}
+                <svg 
+                  viewBox="0 0 960 600"
+                  className="w-full h-full absolute top-0 left-0 z-20"
+                  preserveAspectRatio="xMidYMid meet"
+                >
+                  <g>
+                    {/* Interactive state paths - simplified shapes for example states */}
+                    <path 
+                      d="M232,142 l40,20 l30,35 l-5,35 l-20,15 l-25,-5 l-15,-20 l-5,-25 z" 
+                      className={`state-path fill-transparent ${hoveredState === 'MT' ? 'highlighted' : ''}`}
+                      onMouseEnter={() => handleStateHover('MT')}
+                      onMouseLeave={() => handleStateHover(null)}
+                      onClick={() => handleStateClick('MT')}
+                      data-state="MT"
+                    />
+                    <path 
+                      d="M170,140 l40,10 l20,25 l-5,30 l-25,10 l-30,-5 l-15,-20 z" 
+                      className={`state-path fill-transparent ${hoveredState === 'ID' ? 'highlighted' : ''}`}
+                      onMouseEnter={() => handleStateHover('ID')}
+                      onMouseLeave={() => handleStateHover(null)}
+                      onClick={() => handleStateClick('ID')}
+                      data-state="ID"
+                    />
+                    <path 
+                      d="M63,152 l50,20 l15,25 l-10,25 l-30,10 l-25,-10 l-10,-30 z" 
+                      className={`state-path fill-transparent ${hoveredState === 'WA' ? 'highlighted' : ''}`}
+                      onMouseEnter={() => handleStateHover('WA')}
+                      onMouseLeave={() => handleStateHover(null)}
+                      onClick={() => handleStateClick('WA')}
+                      data-state="WA"
+                    />
+                    <path 
+                      d="M60,250 l40,20 l25,30 l0,40 l-30,30 l-35,-15 l-15,-40 z" 
+                      className={`state-path fill-transparent ${hoveredState === 'CA' ? 'highlighted' : ''}`}
+                      onMouseEnter={() => handleStateHover('CA')}
+                      onMouseLeave={() => handleStateHover(null)}
+                      onClick={() => handleStateClick('CA')}
+                      data-state="CA"
+                    />
+                    <path 
+                      d="M600,400 l30,10 l10,20 l-5,15 l-30,10 l-20,-5 l-10,-25 z" 
+                      className={`state-path fill-transparent ${hoveredState === 'FL' ? 'highlighted' : ''}`}
+                      onMouseEnter={() => handleStateHover('FL')}
+                      onMouseLeave={() => handleStateHover(null)}
+                      onClick={() => handleStateClick('FL')}
+                      data-state="FL"
+                    />
+                    <path 
+                      d="M500,350 l25,10 l20,20 l-5,20 l-25,10 l-20,-10 l-5,-25 z" 
+                      className={`state-path fill-transparent ${hoveredState === 'GA' ? 'highlighted' : ''}`}
+                      onMouseEnter={() => handleStateHover('GA')}
+                      onMouseLeave={() => handleStateHover(null)}
+                      onClick={() => handleStateClick('GA')}
+                      data-state="GA"
+                    />
+                    <path 
+                      d="M232,250 l40,20 l15,30 l-5,30 l-30,15 l-20,-10 l-10,-35 z" 
+                      className={`state-path fill-transparent ${hoveredState === 'CO' ? 'highlighted' : ''}`}
+                      onMouseEnter={() => handleStateHover('CO')}
+                      onMouseLeave={() => handleStateHover(null)}
+                      onClick={() => handleStateClick('CO')}
+                      data-state="CO"
+                    />
+                  </g>
+                </svg>
 
                 {/* Clickable region dots */}
                 {forestRegions.map((region) => (
@@ -469,6 +535,20 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                       ))}
                     </ul>
                   </div>
+                  
+                  <div className="mt-4">
+                    <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center mb-2">
+                      <i className="fas fa-tree mr-1"></i> National Forests
+                    </h4>
+                    <ul className="text-xs space-y-2">
+                      {selectedState.nationalForests.map((forest, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="text-green-400 mr-2">•</span>
+                          <span>{forest}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               ) : selectedRegion ? (
                 <div className="text-green-100">
@@ -529,6 +609,10 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
               <p className="text-green-600/70 flex items-center justify-center">
                 <i className="fas fa-info-circle mr-1"></i>
                 Click on the region markers (R1-R10) to explore details about each Forest Service region
+              </p>
+              <p className="text-green-600/70 flex items-center justify-center mt-1">
+                <i className="fas fa-mouse-pointer mr-1"></i>
+                You can also hover over and click on individual states to see state-specific information
               </p>
             </div>
           </motion.div>

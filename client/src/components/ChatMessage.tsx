@@ -182,7 +182,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
                   }}
                 />
                 {message.images[0].alt && (
-                  <div className="bg-black bg-opacity-60 text-white text-xs p-2 absolute bottom-0 left-0 right-0">
+                  <div className="bg-emerald-900 bg-opacity-80 text-white text-xs p-2 absolute bottom-0 left-0 right-0">
                     {message.images[0].alt}
                   </div>
                 )}
@@ -194,21 +194,21 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
         {/* Compact collapsible sources section */}
         {message.sources && message.sources.length > 0 && message.sources[0].url !== "No relevant information found" && message.sources[0].url !== "Error processing request" && (
           <motion.div 
-            className="text-xs text-gray-500 mt-3 pt-2 border-t border-forest-100"
+            className="text-xs text-gray-500 mt-3 pt-2 border-t border-emerald-200"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
             <button 
               onClick={() => setShowSources(!showSources)}
-              className="flex items-center font-medium text-forest-600 hover:text-forest-700 focus:outline-none transition-colors"
+              className="flex items-center font-medium text-emerald-600 hover:text-emerald-700 focus:outline-none transition-colors"
               aria-expanded={showSources}
               aria-controls="source-links"
             >
-              <i className="fas fa-link text-forest-500 mr-1.5"></i>
+              <i className="fas fa-link text-emerald-500 mr-1.5"></i>
               <span>View Source{message.sources.length > 1 ? 's' : ''}</span>
               <motion.span 
-                className="ml-1 text-forest-500 inline-block" 
+                className="ml-1 text-emerald-500 inline-block" 
                 animate={{ rotateZ: showSources ? 180 : 0 }}
                 transition={{ duration: 0.3 }}
               >
@@ -220,7 +220,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
               {showSources && (
                 <motion.div 
                   id="source-links" 
-                  className="mt-2 pl-3 border-l-2 border-forest-200 space-y-2 py-2 bg-forest-50 rounded-r-md"
+                  className="mt-2 pl-3 border-l-2 border-emerald-300 space-y-2 py-2 bg-emerald-50 rounded-r-md"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
@@ -259,7 +259,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
                       <motion.a 
                         key={index}
                         href={source.url.startsWith("http") ? source.url : "#"} 
-                        className="flex items-center px-2 py-1.5 bg-white rounded-md shadow-sm border border-forest-100 hover:border-forest-300 transition-colors"
+                        className="flex items-center px-2 py-1.5 bg-white rounded-md shadow-sm border border-emerald-200 hover:border-emerald-300 transition-colors"
                         target={source.url.startsWith("http") ? "_blank" : undefined}
                         rel={source.url.startsWith("http") ? "noopener noreferrer" : undefined}
                         title={source.url}
@@ -268,8 +268,8 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
                         transition={{ delay: 0.1 * index }}
                         whileHover={{ scale: 1.02 }}
                       >
-                        <i className="fas fa-external-link-alt text-forest-500 mr-2"></i>
-                        <span className="font-medium text-forest-700">{displayUrl}</span>
+                        <i className="fas fa-external-link-alt text-emerald-500 mr-2"></i>
+                        <span className="font-medium text-emerald-700">{displayUrl}</span>
                       </motion.a>
                     );
                   })}

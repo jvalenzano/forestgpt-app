@@ -321,48 +321,78 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
                   {message.sources.map((source, index) => {
                     // Format URL for display
                     let displayUrl = source.url;
-                    try {
-                      // Try to parse URL and format for display
-                      const urlObj = new URL(source.url);
-                      const path = urlObj.pathname;
-                      // Remove trailing slashes
-                      const cleanPath = path.replace(/\/$/, "");
-                      // Get the last part of the path for display
-                      const pathSegments = cleanPath.split('/').filter(Boolean);
-                      const lastSegment = pathSegments.length > 0 ? pathSegments[pathSegments.length - 1] : '';
+                    // Check if the URL is valid first
+                    if (source.url && 
+                        (source.url.startsWith('http://') || 
+                         source.url.startsWith('https://') || 
+                         source.url === "No relevant information found" ||
+                         source.url === "Error processing request")) {
                       
-                      // Create a friendly display format
-                      let displayName = lastSegment.length > 0 
-                        ? lastSegment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-                        : urlObj.hostname.replace('www.', '');
-                        
-                      // For search results, show a cleaner label
-                      if (source.url.includes('/search?')) {
-                        displayName = "Forest Service Search Results";
+                      try {
+                        // Only parse valid URLs
+                        if (source.url.startsWith('http')) {
+                          const urlObj = new URL(source.url);
+                          const path = urlObj.pathname;
+                          // Remove trailing slashes
+                          const cleanPath = path.replace(/\/$/, "");
+                          // Get the last part of the path for display
+                          const pathSegments = cleanPath.split('/').filter(Boolean);
+                          const lastSegment = pathSegments.length > 0 ? pathSegments[pathSegments.length - 1] : '';
+                          
+                          // Create a friendly display format
+                          let displayName = lastSegment.length > 0 
+                            ? lastSegment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                            : urlObj.hostname.replace('www.', '');
+                            
+                          // For search results, show a cleaner label
+                          if (source.url.includes('/search?')) {
+                            displayName = "Forest Service Search Results";
+                          }
+                          
+                          displayUrl = displayName;
+                        }
+                      } catch (e) {
+                        // If URL parsing fails, use a friendly name
+                        displayUrl = source.title || "Forest Service Resource";
+                        console.error("Error parsing URL:", e);
                       }
-                      
-                      displayUrl = displayName;
-                    } catch (e) {
-                      // If URL parsing fails, use the original URL
-                      console.error("Error parsing URL:", e);
+                    } else {
+                      // For non-URL sources, use a generic name or title if available
+                      displayUrl = source.title || "Additional Information";
                     }
                     
-                    return (
+                    // Determine if this is a clickable link
+                    const isClickable = source.url && source.url.startsWith("http");
+                    
+                    // Use either a button or anchor based on whether the URL is clickable
+                    const CommonProps = {
+                      key: index,
+                      className: "flex items-center px-2 py-1.5 bg-green-950/60 rounded-md shadow-sm border border-green-800 hover:border-green-700 transition-colors",
+                      initial: { opacity: 0, y: -5 },
+                      animate: { opacity: 1, y: 0 },
+                      transition: { delay: 0.1 * index },
+                      whileHover: { scale: 1.02 },
+                    };
+                    
+                    return isClickable ? (
                       <motion.a 
-                        key={index}
-                        href={source.url.startsWith("http") ? source.url : "#"} 
-                        className="flex items-center px-2 py-1.5 bg-green-950/60 rounded-md shadow-sm border border-green-800 hover:border-green-700 transition-colors"
-                        target={source.url.startsWith("http") ? "_blank" : undefined}
-                        rel={source.url.startsWith("http") ? "noopener noreferrer" : undefined}
+                        {...CommonProps}
+                        href={source.url} 
+                        target="_blank"
+                        rel="noopener noreferrer"
                         title={source.url}
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 * index }}
-                        whileHover={{ scale: 1.02 }}
                       >
                         <i className="fas fa-external-link-alt text-green-400 mr-2"></i>
                         <span className="font-medium text-green-300">{displayUrl}</span>
                       </motion.a>
+                    ) : (
+                      <motion.div 
+                        {...CommonProps}
+                        title={source.url || "Information source"}
+                      >
+                        <i className="fas fa-info-circle text-green-400 mr-2"></i>
+                        <span className="font-medium text-green-300">{displayUrl}</span>
+                      </motion.div>
                     );
                   })}
                 </motion.div>

@@ -241,14 +241,14 @@ export async function generateResponse(
         // Check for query keyword matches in alt text (higher weight)
         queryKeywords.forEach(keyword => {
           if (keyword.length > 3 && altText.includes(keyword)) {
-            score += 3;
+            score += 5; // Increased weight for query keyword matches
           }
         });
         
         // Check for response keyword matches in alt text
         responseKeywords.forEach(keyword => {
           if (keyword.length > 3 && altText.includes(keyword)) {
-            score += 1;
+            score += 2; // Increased weight for response keyword matches
           }
         });
         
@@ -264,6 +264,8 @@ export async function generateResponse(
           {term: 'employee', weight: 7},
           {term: 'staff', weight: 7},
           {term: 'official', weight: 7},
+          {term: 'worker', weight: 7},
+          {term: 'firefighter', weight: 9},
           // Places and landmarks (medium priority)
           {term: 'forest', weight: 6},
           {term: 'park', weight: 6},
@@ -271,12 +273,25 @@ export async function generateResponse(
           {term: 'mountain', weight: 6},
           {term: 'river', weight: 5},
           {term: 'lake', weight: 5},
+          {term: 'wilderness', weight: 7},
+          {term: 'campground', weight: 6},
+          {term: 'recreation', weight: 6},
+          {term: 'scenic', weight: 5},
           // Specific topics (lower priority)
           {term: 'permit', weight: 5},
           {term: 'camping', weight: 4},
           {term: 'hiking', weight: 4},
           {term: 'conservation', weight: 4},
-          {term: 'wildlife', weight: 4}
+          {term: 'wildlife', weight: 4},
+          {term: 'fire', weight: 6},
+          {term: 'prescribed burn', weight: 7},
+          {term: 'trees', weight: 5},
+          {term: 'plants', weight: 4},
+          {term: 'animals', weight: 4},
+          {term: 'habitat', weight: 5},
+          {term: 'ecosystem', weight: 6},
+          {term: 'management', weight: 4},
+          {term: 'restoration', weight: 5}
         ];
         
         entities.forEach(entity => {
@@ -325,7 +340,7 @@ export async function generateResponse(
       
       // Only include the top scoring image if it has a reasonable score
       // Higher threshold for better relevance
-      if (scoredImages.length > 0 && scoredImages[0].score > 5) {
+      if (scoredImages.length > 0 && scoredImages[0].score > 10) { // Increased threshold from 5 to 10
         relevantImages = [scoredImages[0].image];
         
         // Debug image selection

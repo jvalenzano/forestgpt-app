@@ -51,7 +51,7 @@ export default function ChatInterface({
     initialDelay: 20000,   // First trivia appears after 20 seconds
     interval: 180000,      // New trivia every 3 minutes
     duration: 10000,       // Each trivia shows for 10 seconds
-    enabled: true          // Trivia is enabled by default
+    enabled: false         // Trivia is disabled by default
   });
   
   // Function to check if a message contains location/region related keywords

@@ -72,9 +72,24 @@
   }
 
   body {
-    @apply font-sans antialiased bg-slate-100 text-foreground;
+    @apply font-sans antialiased text-foreground;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-image: linear-gradient(to bottom, rgba(231, 245, 235, 0.5), rgba(242, 246, 250, 0.5));
+    background-color: hsl(var(--background));
+  }
+  
+  /* Falling leaf keyframe animation */
+  @keyframes fallingleaf {
+    0% {
+      transform: translateY(-10px) rotate(0deg);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(20px) rotate(20deg);
+      opacity: 0;
+    }
   }
   
   /* Improved scrollbar styling */
@@ -98,37 +113,101 @@
 }
 
 @layer components {
+  /* Falling leaf animation elements */
+  .leaf {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23166534' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z'%3E%3C/path%3E%3Cpath d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'%3E%3C/path%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    opacity: 0;
+  }
+  
+  .forest-element {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .forest-element:hover .leaf:nth-child(1) {
+    left: 20%;
+    animation: fallingleaf 2s ease-in-out;
+  }
+  
+  .forest-element:hover .leaf:nth-child(2) {
+    left: 50%;
+    animation: fallingleaf 2.5s ease-in-out 0.3s;
+  }
+  
+  .forest-element:hover .leaf:nth-child(3) {
+    left: 80%;
+    animation: fallingleaf 1.8s ease-in-out 0.6s;
+  }
+
   .chat-container {
-    @apply relative bg-white rounded-xl shadow-md overflow-hidden border-2 border-emerald-200;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23f0f7f0' fill-opacity='0.25' fill-rule='evenodd'/%3E%3C/svg%3E");
+    @apply relative bg-background rounded-xl shadow-md overflow-hidden border border-green-900;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23193a18' fill-opacity='0.15' fill-rule='evenodd'/%3E%3C/svg%3E");
     background-position: center;
   }
   
   .forest-gradient-text {
-    @apply font-bold bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent;
+    @apply font-bold bg-gradient-to-r from-green-700 to-green-500 bg-clip-text text-transparent;
   }
   
   .user-message {
-    @apply bg-amber-100 text-gray-800 rounded-2xl py-3 px-4 shadow-sm border border-amber-300;
+    @apply bg-amber-900/70 text-amber-100 rounded-2xl py-3 px-4 shadow-md border border-amber-700;
   }
   
   .bot-message {
-    @apply bg-emerald-100 border border-emerald-300 rounded-2xl p-4 shadow-sm text-gray-800;
+    @apply bg-green-900/70 border border-green-800 rounded-2xl p-4 shadow-md text-green-100;
   }
   
   .user-avatar {
-    @apply bg-amber-200 text-amber-800 rounded-full p-2 w-10 h-10 flex items-center justify-center shadow-sm flex-shrink-0;
+    @apply bg-amber-800 text-amber-100 rounded-full p-2 w-10 h-10 flex items-center justify-center shadow-md flex-shrink-0;
   }
   
   .bot-avatar {
-    @apply bg-emerald-200 text-emerald-800 rounded-full p-2 w-10 h-10 flex items-center justify-center shadow-sm flex-shrink-0;
+    @apply bg-green-900 text-green-100 rounded-full p-2 w-10 h-10 flex items-center justify-center shadow-md flex-shrink-0 forest-element;
   }
   
   .chat-input {
-    @apply w-full bg-white border-2 border-emerald-300 rounded-full px-6 py-3 pr-16 shadow-sm hover:shadow focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all;
+    @apply w-full bg-muted border border-green-900 rounded-full px-6 py-3 pr-16 shadow-sm 
+    hover:shadow focus:ring-2 focus:ring-green-900 focus:border-green-900 outline-none transition-all
+    text-foreground;
   }
   
   .send-button {
-    @apply absolute right-2 top-1/2 transform -translate-y-1/2 bg-emerald-600 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-emerald-700 transition-colors shadow-md hover:shadow-lg;
+    @apply absolute right-2 top-1/2 transform -translate-y-1/2 bg-green-900 text-white rounded-full w-10 h-10 
+    flex items-center justify-center hover:bg-green-800 transition-colors shadow-md hover:shadow-lg forest-element;
+  }
+  
+  /* Tree loading indicator */
+  .tree-loader {
+    @apply relative w-6 h-6 mx-auto;
+  }
+  
+  .tree-loader::before {
+    content: '';
+    @apply absolute bottom-0 left-1/2 w-2 h-4 bg-green-800 rounded-sm transform -translate-x-1/2;
+  }
+  
+  .tree-loader .leaves {
+    @apply absolute bottom-3 left-1/2 transform -translate-x-1/2;
+    animation: grow 1.5s infinite ease-out;
+  }
+  
+  @keyframes grow {
+    0% {
+      transform: translateX(-50%) scale(0);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-50%) scale(1);
+      opacity: 0.8;
+    }
   }
 }

@@ -14,7 +14,7 @@ export default function LoadingIndicator() {
   };
   
   const iconVariants = {
-    initial: { scale: 0.8, rotate: -10 },
+    initial: { scale: 0.8, rotate: -5 },
     animate: { 
       scale: 1, 
       rotate: 0,
@@ -26,10 +26,17 @@ export default function LoadingIndicator() {
     }
   };
   
-  const dotVariants = {
-    initial: { y: 0 },
+  // New leaf growing animation variants
+  const leafVariants = {
+    initial: { scale: 0, opacity: 0 },
     animate: { 
-      y: [0, -5, 0]
+      scale: 1, 
+      opacity: 1,
+      transition: {
+        repeat: Infinity,
+        repeatType: "reverse" as const,
+        duration: 1.5
+      }
     }
   };
   
@@ -41,72 +48,26 @@ export default function LoadingIndicator() {
       variants={containerVariants}
     >
       <motion.div 
-        className="bot-avatar"
+        className="bot-avatar forest-element"
         variants={iconVariants}
       >
         <i className="fas fa-tree"></i>
+        <div className="leaf"></div>
+        <div className="leaf"></div>
+        <div className="leaf"></div>
       </motion.div>
       <motion.div 
-        className="bot-message flex items-center relative"
-        initial={{ opacity: 0, scale: 0.9, x: -10 }}
-        animate={{ 
-          opacity: 1, 
-          scale: 1, 
-          x: 0,
-          transition: {
-            type: "spring",
-            damping: 15,
-            stiffness: 200
-          }
-        }}
+        className="bot-message flex items-center justify-center py-4"
+        variants={iconVariants}
       >
-        <div className="text-sm font-semibold text-forest-800 mr-2">ForestGPT</div>
-        <div className="typing-dots flex space-x-1.5">
-          <motion.span 
-            className="h-2.5 w-2.5 bg-forest-400 rounded-full"
-            initial={{ y: 0 }}
-            animate={{ y: [0, -5, 0] }}
-            transition={{ 
-              repeat: Infinity, 
-              repeatType: "loop", 
-              duration: 1, 
-              ease: "easeInOut" 
-            }}
-          />
-          <motion.span 
-            className="h-2.5 w-2.5 bg-forest-500 rounded-full"
-            initial={{ y: 0 }}
-            animate={{ y: [0, -5, 0] }}
-            transition={{ 
-              repeat: Infinity, 
-              repeatType: "loop", 
-              duration: 1, 
-              ease: "easeInOut",
-              delay: 0.15 
-            }}
-          />
-          <motion.span 
-            className="h-2.5 w-2.5 bg-forest-600 rounded-full"
-            initial={{ y: 0 }}
-            animate={{ y: [0, -5, 0] }}
-            transition={{ 
-              repeat: Infinity, 
-              repeatType: "loop", 
-              duration: 1, 
-              ease: "easeInOut",
-              delay: 0.3 
-            }}
+        <div className="tree-loader">
+          {/* Tree trunk is added via CSS */}
+          <motion.div 
+            className="leaves w-4 h-4 rounded-full bg-green-700"
+            variants={leafVariants}
           />
         </div>
-        <motion.span 
-          className="ml-3 text-sm text-gray-500 italic"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          <i className="fas fa-search text-forest-400 mr-1"></i>
-          Searching Forest Service resources...
-        </motion.span>
+        <div className="ml-6 text-green-100">Growing response...</div>
       </motion.div>
     </motion.div>
   );

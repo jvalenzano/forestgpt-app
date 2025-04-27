@@ -575,8 +575,8 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                 <i className="fas fa-info-circle mr-1"></i>
                 Click on the region markers (R1-R10) to explore details about each Forest Service region
               </p>
-              <p className="text-yellow-600/70 flex items-center justify-center">
-                <i className="fas fa-lightbulb mr-1"></i>
+              <p className="text-yellow-500 flex items-center justify-center font-medium shadow-sm px-2 py-1 bg-green-900/40 rounded-md border border-green-800/30">
+                <i className="fas fa-lightbulb mr-1 text-yellow-400"></i>
                 Click on state abbreviations to discover interesting forest facts
               </p>
               <p className="text-blue-400/80 flex items-center justify-center mt-1 text-[11px]">

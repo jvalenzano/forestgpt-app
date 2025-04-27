@@ -265,7 +265,7 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
               className="flex items-center text-xs bg-green-800 hover:bg-green-700 text-green-100 py-1 px-3 rounded-full transition-colors space-x-1"
             >
               <i className="fas fa-map-marked-alt text-green-300 mr-1.5"></i>
-              <span>View Forest Regions Map</span>
+              <span>View Regions Map</span>
             </button>
           </motion.div>
         )}

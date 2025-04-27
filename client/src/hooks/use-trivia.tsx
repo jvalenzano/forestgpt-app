@@ -8,9 +8,9 @@ type UseTriviaOptions = {
 };
 
 export function useTrivia({
-  initialDelay = 15000, // Default 15 seconds initial delay
+  initialDelay = 20000, // Default 20 seconds initial delay
   interval = 120000,    // Default 2 minutes between popups
-  duration = 10000,     // Default 10 seconds display time
+  duration = 5000,      // Default 5 seconds display time (reduced from 10s)
   enabled = true        // Enabled by default
 }: UseTriviaOptions = {}) {
   const [isTriviaVisible, setIsTriviaVisible] = useState<boolean>(false);

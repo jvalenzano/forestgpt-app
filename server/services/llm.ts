@@ -13,7 +13,7 @@ export interface LLMDetails {
   processingTime: number;
 }
 
-interface Source {
+export interface Source {
   url: string;
   title?: string;
 }

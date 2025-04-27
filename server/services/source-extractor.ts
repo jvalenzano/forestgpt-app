@@ -1,4 +1,4 @@
-import { Source } from "../services/llm";
+import { Source } from "./llm";
 
 /**
  * Extract the most relevant URLs from scraped content as sources

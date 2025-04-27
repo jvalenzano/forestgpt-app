@@ -8,6 +8,12 @@ const CACHE_EXPIRATION = 1000 * 60 * 60 * 24;
 
 // Rate limiting settings
 const MIN_REQUEST_INTERVAL = 1000; // Minimum 1 second between requests
+
+// Interface for cached content metadata
+interface ContentMetadata {
+  title?: string;
+  [key: string]: any;
+}
 let lastRequestTime = 0;
 
 /**
@@ -31,6 +37,7 @@ async function rateLimit(): Promise<void> {
 async function fetchUrl(url: string): Promise<{ 
   html: string; 
   status: number;
+  title?: string;
   error?: string;
 }> {
   try {
@@ -40,7 +47,30 @@ async function fetchUrl(url: string): Promise<{
     const cachedContent = await storage.getCachedContent(url);
     if (cachedContent) {
       console.log(`Retrieved cached content for URL: ${url}`);
-      return { html: cachedContent.content, status: 200 };
+      
+      // Extract title from cached content if needed
+      let title: string | undefined;
+      try {
+        if (cachedContent.metadata) {
+          const metadata = cachedContent.metadata as ContentMetadata;
+          if (metadata.title) {
+            title = metadata.title;
+          }
+        } else {
+          const titleMatch = cachedContent.content.match(/<title>(.*?)<\/title>/i);
+          if (titleMatch && titleMatch[1]) {
+            title = titleMatch[1].trim()
+              .replace(" | US Forest Service", "")
+              .replace(" | USDA Forest Service", "")
+              .replace(" | Forest Service", "")
+              .replace(" | USDA", "");
+          }
+        }
+      } catch (e) {
+        console.log("Error extracting title from cached content:", e);
+      }
+      
+      return { html: cachedContent.content, status: 200, title };
     }
     
     // Enforce rate limiting
@@ -68,6 +98,21 @@ async function fetchUrl(url: string): Promise<{
     const html = await response.text();
     console.log(`Received content length: ${html.length} characters`);
     
+    // Extract title for better source attribution
+    let title: string | undefined;
+    try {
+      const titleMatch = html.match(/<title>(.*?)<\/title>/i);
+      if (titleMatch && titleMatch[1]) {
+        title = titleMatch[1].trim()
+          .replace(" | US Forest Service", "")
+          .replace(" | USDA Forest Service", "")
+          .replace(" | Forest Service", "")
+          .replace(" | USDA", "");
+      }
+    } catch (e) {
+      console.log("Error extracting title:", e);
+    }
+    
     // Cache the content if request was successful
     if (response.ok) {
       console.log(`Caching content for URL: ${url}`);
@@ -76,13 +121,14 @@ async function fetchUrl(url: string): Promise<{
         url,
         content: html,
         expiresAt,
-        metadata: {}
+        metadata: { title }
       });
     }
     
     return { 
       html, 
-      status: response.status
+      status: response.status,
+      title
     };
   } catch (error) {
     console.error(`Error fetching URL ${url}:`, error);

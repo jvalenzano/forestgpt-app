@@ -226,7 +226,7 @@ interface ForestRegionMapProps {
 const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose }) => {
   const [selectedRegion, setSelectedRegion] = useState<ForestRegion | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
-  const [mapHeight, setMapHeight] = useState<number>(400); // Default height
+  const [mapHeight, setMapHeight] = useState<number>(300); // Default height - smaller for mobile
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [fact, setFact] = useState<string | null>(null);
   // Store the starting point of drag and initial height
@@ -282,7 +282,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
       
       // Apply the difference to the initial height
       // This allows both increasing and decreasing height
-      const newHeight = Math.max(300, Math.min(700, initialHeight + diff));
+      const newHeight = Math.max(250, Math.min(500, initialHeight + diff)); // Lower max height for better mobile display
       setMapHeight(newHeight);
       
       // Prevent text selection during resize
@@ -301,7 +301,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
           onClick={handleClose}
         >
           <motion.div
-            className="w-[90%] max-w-4xl bg-gradient-to-b from-green-950 to-black rounded-lg overflow-hidden shadow-xl p-6 border border-green-800"
+            className="w-[95%] max-w-4xl bg-gradient-to-b from-green-950 to-black rounded-lg overflow-auto shadow-xl p-4 border border-green-800 max-h-[90vh] flex flex-col"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -479,7 +479,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
               </div>
 
               {/* Region information sidebar */}
-              <div className="w-full md:w-1/3 overflow-y-auto bg-green-950/50 rounded-lg p-4 border border-green-800"
+              <div className="w-full md:w-1/3 overflow-y-auto bg-green-950/50 rounded-lg p-4 border border-green-800 max-h-[40vh] md:max-h-none"
                    style={{ height: `${mapHeight}px` }}>
                 {selectedRegion ? (
                   <div className="text-green-100">

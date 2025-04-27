@@ -17,72 +17,72 @@ const forestRegions: ForestRegion[] = [
     name: 'Northern Region (R1)',
     description: 'Covering forests and grasslands in Montana, northern Idaho, North Dakota, and northwestern South Dakota.',
     states: ['MT', 'ID', 'ND', 'SD'],
-    color: 'bg-green-700',
-    position: { x: 22, y: 18 }
+    color: 'bg-amber-800',
+    position: { x: 25, y: 18 }
   },
   {
     id: 'rocky-mountain',
     name: 'Rocky Mountain Region (R2)',
     description: 'Managing lands in Colorado, Kansas, Nebraska, South Dakota, and Wyoming.',
     states: ['CO', 'KS', 'NE', 'SD', 'WY'],
-    color: 'bg-green-800',
-    position: { x: 30, y: 30 }
+    color: 'bg-yellow-100',
+    position: { x: 30, y: 33 }
   },
   {
     id: 'southwestern',
     name: 'Southwestern Region (R3)',
     description: 'Overseeing Arizona and New Mexico forests and grasslands.',
     states: ['AZ', 'NM'],
-    color: 'bg-green-900',
-    position: { x: 25, y: 55 }
+    color: 'bg-amber-600',
+    position: { x: 23, y: 48 }
   },
   {
     id: 'intermountain',
     name: 'Intermountain Region (R4)',
     description: 'Covering southern Idaho, Nevada, Utah, and western Wyoming.',
     states: ['ID', 'NV', 'UT', 'WY'],
-    color: 'bg-green-600',
-    position: { x: 15, y: 35 }
+    color: 'bg-yellow-200',
+    position: { x: 17, y: 30 }
   },
   {
     id: 'pacific-southwest',
     name: 'Pacific Southwest Region (R5)',
     description: 'Managing all of California and Hawaii.',
     states: ['CA', 'HI'],
-    color: 'bg-emerald-700',
-    position: { x: 8, y: 40 }
+    color: 'bg-yellow-600',
+    position: { x: 8, y: 37 }
   },
   {
     id: 'pacific-northwest',
     name: 'Pacific Northwest Region (R6)',
     description: 'Covering Oregon and Washington.',
     states: ['OR', 'WA'],
-    color: 'bg-emerald-800',
-    position: { x: 10, y: 20 }
+    color: 'bg-lime-200',
+    position: { x: 11, y: 20 }
   },
   {
     id: 'southern',
     name: 'Southern Region (R8)',
     description: 'Covering forests across 13 southern states and Puerto Rico.',
     states: ['AL', 'AR', 'FL', 'GA', 'KY', 'LA', 'MS', 'NC', 'OK', 'SC', 'TN', 'TX', 'VA', 'PR'],
-    color: 'bg-teal-700',
-    position: { x: 65, y: 60 }
+    color: 'bg-green-600',
+    position: { x: 62, y: 48 }
   },
   {
     id: 'eastern',
     name: 'Eastern Region (R9)',
     description: 'Managing forests across 20 northeastern states.',
     states: ['CT', 'DE', 'IL', 'IN', 'IA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MO', 'NH', 'NJ', 'NY', 'OH', 'PA', 'RI', 'VT', 'WV', 'WI'],
-    color: 'bg-teal-800',
-    position: { x: 70, y: 25 }
+    color: 'bg-yellow-400',
+    position: { x: 70, y: 28 }
   },
   {
     id: 'alaska',
     name: 'Alaska Region (R10)',
     description: 'Managing over 22 million acres in Alaska.',
     states: ['AK'],
-    color: 'bg-teal-900',
-    position: { x: 10, y: 10 }
+    color: 'bg-green-900',
+    position: { x: 12, y: 85 }
   },
 ];
 
@@ -135,23 +135,34 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
 
             <div className="flex flex-col md:flex-row gap-6">
               {/* Map of US with clickable regions */}
-              <div className="relative w-full md:w-2/3 h-[300px] map-container rounded-lg border border-green-900 overflow-hidden forest-element">
+              <div className="relative w-full md:w-2/3 h-[400px] map-container rounded-lg border border-green-900 overflow-hidden forest-element">
                 <div className="leaf"></div>
                 <div className="leaf"></div>
                 <div className="leaf"></div>
                 
-                {/* Simplified US map outline SVG */}
+                {/* Detailed US map */}
                 <svg
-                  viewBox="0 0 800 450"
-                  className="w-full h-full opacity-30"
+                  viewBox="0 0 950 600"
+                  className="w-full h-full opacity-40"
                   preserveAspectRatio="xMidYMid meet"
                 >
-                  <path
-                    d="M223,48L241,59L247,81L245,94L248,107L235,115L214,121L201,120L196,113L183,113L175,106L171,96L169,83L173,74L170,69L159,70L159,76L157,84L154,84L151,79L146,81L130,80L124,75L114,78L102,80L79,85L62,87L47,85L40,79L25,76L13,70L3,59L-3,47L-3,38L-1,33L3,27L9,25L16,23L23,23L30,24L38,23L44,19L49,13L56,9L63,8L70,4L77,2L86,1L96,1L105,3L113,7L119,9L125,8L135,7L143,8L147,13L153,17L159,20L166,20L172,21L180,29L186,36L192,36L198,40L204,43L212,42L218,44L223,48ZM80,446L83,442L88,440L95,439L103,440L108,444L111,448L109,452L103,455L97,456L90,456L85,454L80,451L78,446L80,446ZM144,429L140,427L136,424L131,419L128,413L127,407L128,401L130,397L134,395L137,397L141,399L144,403L147,407L149,412L149,417L148,421L146,425L144,429ZM179,423L182,420L185,418L189,417L194,417L198,419L201,422L203,426L202,431L200,434L196,437L191,439L186,438L182,436L179,433L177,428L179,423ZM236,414L237,409L240,405L243,402L248,401L252,401L257,402L260,406L262,410L262,415L260,419L256,422L252,423L247,423L242,421L239,418L236,414ZM285,409L287,404L290,400L293,397L297,396L301,397L305,398L309,402L310,406L310,411L308,416L305,419L301,421L296,421L291,420L287,418L285,414L285,409ZM336,401L345,391L350,385L356,381L363,379L368,380L372,383L374,388L373,394L370,399L365,402L359,406L353,409L347,410L342,409L338,406L336,401ZM371,387L378,381L381,378L387,373L392,370L399,370L408,370L414,372L415,375L410,378L405,380L393,381L385,381L378,382L374,384L371,387ZM435,369L433,361L432,353L433,346L437,341L441,339L447,339L452,341L457,345L461,349L464,354L464,358L461,361L456,363L451,364L445,367L440,369L435,369ZM478,358L475,347L475,337L481,325L486,317L493,311L500,310L507,312L512,316L516,321L518,328L517,334L514,340L510,344L504,348L499,351L493,353L488,357L484,359L478,358ZM525,341L521,334L520,328L519,317L523,308L526,304L534,301L541,300L547,302L554,308L557,317L557,324L554,330L550,336L545,339L540,340L533,342L527,342L525,341ZM570,335L569,326L568,320L572,312L576,305L582,301L588,299L595,302L603,306L611,312L617,316L622,320L623,326L621,333L614,334L607,335L599,335L590,336L580,336L574,335L570,335ZM745,192L747,189L751,187L755,186L759,188L762,191L763,196L760,199L756,199L752,199L748,197L746,195L745,192ZM757,251L753,249L750,246L749,242L749,238L751,233L754,230L758,228L762,227L766,227L770,229L773,232L775,235L775,239L774,243L771,247L767,250L764,250L761,252L757,251ZM630,262L632,257L636,255L640,254L644,255L647,257L648,260L650,265L649,268L646,271L642,273L638,273L634,271L631,267L630,262ZM658,251L658,246L659,240L662,236L667,234L672,234L677,236L680,240L682,244L682,249L681,254L677,258L673,260L668,261L663,259L660,256L658,251ZM688,244L687,236L691,229L696,222L703,218L710,217L716,217L722,219L726,222L728,228L726,234L723,239L718,243L711,247L701,247L694,247L689,246L688,244Z"
-                    fill="url(#map-gradient)"
-                    stroke="#2F4F40"
-                    strokeWidth="3"
-                  />
+                  <g fill="url(#map-gradient)" stroke="#2F4F40" strokeWidth="1.5">
+                    {/* Continental US */}
+                    <path d="M243,178 L241,217 L247,242 L261,262 L277,284 L295,297 L348,316 L359,328 L368,350 L369,371 L379,392 L378,407 L395,432 L401,460 L399,473 L393,482 L383,492 L358,492 L344,485 L307,485 L285,478 L273,463 L260,454 L236,443 L225,426 L198,400 L176,373 L156,357 L137,350 L117,339 L114,324 L121,305 L131,293 L137,269 L147,252 L166,241 L180,224 L181,203 L177,194 L175,178 L162,168 L151,147 L142,139 L139,120 L143,105 L130,87 L113,78 L103,59 L112,52 L125,38 L141,35 L157,48 L170,48 L184,65 L199,77 L210,101 L225,110 L241,123 L251,128 L263,135 L268,151 L276,166 L280,178 L286,182 L298,182 L316,192 L330,210 L342,219 L352,225 L375,218 L385,206 L401,196 L417,195 L424,204 L429,221 L452,221 L468,218 L487,227 L491,234 L526,234 L558,246 L576,246 L596,238 L607,223 L618,221 L641,211 L661,200 L693,194 L720,181 L742,179 L765,166 L768,149 L761,123 L766,107 L773,100 L783,78 L794,64 L800,44 L791,22 L774,12 L760,13 L746,24 L738,23 L697,31 L673,27 L662,16 L658,1 L641,4 L628,13 L606,8 L591,13 L576,28 L566,31 L550,25 L527,27 L517,44 L503,59 L489,83 L473,98 L451,121 L436,124 L426,115 L402,114 L390,109 L381,94 L375,80 L364,69 L361,50 L358,41 L346,35 L334,18 L323,6 L307,2 L293,5 L279,17 L263,32 L256,47 L254,64 L246,82 L243,102 L250,127 L243,138 L232,140 L219,147 L211,161 L209,174 L217,184 L222,192 L224,211 L221,224 L213,230 L212,236 L208,237 L208,229 L201,213 L194,202 L187,198 L172,198 L167,208 L168,227 L180,241 L195,249 L199,262 L198,276 L191,294 L176,317 L167,326 L158,326 L151,314 L145,305 L140,292 L136,278 L129,266 L122,262 L115,249 L110,238 L101,227 L93,216 L83,204 L71,197 L65,187 L70,174 L78,161 L83,146 L89,136 L93,121 L100,110 L108,94 L113,87 L107,77 L100,70 L95,54 L90,44 L83,33 L74,30 L66,36 L59,47 L54,58 L46,68 L36,79 L29,89 L23,101 L17,114 L11,128 L4,142 L1,154 L3,167 L13,176 L24,180 L32,182 L38,196 L42,208 L36,219 L27,226 L22,237 L24,247 L21,256 L17,264 L8,269 L3,278 L7,285 L13,290 L21,292 L26,297 L31,307 L35,316 L37,326 L43,331 L50,331 L59,329 L67,328 L75,334 L81,343 L87,352 L94,359 L101,365 L112,369 L121,374 L124,385 L129,395 L136,401 L150,401 L163,398 L178,392 L187,388 L200,391 L213,397 L223,406 L233,414 L244,421 L253,425 L265,422 L278,419 L291,421 L302,424 L315,423 L332,420 L345,411 L347,399 L357,386 L369,382 L384,378 L396,380 L406,388 L417,394 L426,397 L435,395 L447,392 L457,389 L469,389 L483,390 L495,393 L504,396 L520,396 L528,393 L540,387 L550,380 L557,373 L567,366 L575,358 L575,348 L583,342 L594,339 L606,337 L620,335 L634,333 L648,332 L662,331 L674,329 L681,325 L691,318 L700,317 L712,321 L722,322 L739,320 L753,314 L767,308 L781,300 L793,293 L804,286" />
+                    
+                    {/* Alaska */}
+                    <path d="M95,420 L87,429 L75,432 L62,430 L50,423 L44,414 L44,404 L50,395 L61,393 L74,396 L85,404 L92,413 L95,420" />
+                    <path d="M32,430 L24,437 L13,438 L5,434 L1,426 L6,419 L16,417 L25,421 L32,430" />
+                    <path d="M162,425 L172,420 L183,423 L188,431 L183,440 L172,442 L163,438 L158,430 L162,425" />
+                    <path d="M125,428 L114,436 L102,439 L91,435 L88,427 L93,419 L105,416 L116,419 L125,428" />
+                    
+                    {/* Hawaii */}
+                    <path d="M45,520 L34,518 L27,523 L22,529 L21,536 L25,544 L33,545 L42,541 L47,535 L48,527 L45,520" />
+                    <path d="M68,515 L75,512 L82,516 L80,523 L73,527 L67,523 L68,515" />
+                    <path d="M94,511 L103,514 L111,518 L104,525 L94,527 L87,521 L94,511" />
+                    <path d="M120,505 L129,502 L139,505 L136,515 L126,520 L117,516 L120,505" />
+                    <path d="M146,495 L159,493 L170,498 L165,510 L153,514 L142,510 L146,495" />
+                  </g>
                   <defs>
                     <linearGradient id="map-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#1a4c29" />
@@ -159,13 +170,53 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                     </linearGradient>
                   </defs>
                 </svg>
+                
+                {/* Region colored areas that match the forest service map color scheme */}
+                <svg
+                  viewBox="0 0 950 600"
+                  className="w-full h-full absolute top-0 left-0 opacity-10 z-0"
+                  preserveAspectRatio="xMidYMid meet"
+                >
+                  <g stroke="#2F4F40" strokeWidth="0.5">
+                    {/* Eastern Region (R9) - Yellow */}
+                    <path d="M558,246 L576,246 L596,238 L607,223 L618,221 L641,211 L661,200 L693,194 L720,181 L742,179 L765,166 L768,149 L761,123 L766,107 L773,100 L783,78 L794,64 L800,44 L791,22 L774,12 L760,13 L746,24 L738,23 L697,31 L673,27 L662,16 L658,1 L641,4 L628,13 L606,8 L591,13 L576,28 L566,31 L550,25 L527,27 L517,44 L503,59 L489,83 L473,98 L451,121 L436,124 L426,115 L402,114 L390,109 L381,94 L375,80 L364,69 L361,50 L358,41 L346,35 L334,18 L323,6 L307,2 L293,5 L279,17 L465,55 L487,227 L491,234 L526,234 L558,246" fill="#f7ce46" />
+                    
+                    {/* Southern Region (R8) - Green */}
+                    <path d="M243,178 L241,217 L247,242 L261,262 L277,284 L295,297 L348,316 L359,328 L368,350 L369,371 L379,392 L378,407 L395,432 L401,460 L399,473 L393,482 L383,492 L358,492 L344,485 L307,485 L285,478 L273,463 L260,454 L236,443 L225,426 L198,400 L483,390 L495,393 L504,396 L520,396 L528,393 L540,387 L550,380 L557,373 L567,366 L575,358 L575,348 L583,342 L594,339 L606,337 L620,335 L634,333 L648,332 L662,331 L674,329 L681,325 L691,318 L700,317 L712,321 L722,322 L739,320 L753,314 L767,308 L781,300 L793,293 L804,286 L794,298 L435,395 L447,392 L457,389 L469,389 L243,178" fill="#70A65F" />
+                    
+                    {/* Northern Region (R1) - Brown */}
+                    <path d="M243,102 L250,127 L243,138 L232,140 L219,147 L211,161 L209,174 L217,184 L222,192 L224,211 L221,224 L213,230 L212,236 L208,237 L208,229 L201,213 L194,202 L187,198 L172,198 L167,208 L168,227 L180,241 L244,421 L253,425 L265,422 L278,419 L291,421 L302,424 L315,423 L332,420 L345,411 L347,399 L357,386 L369,382 L384,378 L245,155 L243,102" fill="#b08850" />
+                    
+                    {/* Rocky Mountain Region (R2) - Cream */}
+                    <path d="M199,262 L198,276 L191,294 L176,317 L167,326 L158,326 L151,314 L145,305 L140,292 L136,278 L129,266 L122,262 L115,249 L110,238 L101,227 L93,216 L83,204 L71,197 L65,187 L70,174 L78,161 L83,146 L89,136 L93,121 L100,110 L108,94 L113,87 L107,77 L100,70 L150,401 L163,398 L178,392 L187,388 L200,391 L213,397 L223,406 L233,414 L200,350 L199,262" fill="#f5f1e0" />
+                    
+                    {/* Pacific Northwest Region (R6) - Light Green */}
+                    <path d="M43,331 L50,331 L59,329 L67,328 L75,334 L81,343 L87,352 L94,359 L101,365 L112,369 L121,374 L124,385 L129,395 L136,401 L110,330 L43,331" fill="#d8e4bc" />
+                    
+                    {/* Intermountain Region (R4) - Light Yellow */}
+                    <path d="M95,54 L90,44 L83,33 L74,30 L66,36 L59,47 L54,58 L46,68 L36,79 L29,89 L23,101 L17,114 L11,128 L4,142 L1,154 L3,167 L13,176 L24,180 L32,182 L38,196 L42,208 L36,219 L27,226 L22,237 L24,247 L21,256 L17,264 L8,269 L3,278 L7,285 L13,290 L21,292 L26,297 L31,307 L35,316 L37,326 L100,310 L95,54" fill="#f7f4cc" />
+                    
+                    {/* Pacific Southwest Region (R5) - Amber/Orange */}
+                    <path d="M176,373 L156,357 L137,350 L117,339 L114,324 L121,305 L131,293 L137,269 L147,252 L166,241 L180,224 L181,203 L177,194 L175,178 L162,168 L151,147 L142,139 L139,120 L143,105 L130,87 L113,78 L103,59 L112,52 L125,38 L141,35 L157,48 L170,48 L184,65 L199,77 L176,373" fill="#FFBF00" />
+                    
+                    {/* Southwestern Region (R3) - Amber Brown */}
+                    <path d="M396,380 L406,388 L417,394 L426,397 L400,380 L396,380" fill="#b08850" />
+                    
+                    {/* Alaska Region (R10) - Forest Green */}
+                    <path d="M95,420 L87,429 L75,432 L62,430 L50,423 L44,414 L44,404 L50,395 L61,393 L74,396 L85,404 L92,413 L95,420" fill="#2e5e38" />
+                    <path d="M32,430 L24,437 L13,438 L5,434 L1,426 L6,419 L16,417 L25,421 L32,430" fill="#2e5e38" />
+                    <path d="M162,425 L172,420 L183,423 L188,431 L183,440 L172,442 L163,438 L158,430 L162,425" fill="#2e5e38" />
+                    <path d="M125,428 L114,436 L102,439 L91,435 L88,427 L93,419 L105,416 L116,419 L125,428" fill="#2e5e38" />
+                  </g>
+                </svg>
+
 
                 {/* Clickable region dots */}
                 {forestRegions.map((region) => (
                   <motion.button
                     key={region.id}
-                    className={`absolute w-6 h-6 rounded-full ${region.color} flex items-center justify-center 
-                    shadow-lg border border-white/40 hover:border-white transition-all z-10 region-marker`}
+                    className={`absolute w-8 h-8 rounded-full ${region.color} flex items-center justify-center 
+                    shadow-lg border-2 border-white/70 hover:border-white transition-all z-10 region-marker`}
                     style={{
                       left: `${region.position.x}%`,
                       top: `${region.position.y}%`,
@@ -175,8 +226,15 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                     whileTap={{ scale: 0.9 }}
                     title={region.name}
                   >
-                    <span className="text-xs text-white font-bold">
-                      {region.id === 'alaska' ? 'AK' : (region.id === 'pacific-southwest' ? 'CA' : '')}
+                    <span className="text-xs text-gray-800 font-bold">
+                      {region.id === 'northern' ? 'R1' : 
+                       region.id === 'rocky-mountain' ? 'R2' : 
+                       region.id === 'southwestern' ? 'R3' : 
+                       region.id === 'intermountain' ? 'R4' : 
+                       region.id === 'pacific-southwest' ? 'R5' : 
+                       region.id === 'pacific-northwest' ? 'R6' : 
+                       region.id === 'southern' ? 'R8' : 
+                       region.id === 'eastern' ? 'R9' : 'R10'}
                     </span>
                   </motion.button>
                 ))}
@@ -198,7 +256,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
               </div>
 
               {/* Region information sidebar */}
-              <div className="w-full md:w-1/3 bg-green-950/50 rounded-lg p-4 border border-green-800">
+              <div className="w-full md:w-1/3 h-[400px] overflow-y-auto bg-green-950/50 rounded-lg p-4 border border-green-800">
                 {selectedRegion ? (
                   <div className="text-green-100">
                     <div className="flex items-center mb-2">
@@ -251,10 +309,10 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
             </div>
 
             <div className="mt-4 text-xs text-green-500 text-center space-y-1">
-              <p>The U.S. Forest Service manages 154 national forests and 20 grasslands across the country.</p>
+              <p>The U.S. Forest Service is divided into 9 regions (R1-R9) plus Alaska (R10), managing 155 national forests and 20 grasslands.</p>
               <p className="text-green-600/70 flex items-center justify-center">
                 <i className="fas fa-info-circle mr-1"></i>
-                Click on the pulsing markers to explore each Forest Service region
+                Click on the region markers (R1-R10) to explore details about each Forest Service region
               </p>
             </div>
           </motion.div>

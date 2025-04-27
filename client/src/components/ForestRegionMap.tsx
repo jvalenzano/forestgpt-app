@@ -163,6 +163,10 @@ const forestRegions: ForestRegion[] = [
         fact: 'Alabama\'s Talladega National Forest is home to Cheaha Mountain, the highest point in the state at 2,413 feet, and contains significant old-growth longleaf pine ecosystems.'
       },
       {
+        state: 'AR',
+        fact: 'Arkansas\'s Ouachita National Forest spans 1.8 million acres and features unique east-west running mountain ranges, rather than the typical north-south orientation found elsewhere.'
+      },
+      {
         state: 'FL',
         fact: 'Florida\'s Ocala National Forest contains the largest contiguous sand pine scrub forest in the world, a unique ecosystem adapted to fire and drought.'
       },
@@ -171,8 +175,44 @@ const forestRegions: ForestRegion[] = [
         fact: 'Georgia\'s Chattahoochee-Oconee National Forest protects the headwaters of several major river systems that provide drinking water to millions across the Southeast.'
       },
       {
+        state: 'KY',
+        fact: 'Kentucky\'s Daniel Boone National Forest contains more than 600 miles of trails and over 3,400 miles of maintained roads, with the Red River Gorge being a world-famous rock climbing destination.'
+      },
+      {
+        state: 'LA',
+        fact: 'Louisiana\'s Kisatchie National Forest is the state\'s only national forest, protecting more than 604,000 acres of longleaf pine forests, critical habitat for the endangered red-cockaded woodpecker.'
+      },
+      {
+        state: 'MS',
+        fact: 'Mississippi\'s national forests contain over 1.2 million acres including DeSoto National Forest, which features the state\'s only federally designated wilderness areas.'
+      },
+      {
+        state: 'NC',
+        fact: 'North Carolina\'s Pisgah and Nantahala National Forests include parts of the Appalachian Trail and feature some of the oldest mountains in the world, dating back over 300 million years.'
+      },
+      {
+        state: 'OK',
+        fact: 'Oklahoma\'s Ouachita National Forest includes the Winding Stair Mountains and features diverse oak-hickory forests that offer crucial habitat for black bears and other wildlife.'
+      },
+      {
+        state: 'SC',
+        fact: 'South Carolina\'s Francis Marion and Sumter National Forests encompass nearly 630,000 acres, with the Francis Marion forest being named after the Revolutionary War hero known as the "Swamp Fox."'
+      },
+      {
+        state: 'TN',
+        fact: 'Tennessee\'s Cherokee National Forest spans over 650,000 acres and contains portions of the Appalachian Trail, with elevations ranging from 1,000 to 5,400 feet.'
+      },
+      {
         state: 'TX',
         fact: 'Texas\'s National Forests are home to the endangered red-cockaded woodpecker, with intensive conservation efforts helping recover this iconic southern pine species.'
+      },
+      {
+        state: 'VA',
+        fact: 'Virginia\'s George Washington and Jefferson National Forests include over 1.8 million acres with more than 2,200 miles of trails, including portions of the Appalachian Trail.'
+      },
+      {
+        state: 'PR',
+        fact: 'Puerto Rico\'s El Yunque National Forest is the only tropical rainforest in the U.S. National Forest System, receiving over 200 inches of rainfall annually and hosting unique species like the coquí frog.'
       }
     ]
   },
@@ -226,12 +266,7 @@ interface ForestRegionMapProps {
 const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose }) => {
   const [selectedRegion, setSelectedRegion] = useState<ForestRegion | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
-  const [mapHeight, setMapHeight] = useState<number>(300); // Default height - smaller for mobile
-  const [isDragging, setIsDragging] = useState<boolean>(false);
   const [fact, setFact] = useState<string | null>(null);
-  // Store the starting point of drag and initial height
-  const [startY, setStartY] = useState<number | null>(null);
-  const [initialHeight, setInitialHeight] = useState<number | null>(null);
 
   const handleRegionClick = (region: ForestRegion) => {
     setSelectedRegion(region);
@@ -260,35 +295,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
     onClose();
   };
   
-  // Handle map resize
-  const handleResizeStart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-    setStartY(e.clientY);
-    setInitialHeight(mapHeight);
-  };
-  
-  const handleResizeEnd = () => {
-    setIsDragging(false);
-    setStartY(null);
-  };
-  
-  
-  const handleResize = (e: React.MouseEvent) => {
-    if (isDragging && startY !== null && initialHeight !== null) {
-      // Calculate the difference from the start position
-      const diff = e.clientY - startY;
-      
-      // Apply the difference to the initial height
-      // This allows both increasing and decreasing height
-      const newHeight = Math.max(250, Math.min(500, initialHeight + diff)); // Lower max height for better mobile display
-      setMapHeight(newHeight);
-      
-      // Prevent text selection during resize
-      e.preventDefault();
-    }
-  };
+  // Resize functionality removed
 
   return (
     <AnimatePresence>
@@ -324,10 +331,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
               {/* Map of US with clickable regions */}
               <div 
                 className="relative w-full md:w-2/3 map-container rounded-lg border border-green-900 overflow-hidden forest-element" 
-                style={{ height: `${mapHeight}px` }}
-                onMouseMove={handleResize}
-                onMouseUp={handleResizeEnd}
-                onMouseLeave={handleResizeEnd}
+                style={{ height: '280px' }}
               >
                 <div className="leaf"></div>
                 <div className="leaf"></div>
@@ -450,17 +454,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                   </motion.button>
                 ))}
 
-                {/* Resize handle */}
-                <div 
-                  className="absolute bottom-0 left-0 right-0 h-8 flex items-center justify-center cursor-ns-resize bg-gradient-to-t from-green-950/80 to-transparent"
-                  onMouseDown={handleResizeStart}
-                >
-                  <div className="w-24 h-1 bg-green-500/60 rounded-full"></div>
-                  <span className="absolute text-green-300 text-xs font-medium">
-                    <i className="fas fa-arrows-alt-v mr-1"></i>
-                    Resize
-                  </span>
-                </div>
+                {/* Resize handle removed */}
 
                 {/* Region highlight if selected */}
                 {selectedRegion && (
@@ -512,16 +506,7 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                           ))}
                         </div>
                       </div>
-                      <div>
-                        <h4 className="text-xs font-semibold text-green-400 uppercase flex items-center">
-                          <i className="fas fa-seedling mr-1"></i> Key Features
-                        </h4>
-                        <ul className="text-xs mt-1 pl-4 space-y-1 list-disc text-green-200">
-                          <li>Multiple national forests and grasslands</li>
-                          <li>Diverse recreation opportunities</li>
-                          <li>Important watershed protection</li>
-                        </ul>
-                      </div>
+                      {/* Key Features section removed */}
                       
                       {/* Did you know section */}
                       {fact && (

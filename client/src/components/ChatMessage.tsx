@@ -150,64 +150,54 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
         
         {/* Image display for bot responses with special handling for Chief queries */}
         {message.role === "bot" && (
-          <>
-            {/* Special case handler for Forest Service Chief queries */}
-            {userQuery && (
-              userQuery.toLowerCase().includes("chief") || 
-              userQuery.toLowerCase().includes("leadership") || 
-              userQuery.toLowerCase().includes("who is in charge") || 
-              userQuery.toLowerCase().includes("who runs")
-            ) && message.content.toLowerCase().includes("randy moore") && (
+          message.content.toLowerCase().includes("randy moore") && 
+          userQuery && (
+            userQuery.toLowerCase().includes("chief") || 
+            userQuery.toLowerCase().includes("leadership") || 
+            userQuery.toLowerCase().includes("who is in charge") || 
+            userQuery.toLowerCase().includes("who runs")
+          ) ? (
+            // Special case for Forest Service Chief
+            <motion.div 
+              className="mt-4"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+            >
               <motion.div 
-                className="mt-4"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
+                className="relative overflow-hidden rounded-md shadow-sm border border-emerald-300 max-w-md mx-auto"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 }}
+                whileHover={{ scale: 1.02 }}
               >
-                <motion.div 
-                  className="relative overflow-hidden rounded-md shadow-sm border border-emerald-300 max-w-md mx-auto"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3 }}
-                  whileHover={{ scale: 1.02 }}
+                <a 
+                  href="https://www.fs.usda.gov/sites/default/files/2021-08/Randy%20Moore%20photo.jpg" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="block"
+                  title="Randy Moore, Chief of the Forest Service"
                 >
-                  <a 
-                    href="https://www.fs.usda.gov/sites/default/files/2021-08/Randy%20Moore%20photo.jpg" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="block"
-                    title="Randy Moore, Chief of the Forest Service"
-                  >
-                    <img 
-                      src="https://www.fs.usda.gov/sites/default/files/2021-08/Randy%20Moore%20photo.jpg" 
-                      alt="Randy Moore, Chief of the Forest Service" 
-                      className="w-full h-auto max-h-[250px] object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.onerror = null;
-                        target.src = "https://www.fs.usda.gov/sites/default/files/media_wysiwyg/fs_shield.png";
-                        target.className = "w-auto h-auto max-h-[80px] mx-auto my-4";
-                      }}
-                    />
-                    <div className="bg-emerald-900 bg-opacity-80 text-white text-xs p-2 absolute bottom-0 left-0 right-0">
-                      Randy Moore, Chief of the Forest Service
-                    </div>
-                  </a>
-                </motion.div>
+                  <img 
+                    src="https://www.fs.usda.gov/sites/default/files/2021-08/Randy%20Moore%20photo.jpg" 
+                    alt="Randy Moore, Chief of the Forest Service" 
+                    className="w-full h-auto max-h-[250px] object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = "https://www.fs.usda.gov/sites/default/files/media_wysiwyg/fs_shield.png";
+                      target.className = "w-auto h-auto max-h-[80px] mx-auto my-4";
+                    }}
+                  />
+                  <div className="bg-emerald-900 bg-opacity-80 text-white text-xs p-2 absolute bottom-0 left-0 right-0">
+                    Randy Moore, Chief of the Forest Service
+                  </div>
+                </a>
               </motion.div>
-            )}
-            
-            {/* Standard image display for non-Chief queries when images are available */}
-            {!(
-              userQuery && (
-                userQuery.toLowerCase().includes("chief") || 
-                userQuery.toLowerCase().includes("leadership") || 
-                userQuery.toLowerCase().includes("who is in charge") || 
-                userQuery.toLowerCase().includes("who runs")
-              ) && message.content.toLowerCase().includes("randy moore")
-            ) && 
-            message.images && 
-            message.images.length > 0 && (
+            </motion.div>
+          ) : (
+            // Standard image display for regular queries
+            message.images && message.images.length > 0 && (
               <motion.div 
                 className="mt-4"
                 initial={{ opacity: 0, y: 10 }}
@@ -247,8 +237,8 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
                   </a>
                 </motion.div>
               </motion.div>
-            )}
-          </>
+            )
+          )
         )}
         
         {/* Compact collapsible sources section */}

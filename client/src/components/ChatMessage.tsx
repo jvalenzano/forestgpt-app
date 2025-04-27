@@ -114,17 +114,23 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
       }}
     >
       <motion.div 
-        className="bot-avatar bg-emerald-200 w-8 h-8 rounded-full flex items-center justify-center"
+        className="bot-avatar forest-element"
         variants={iconVariants}
       >
-        <i className="fas fa-tree text-emerald-800"></i>
+        <i className="fas fa-tree"></i>
+        <div className="leaf"></div>
+        <div className="leaf"></div>
+        <div className="leaf"></div>
       </motion.div>
       <motion.div 
-        className="bot-message bg-emerald-100 p-4 rounded-lg rounded-tl-none shadow-sm border border-emerald-300"
+        className="bot-message forest-element p-4 rounded-lg rounded-tl-none shadow-md"
         variants={bubbleVariants}
       >
+        <div className="leaf"></div>
+        <div className="leaf"></div>
+        <div className="leaf"></div>
         <motion.div 
-          className="text-sm font-semibold text-emerald-800 mb-1"
+          className="text-sm font-semibold text-green-100 mb-1"
           variants={contentVariants}
         >
           ForestGPT
@@ -133,7 +139,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
         {/* Echo the user's query in italics if available */}
         {userQuery && (
           <motion.div 
-            className="text-xs italic text-gray-500 mb-2 border-l-2 border-emerald-200 pl-2"
+            className="text-xs italic text-green-300/80 mb-2 border-l-2 border-green-700 pl-2"
             initial={{ opacity: 0, x: -5 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
@@ -143,7 +149,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
         )}
         
         <motion.div 
-          className="prose prose-sm text-gray-700"
+          className="prose prose-invert prose-sm"
           dangerouslySetInnerHTML={{ __html: message.content }}
           variants={contentVariants}
         />
@@ -244,21 +250,21 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
         {/* Compact collapsible sources section */}
         {message.sources && message.sources.length > 0 && message.sources[0].url !== "No relevant information found" && message.sources[0].url !== "Error processing request" && (
           <motion.div 
-            className="text-xs text-gray-500 mt-3 pt-2 border-t border-emerald-200"
+            className="text-xs text-green-300 mt-3 pt-2 border-t border-green-700"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
             <button 
               onClick={() => setShowSources(!showSources)}
-              className="flex items-center px-2 py-1 rounded-md bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 focus:outline-none font-medium text-emerald-700 transition-colors"
+              className="flex items-center px-2 py-1 rounded-md bg-green-950/80 border border-green-800 hover:bg-green-900 focus:outline-none font-medium text-green-200 transition-colors"
               aria-expanded={showSources}
               aria-controls="source-links"
             >
-              <i className="fas fa-link text-emerald-600 mr-1.5"></i>
+              <i className="fas fa-link text-green-400 mr-1.5"></i>
               <span>View Source{message.sources.length > 1 ? 's' : ''}</span>
               <motion.span 
-                className="ml-1 text-emerald-500 inline-block" 
+                className="ml-1 text-green-400 inline-block" 
                 animate={{ rotateZ: showSources ? 180 : 0 }}
                 transition={{ duration: 0.3 }}
               >
@@ -270,7 +276,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
               {showSources && (
                 <motion.div 
                   id="source-links" 
-                  className="mt-2 pl-3 border-l-2 border-emerald-300 space-y-2 py-2 bg-emerald-50 rounded-r-md"
+                  className="mt-2 pl-3 border-l-2 border-green-700 space-y-2 py-2 bg-green-900/40 rounded-r-md"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
@@ -309,7 +315,7 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
                       <motion.a 
                         key={index}
                         href={source.url.startsWith("http") ? source.url : "#"} 
-                        className="flex items-center px-2 py-1.5 bg-white rounded-md shadow-sm border border-emerald-200 hover:border-emerald-300 transition-colors"
+                        className="flex items-center px-2 py-1.5 bg-green-950/60 rounded-md shadow-sm border border-green-800 hover:border-green-700 transition-colors"
                         target={source.url.startsWith("http") ? "_blank" : undefined}
                         rel={source.url.startsWith("http") ? "noopener noreferrer" : undefined}
                         title={source.url}
@@ -318,8 +324,8 @@ export default function ChatMessage({ message, previousMessage }: ChatMessagePro
                         transition={{ delay: 0.1 * index }}
                         whileHover={{ scale: 1.02 }}
                       >
-                        <i className="fas fa-external-link-alt text-emerald-500 mr-2"></i>
-                        <span className="font-medium text-emerald-700">{displayUrl}</span>
+                        <i className="fas fa-external-link-alt text-green-400 mr-2"></i>
+                        <span className="font-medium text-green-300">{displayUrl}</span>
                       </motion.a>
                     );
                   })}

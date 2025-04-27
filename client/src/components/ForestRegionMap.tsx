@@ -2,6 +2,14 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Define the regions of the US Forest Service
+interface State {
+  code: string;
+  name: string;
+  description: string;
+  nationalForests: string[];
+  regionId: string;
+}
+
 interface ForestRegion {
   id: string;
   name: string;
@@ -88,8 +96,12 @@ const forestRegions: ForestRegion[] = [
 
 interface StateInfo {
   name: string;
+  region: string;
+  regionName: string;
   url: string;
   quickFacts: string[];
+  nationalForests: string[];
+  path?: string; // SVG path data for state outline
 }
 
 interface ForestRegionMapProps {
@@ -100,26 +112,158 @@ interface ForestRegionMapProps {
 const stateInfo: Record<string, StateInfo> = {
   'MT': {
     name: 'Montana',
-    url: 'https://www.fs.usda.gov/montana',
+    region: 'northern',
+    regionName: 'Northern Region (R1)',
+    url: 'https://www.fs.usda.gov/main/r1/home',
     quickFacts: [
-      'Home to 10 national forests',
+      'Home to several national forests',
       'Over 3.7 million acres of wilderness',
       'Features the Bob Marshall Wilderness Complex'
+    ],
+    nationalForests: [
+      'Beaverhead-Deerlodge National Forest',
+      'Bitterroot National Forest',
+      'Custer Gallatin National Forest',
+      'Flathead National Forest',
+      'Helena-Lewis and Clark National Forest',
+      'Kootenai National Forest',
+      'Lolo National Forest'
     ]
   },
-  // Add more states as needed
+  'ID': {
+    name: 'Idaho',
+    region: 'northern',
+    regionName: 'Northern Region (R1)',
+    url: 'https://www.fs.usda.gov/main/r1/home',
+    quickFacts: [
+      'Contains portions of the Rocky Mountains',
+      'Home to diverse wildlife including elk and wolves',
+      'Features pristine alpine lakes and rivers'
+    ],
+    nationalForests: [
+      'Idaho Panhandle National Forests',
+      'Clearwater National Forest', 
+      'Nez Perce National Forest'
+    ]
+  },
+  'WA': {
+    name: 'Washington',
+    region: 'pacific-northwest',
+    regionName: 'Pacific Northwest Region (R6)',
+    url: 'https://www.fs.usda.gov/main/r6/home',
+    quickFacts: [
+      'Features forests in both Cascade and Olympic mountains',
+      'Home to temperate rainforests',
+      'Includes Mt. Baker-Snoqualmie, one of the most visited forests'
+    ],
+    nationalForests: [
+      'Colville National Forest',
+      'Gifford Pinchot National Forest',
+      'Mt. Baker-Snoqualmie National Forest',
+      'Okanogan-Wenatchee National Forest',
+      'Olympic National Forest'
+    ]
+  },
+  'CA': {
+    name: 'California',
+    region: 'pacific-southwest',
+    regionName: 'Pacific Southwest Region (R5)',
+    url: 'https://www.fs.usda.gov/main/r5/home',
+    quickFacts: [
+      'Home to the iconic Sierra Nevada mountains',
+      'Contains the tallest trees in the world in redwood forests',
+      'Features diverse ecosystems from coastal to alpine'
+    ],
+    nationalForests: [
+      'Angeles National Forest',
+      'Eldorado National Forest',
+      'Klamath National Forest',
+      'Lake Tahoe Basin Management Unit',
+      'Lassen National Forest',
+      'Los Padres National Forest',
+      'Mendocino National Forest',
+      'Modoc National Forest',
+      'Sequoia National Forest',
+      'Shasta-Trinity National Forest',
+      'Sierra National Forest',
+      'Stanislaus National Forest',
+      'Tahoe National Forest'
+    ]
+  },
+  'FL': {
+    name: 'Florida',
+    region: 'southern',
+    regionName: 'Southern Region (R8)',
+    url: 'https://www.fs.usda.gov/main/r8/home',
+    quickFacts: [
+      'Features unique subtropical forest ecosystems',
+      'Contains the largest National Forest in Florida',
+      'Home to diverse wildlife including the Florida black bear'
+    ],
+    nationalForests: [
+      'Apalachicola National Forest',
+      'Ocala National Forest',
+      'Osceola National Forest'
+    ]
+  },
+  'GA': {
+    name: 'Georgia',
+    region: 'southern',
+    regionName: 'Southern Region (R8)',
+    url: 'https://www.fs.usda.gov/main/r8/home',
+    quickFacts: [
+      'Chattahoochee-Oconee National Forests cover over 867,000 acres',
+      'Features the southern terminus of the Appalachian Trail',
+      'Contains diverse ecosystems from mountains to piedmont'
+    ],
+    nationalForests: [
+      'Chattahoochee-Oconee National Forests'
+    ]
+  },
+  'CO': {
+    name: 'Colorado',
+    region: 'rocky-mountain',
+    regionName: 'Rocky Mountain Region (R2)',
+    url: 'https://www.fs.usda.gov/main/r2/home',
+    quickFacts: [
+      'Features 11 national forests covering over 14 million acres',
+      'Contains 54 mountain peaks over 14,000 feet',
+      'Home to diverse wildlife including elk, moose, and bighorn sheep'
+    ],
+    nationalForests: [
+      'Arapaho and Roosevelt National Forests',
+      'Grand Mesa, Uncompahgre and Gunnison National Forests',
+      'Pike and San Isabel National Forests',
+      'Rio Grande National Forest',
+      'San Juan National Forest',
+      'White River National Forest'
+    ]
+  }
 };
 
 const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose }) => {
   const [selectedRegion, setSelectedRegion] = useState<ForestRegion | null>(null);
   const [selectedState, setSelectedState] = useState<StateInfo | null>(null);
+  const [hoveredState, setHoveredState] = useState<string | null>(null);
 
   const handleRegionClick = (region: ForestRegion) => {
     setSelectedRegion(region);
+    setSelectedState(null); // Clear selected state when a region is clicked
+  };
+
+  const handleStateClick = (stateCode: string) => {
+    if (stateInfo[stateCode]) {
+      setSelectedState(stateInfo[stateCode]);
+    }
+  };
+  
+  const handleStateHover = (stateCode: string | null) => {
+    setHoveredState(stateCode);
   };
 
   const handleClose = () => {
     setSelectedRegion(null);
+    setSelectedState(null);
     onClose();
   };
 

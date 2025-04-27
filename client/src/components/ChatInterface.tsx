@@ -160,13 +160,13 @@ export default function ChatInterface({
               <button 
                 onClick={toggleTrivia}
                 className={`text-xs ${isTriviaEnabled ? 'bg-amber-700 hover:bg-amber-600' : 'bg-gray-700 hover:bg-gray-600'} text-gray-100 py-1 px-3 rounded-full flex items-center space-x-1 transition-colors`}
-                title={isTriviaEnabled ? "Turn off forest facts" : "Turn on forest facts"}
+                title={isTriviaEnabled ? "Turn off forest trivia" : "Turn on forest trivia"}
               >
                 <i className={`fas fa-toggle-${isTriviaEnabled ? 'on' : 'off'} ${isTriviaEnabled ? 'text-amber-300' : 'text-gray-400'} mr-1`}></i>
                 <span>Trivia</span>
               </button>
               
-              {/* Forest Regions map button */}
+              {/* Regions map button */}
               <button 
                 onClick={() => setIsRegionMapVisible(true)}
                 className="text-xs bg-green-900 hover:bg-green-800 text-green-100 py-1 px-3 rounded-full flex items-center space-x-1 transition-colors"

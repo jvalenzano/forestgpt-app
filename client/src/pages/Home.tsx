@@ -39,7 +39,7 @@ export default function Home() {
   };
   
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 font-sans text-gray-800">
+    <div className="flex flex-col min-h-screen bg-gray-200 font-sans text-gray-800">
       <Header 
         debugMode={debugMode} 
         onToggleDebug={handleToggleDebug} 

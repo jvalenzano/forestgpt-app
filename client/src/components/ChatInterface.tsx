@@ -162,8 +162,8 @@ export default function ChatInterface({
                 className={`text-xs ${isTriviaEnabled ? 'bg-amber-700 hover:bg-amber-600' : 'bg-gray-700 hover:bg-gray-600'} text-gray-100 py-1 px-3 rounded-full flex items-center space-x-1 transition-colors`}
                 title={isTriviaEnabled ? "Turn off forest facts" : "Turn on forest facts"}
               >
-                <i className={`fas fa-lightbulb ${isTriviaEnabled ? 'text-amber-300' : 'text-gray-400'} mr-1`}></i>
-                <span>Facts {isTriviaEnabled ? 'On' : 'Off'}</span>
+                <i className={`fas fa-toggle-${isTriviaEnabled ? 'on' : 'off'} ${isTriviaEnabled ? 'text-amber-300' : 'text-gray-400'} mr-1`}></i>
+                <span>Facts</span>
               </button>
               
               {/* Forest Regions map button */}
@@ -172,7 +172,7 @@ export default function ChatInterface({
                 className="text-xs bg-green-900 hover:bg-green-800 text-green-100 py-1 px-3 rounded-full flex items-center space-x-1 transition-colors"
               >
                 <i className="fas fa-map-marked-alt text-green-400 mr-1"></i>
-                <span>Forest Regions</span>
+                <span>Regions</span>
               </button>
             </div>
           </div>

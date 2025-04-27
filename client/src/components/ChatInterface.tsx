@@ -3,6 +3,7 @@ import ChatMessage from "./ChatMessage";
 import ChatForm from "./ChatForm";
 import LoadingIndicator from "./LoadingIndicator";
 import ForestTrivia from "./ForestTrivia";
+import ForestRegionMap from "./ForestRegionMap";
 import { ChatMessage as ChatMessageType } from "@/lib/types";
 import { sendChatMessage } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
@@ -35,6 +36,7 @@ export default function ChatInterface({
   ]);
   
   const [isLoading, setIsLoading] = useState(false);
+  const [isRegionMapVisible, setIsRegionMapVisible] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -42,9 +44,22 @@ export default function ChatInterface({
   const { isTriviaVisible, hideTrivia, showTrivia } = useTrivia({
     initialDelay: 20000,   // First trivia appears after 20 seconds
     interval: 180000,      // New trivia every 3 minutes
-    duration: 12000,       // Each trivia shows for 12 seconds
+    duration: 5000,        // Each trivia shows for 5 seconds
     enabled: true          // Trivia is enabled by default
   });
+  
+  // Function to check if a message contains location/region related keywords
+  const containsRegionKeywords = (message: string): boolean => {
+    const regionKeywords = [
+      'region', 'regions', 'map', 'location', 'where', 'area', 'areas', 
+      'forest service regions', 'forest regions', 'national forest locations',
+      'where is', 'located', 'northern region', 'southern region', 'eastern region',
+      'western region', 'pacific', 'rocky mountain', 'alaska', 'southwestern'
+    ];
+    
+    const lowercaseMessage = message.toLowerCase();
+    return regionKeywords.some(keyword => lowercaseMessage.includes(keyword));
+  };
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -65,6 +80,14 @@ export default function ChatInterface({
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     
+    // Check if the message contains region-related keywords to show the map
+    if (containsRegionKeywords(message)) {
+      // Show the map with a slight delay to allow the message to be sent first
+      setTimeout(() => {
+        setIsRegionMapVisible(true);
+      }, 500);
+    }
+    
     try {
       // Send message to server
       const response = await sendChatMessage(message);
@@ -74,6 +97,11 @@ export default function ChatInterface({
       // Update debug info if available
       if (response.debugInfo && debugMode) {
         onUpdateDebugInfo(response.debugInfo);
+      }
+      
+      // Also check bot response for region keywords to show map
+      if (!isRegionMapVisible && containsRegionKeywords(response.message.content)) {
+        setIsRegionMapVisible(true);
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -103,6 +131,9 @@ export default function ChatInterface({
     <section className="flex-grow md:w-3/4 flex flex-col h-[calc(100vh-8rem)]">
       {/* Forest Trivia Component */}
       <ForestTrivia isVisible={isTriviaVisible} onClose={hideTrivia} />
+      
+      {/* Forest Region Map Component */}
+      <ForestRegionMap isVisible={isRegionMapVisible} onClose={() => setIsRegionMapVisible(false)} />
       
       <div className="chat-container p-4 flex-grow flex flex-col overflow-hidden forest-element">
         <div className="leaf"></div>

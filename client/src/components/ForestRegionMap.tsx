@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Define the regions of the US Forest Service
+interface StateFactData {
+  state: string;
+  fact: string;
+}
+
 interface ForestRegion {
   id: string;
   name: string;
@@ -9,6 +14,7 @@ interface ForestRegion {
   states: string[];
   color: string; // Tailwind color class
   position: { x: number; y: number }; // Relative position in the map (0-100)
+  stateFacts?: StateFactData[]; // Interesting facts about states in this region
 }
 
 const forestRegions: ForestRegion[] = [
@@ -18,7 +24,25 @@ const forestRegions: ForestRegion[] = [
     description: 'Covering forests and grasslands in Montana, northern Idaho, North Dakota, and northwestern South Dakota.',
     states: ['MT', 'ID', 'ND', 'SD'],
     color: 'bg-amber-800',
-    position: { x: 25, y: 18 }
+    position: { x: 25, y: 18 },
+    stateFacts: [
+      {
+        state: 'MT',
+        fact: 'Montana is home to the Bob Marshall Wilderness Complex, spanning over 1.5 million acres, one of the largest wilderness areas in the continental United States.'
+      },
+      {
+        state: 'ID',
+        fact: 'Idaho\'s Clearwater National Forest contains old-growth cedar groves with trees over 3,000 years old, some of the oldest living organisms in the region.'
+      },
+      {
+        state: 'ND',
+        fact: 'The Dakota Prairie Grasslands in North Dakota is one of the largest publicly owned grasslands in the United States, featuring unique prairie ecosystems.'
+      },
+      {
+        state: 'SD',
+        fact: 'The Black Hills National Forest in South Dakota contains the famous Mount Rushmore and was the first forest reserve established in the state in 1897.'
+      }
+    ]
   },
   {
     id: 'rocky-mountain',
@@ -26,7 +50,25 @@ const forestRegions: ForestRegion[] = [
     description: 'Managing lands in Colorado, Kansas, Nebraska, South Dakota, and Wyoming.',
     states: ['CO', 'KS', 'NE', 'SD', 'WY'],
     color: 'bg-yellow-100',
-    position: { x: 30, y: 33 }
+    position: { x: 30, y: 33 },
+    stateFacts: [
+      {
+        state: 'CO',
+        fact: 'Colorado has more land above 10,000 feet than any other state, with the Forest Service managing 11.3 million acres of high-elevation forests and alpine tundra.'
+      },
+      {
+        state: 'KS',
+        fact: 'The Cimarron National Grassland in Kansas was once part of the Dust Bowl and has been restored to showcase how proper land management can heal damaged ecosystems.'
+      },
+      {
+        state: 'NE',
+        fact: 'Nebraska\'s National Forest was established in 1902 as the nation\'s largest human-planted forest, created to address timber shortages on the Great Plains.'
+      },
+      {
+        state: 'WY',
+        fact: 'Wyoming\'s Bridger-Teton National Forest contains over 1.2 million acres of wilderness and is a critical habitat for the largest elk herd in North America.'
+      }
+    ]
   },
   {
     id: 'southwestern',
@@ -34,7 +76,17 @@ const forestRegions: ForestRegion[] = [
     description: 'Overseeing Arizona and New Mexico forests and grasslands.',
     states: ['AZ', 'NM'],
     color: 'bg-amber-600',
-    position: { x: 23, y: 48 }
+    position: { x: 23, y: 48 },
+    stateFacts: [
+      {
+        state: 'AZ',
+        fact: 'Arizona\'s Coconino National Forest contains the largest contiguous ponderosa pine forest in the world, spanning over 1.8 million acres.'
+      },
+      {
+        state: 'NM',
+        fact: 'New Mexico\'s Carson National Forest contains Wheeler Peak, the state\'s highest point at 13,161 feet, showcasing five different life zones from desert to alpine tundra.'
+      }
+    ]
   },
   {
     id: 'intermountain',
@@ -42,7 +94,25 @@ const forestRegions: ForestRegion[] = [
     description: 'Covering southern Idaho, Nevada, Utah, and western Wyoming.',
     states: ['ID', 'NV', 'UT', 'WY'],
     color: 'bg-yellow-200',
-    position: { x: 17, y: 30 }
+    position: { x: 17, y: 30 },
+    stateFacts: [
+      {
+        state: 'ID',
+        fact: 'The Sawtooth National Forest in Idaho contains over 700 alpine lakes and 40 peaks that rise above 10,000 feet in elevation.'
+      },
+      {
+        state: 'NV',
+        fact: 'Nevada\'s Humboldt-Toiyabe National Forest is the largest national forest in the contiguous 48 states, spanning over 6.3 million acres across mountains and high desert.'
+      },
+      {
+        state: 'UT',
+        fact: 'Utah\'s Ashley National Forest is home to Flaming Gorge, one of the most scenic reservoirs in America, with ancient rock formations dating back over 150 million years.'
+      },
+      {
+        state: 'WY',
+        fact: 'The Bridger Wilderness in Wyoming protects crucial watersheds that provide drinking water to over 1.5 million people in the western United States.'
+      }
+    ]
   },
   {
     id: 'pacific-southwest',
@@ -50,7 +120,17 @@ const forestRegions: ForestRegion[] = [
     description: 'Managing all of California and Hawaii.',
     states: ['CA', 'HI'],
     color: 'bg-yellow-600',
-    position: { x: 8, y: 37 }
+    position: { x: 8, y: 37 },
+    stateFacts: [
+      {
+        state: 'CA',
+        fact: 'California\'s Sequoia National Forest contains some of the largest trees on Earth, including the General Sherman Tree, the largest tree by volume at 52,500 cubic feet.'
+      },
+      {
+        state: 'HI',
+        fact: 'Hawaii\'s tropical forests are home to more endangered species than any other state, with the Forest Service helping preserve over 55,000 acres of critical habitat.'
+      }
+    ]
   },
   {
     id: 'pacific-northwest',
@@ -58,7 +138,17 @@ const forestRegions: ForestRegion[] = [
     description: 'Covering Oregon and Washington.',
     states: ['OR', 'WA'],
     color: 'bg-lime-200',
-    position: { x: 11, y: 20 }
+    position: { x: 11, y: 20 },
+    stateFacts: [
+      {
+        state: 'OR',
+        fact: 'Oregon\'s Deschutes National Forest contains Newberry National Volcanic Monument, featuring a 500-foot-deep obsidian flow - the largest in the United States.'
+      },
+      {
+        state: 'WA',
+        fact: 'Washington\'s Olympic National Forest receives nearly 150 inches of annual rainfall in some areas, making it home to the only temperate rainforest in the continental United States.'
+      }
+    ]
   },
   {
     id: 'southern',
@@ -66,7 +156,25 @@ const forestRegions: ForestRegion[] = [
     description: 'Covering forests across 13 southern states and Puerto Rico.',
     states: ['AL', 'AR', 'FL', 'GA', 'KY', 'LA', 'MS', 'NC', 'OK', 'SC', 'TN', 'TX', 'VA', 'PR'],
     color: 'bg-green-600',
-    position: { x: 62, y: 48 }
+    position: { x: 62, y: 48 },
+    stateFacts: [
+      {
+        state: 'AL',
+        fact: 'Alabama\'s Talladega National Forest is home to Cheaha Mountain, the highest point in the state at 2,413 feet, and contains significant old-growth longleaf pine ecosystems.'
+      },
+      {
+        state: 'FL',
+        fact: 'Florida\'s Ocala National Forest contains the largest contiguous sand pine scrub forest in the world, a unique ecosystem adapted to fire and drought.'
+      },
+      {
+        state: 'GA',
+        fact: 'Georgia\'s Chattahoochee-Oconee National Forest protects the headwaters of several major river systems that provide drinking water to millions across the Southeast.'
+      },
+      {
+        state: 'TX',
+        fact: 'Texas\'s National Forests are home to the endangered red-cockaded woodpecker, with intensive conservation efforts helping recover this iconic southern pine species.'
+      }
+    ]
   },
   {
     id: 'eastern',
@@ -74,7 +182,25 @@ const forestRegions: ForestRegion[] = [
     description: 'Managing forests across 20 northeastern states.',
     states: ['CT', 'DE', 'IL', 'IN', 'IA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MO', 'NH', 'NJ', 'NY', 'OH', 'PA', 'RI', 'VT', 'WV', 'WI'],
     color: 'bg-yellow-400',
-    position: { x: 70, y: 28 }
+    position: { x: 70, y: 28 },
+    stateFacts: [
+      {
+        state: 'MI',
+        fact: 'Michigan\'s Hiawatha National Forest spans nearly one million acres between the shores of Lake Superior, Lake Michigan, and Lake Huron, with over 100 miles of shoreline.'
+      },
+      {
+        state: 'MN',
+        fact: 'Minnesota\'s Superior National Forest contains the Boundary Waters Canoe Area Wilderness, with over 1,200 miles of canoe routes and more than 1,000 lakes.'
+      },
+      {
+        state: 'NH',
+        fact: 'New Hampshire\'s White Mountain National Forest is home to Mount Washington, which holds the record for the highest wind speed ever recorded on Earth\'s surface at 231 mph.'
+      },
+      {
+        state: 'WV',
+        fact: 'West Virginia\'s Monongahela National Forest contains the highest point in the state and the headwaters of six major river systems, earning it the nickname "the birthplace of rivers."'
+      }
+    ]
   },
   {
     id: 'alaska',
@@ -82,7 +208,13 @@ const forestRegions: ForestRegion[] = [
     description: 'Managing over 22 million acres in Alaska.',
     states: ['AK'],
     color: 'bg-green-900',
-    position: { x: 12, y: 85 }
+    position: { x: 12, y: 60 }, // Moved higher up on the map
+    stateFacts: [
+      {
+        state: 'AK',
+        fact: 'Alaska\'s Tongass National Forest is the largest national forest in the United States at 16.7 million acres and contains the world\'s largest intact temperate rainforest.'
+      }
+    ]
   },
 ];
 
@@ -93,14 +225,55 @@ interface ForestRegionMapProps {
 
 const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose }) => {
   const [selectedRegion, setSelectedRegion] = useState<ForestRegion | null>(null);
+  const [selectedState, setSelectedState] = useState<string | null>(null);
+  const [mapHeight, setMapHeight] = useState<number>(400); // Default height
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [fact, setFact] = useState<string | null>(null);
 
   const handleRegionClick = (region: ForestRegion) => {
     setSelectedRegion(region);
+    setSelectedState(null); // Reset selected state when a new region is selected
+    setFact(null); // Reset fact when a new region is selected
+  };
+
+  const handleStateClick = (state: string) => {
+    setSelectedState(state);
+    
+    // Find the fact for this state in the selected region
+    if (selectedRegion && selectedRegion.stateFacts) {
+      const stateFact = selectedRegion.stateFacts.find(sf => sf.state === state);
+      if (stateFact) {
+        setFact(stateFact.fact);
+      } else {
+        setFact(null);
+      }
+    }
   };
 
   const handleClose = () => {
     setSelectedRegion(null);
+    setSelectedState(null);
+    setFact(null);
     onClose();
+  };
+  
+  // Handle map resize
+  const handleResizeStart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+  
+  const handleResizeEnd = () => {
+    setIsDragging(false);
+  };
+  
+  const handleResize = (e: React.MouseEvent) => {
+    if (isDragging) {
+      const containerRect = e.currentTarget.getBoundingClientRect();
+      const newHeight = Math.max(300, Math.min(600, e.clientY - containerRect.top));
+      setMapHeight(newHeight);
+    }
   };
 
   return (
@@ -135,7 +308,13 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
 
             <div className="flex flex-col md:flex-row gap-6">
               {/* Map of US with clickable regions */}
-              <div className="relative w-full md:w-2/3 h-[400px] map-container rounded-lg border border-green-900 overflow-hidden forest-element">
+              <div 
+                className="relative w-full md:w-2/3 map-container rounded-lg border border-green-900 overflow-hidden forest-element" 
+                style={{ height: `${mapHeight}px` }}
+                onMouseMove={handleResize}
+                onMouseUp={handleResizeEnd}
+                onMouseLeave={handleResizeEnd}
+              >
                 <div className="leaf"></div>
                 <div className="leaf"></div>
                 <div className="leaf"></div>

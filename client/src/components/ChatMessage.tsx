@@ -364,9 +364,8 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
                     // Determine if this is a clickable link
                     const isClickable = source.url && source.url.startsWith("http");
                     
-                    // Use either a button or anchor based on whether the URL is clickable
-                    const CommonProps = {
-                      key: index,
+                    // Extract common props (without the key)
+                    const commonProps = {
                       className: "flex items-center px-2 py-1.5 bg-green-950/60 rounded-md shadow-sm border border-green-800 hover:border-green-700 transition-colors",
                       initial: { opacity: 0, y: -5 },
                       animate: { opacity: 1, y: 0 },
@@ -376,7 +375,8 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
                     
                     return isClickable ? (
                       <motion.a 
-                        {...CommonProps}
+                        key={index}
+                        {...commonProps}
                         href={source.url} 
                         target="_blank"
                         rel="noopener noreferrer"
@@ -387,7 +387,8 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
                       </motion.a>
                     ) : (
                       <motion.div 
-                        {...CommonProps}
+                        key={index}
+                        {...commonProps}
                         title={source.url || "Information source"}
                       >
                         <i className="fas fa-info-circle text-green-400 mr-2"></i>

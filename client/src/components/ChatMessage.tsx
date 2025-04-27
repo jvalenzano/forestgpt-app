@@ -131,15 +131,7 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
         animate: { opacity: 1 }
       }}
     >
-      <motion.div 
-        className="bot-avatar forest-element"
-        variants={iconVariants}
-      >
-        <i className="fas fa-tree"></i>
-        <div className="leaf"></div>
-        <div className="leaf"></div>
-        <div className="leaf"></div>
-      </motion.div>
+      {/* Tree avatar removed as requested */}
       <motion.div 
         className="bot-message forest-element p-4 rounded-lg rounded-tl-none shadow-md"
         variants={bubbleVariants}
@@ -362,7 +354,12 @@ export default function ChatMessage({ message, previousMessage, onShowRegionMap 
                     }
                     
                     // Determine if this is a clickable link
-                    const isClickable = source.url && source.url.startsWith("http");
+                    // Fix URL validation to better handle Forest Service URLs
+                    const isClickable = source.url && (
+                      source.url.startsWith("http://") || 
+                      source.url.startsWith("https://")
+                    ) && source.url !== "No relevant information found" && 
+                       source.url !== "Error processing request";
                     
                     // Extract common props (without the key)
                     const commonProps = {

@@ -271,8 +271,12 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
   const handleResize = (e: React.MouseEvent) => {
     if (isDragging) {
       const containerRect = e.currentTarget.getBoundingClientRect();
-      const newHeight = Math.max(300, Math.min(600, e.clientY - containerRect.top));
+      // Allow moving both up and down, with min height of 300px and max of 700px
+      const newHeight = Math.max(300, Math.min(700, e.clientY - containerRect.top));
       setMapHeight(newHeight);
+      
+      // Prevent text selection during resize
+      e.preventDefault();
     }
   };
 

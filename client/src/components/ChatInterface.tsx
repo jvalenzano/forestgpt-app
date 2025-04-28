@@ -9,6 +9,7 @@ import { sendChatMessage } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useTrivia } from "@/hooks/use-trivia";
 import { useIsMobile } from "@/hooks/use-mobile";
+import forestServiceLogo from "../assets/forest_service_logo.svg";
 
 interface ChatInterfaceProps {
   debugMode: boolean;
@@ -142,7 +143,7 @@ export default function ChatInterface({
           <div className="flex items-center mb-2">
             <div className="w-14 h-14 mr-3">
               <img 
-                src="/src/assets/forest_service_logo.svg" 
+                src={forestServiceLogo} 
                 alt="US Forest Service Logo" 
                 className="w-full h-full"
               />

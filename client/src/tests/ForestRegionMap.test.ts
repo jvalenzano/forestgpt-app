@@ -4,14 +4,29 @@
  */
 
 // Import the forestRegions data from the component file
-// Since we're only testing the data, we don't need to import the entire component
-import { forestRegions } from '../components/ForestRegionMap';
+import { forestRegions } from '../components/ForestRegionMap.js';
+
+// Define types based on the component's interfaces
+interface StateFactData {
+  state: string;
+  fact: string;
+}
+
+interface ForestRegion {
+  id: string;
+  name: string;
+  description: string;
+  states: string[];
+  color: string;
+  position: { x: number; y: number };
+  stateFacts?: StateFactData[];
+}
 
 describe('ForestRegionMap States Data', () => {
   test('All states should have a corresponding "Did You Know" fact', () => {
     // Get all states from all regions
     const allStates: string[] = [];
-    forestRegions.forEach(region => {
+    forestRegions.forEach((region: ForestRegion) => {
       region.states.forEach(state => {
         allStates.push(state);
       });
@@ -19,7 +34,7 @@ describe('ForestRegionMap States Data', () => {
     
     // Get all states that have facts
     const statesWithFacts: string[] = [];
-    forestRegions.forEach(region => {
+    forestRegions.forEach((region: ForestRegion) => {
       if (region.stateFacts) {
         region.stateFacts.forEach(stateFact => {
           statesWithFacts.push(stateFact.state);

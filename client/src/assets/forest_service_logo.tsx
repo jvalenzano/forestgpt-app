@@ -9,27 +9,31 @@ export const ForestServiceLogo = () => (
     height="100%"
     className="forest-service-logo"
   >
-    <g transform="translate(25,10) scale(0.75,0.75)">
+    <g transform="translate(15,10) scale(0.85,0.85)">
       {/* Shield outline */}
-      <path d="M100,0 L200,35 L200,165 L100,200 L0,165 L0,35 Z" fill="#004D25" stroke="#FFD700" strokeWidth="4"/>
+      <path d="M100,0 L185,30 L185,170 L100,200 L15,170 L15,30 Z" fill="#004D25" stroke="#FFD700" strokeWidth="2"/>
       
-      {/* Pine trees */}
-      <path d="M100,25 L140,90 L125,90 L155,140 L135,140 L165,190 L35,190 L65,140 L45,140 L75,90 L60,90 Z" fill="#FFD700"/>
-      
-      {/* Text paths */}
-      <path id="curve-top" d="M40,45 A 80,80 0 0,1 160,45" fill="none"/>
-      <path id="curve-bottom" d="M40,155 A 80,80 0 0,0 160,155" fill="none"/>
+      {/* Pine trees group */}
+      <path d="M100,35 
+               L130,80 L115,80 
+               L140,120 L120,120 
+               L145,165 L55,165 
+               L80,120 L60,120 
+               L85,80 L70,80 Z" 
+            fill="#FFD700"/>
       
       {/* Text */}
+      <path id="top-curve" d="M35,45 A 85,85 0 0,1 165,45" fill="none"/>
+      <path id="bottom-curve" d="M35,155 A 85,85 0 0,0 165,155" fill="none"/>
+      
       <text fill="#FFD700" fontFamily="Times New Roman" fontWeight="bold">
-        <textPath href="#curve-top" startOffset="50%" textAnchor="middle" fontSize="20">UNITED STATES</textPath>
+        <textPath href="#top-curve" startOffset="50%" textAnchor="middle" fontSize="18">FOREST SERVICE</textPath>
       </text>
       <text fill="#FFD700" fontFamily="Times New Roman" fontWeight="bold">
-        <textPath href="#curve-bottom" startOffset="50%" textAnchor="middle" fontSize="20">FOREST SERVICE</textPath>
+        <textPath href="#bottom-curve" startOffset="50%" textAnchor="middle" fontSize="18">UNITED STATES</textPath>
       </text>
       
-      {/* Department text */}
-      <text x="100" y="175" fill="#FFD700" fontFamily="Times New Roman" fontSize="14" textAnchor="middle">DEPARTMENT OF AGRICULTURE</text>
+      <text x="100" y="185" fill="#FFD700" fontFamily="Times New Roman" fontSize="12" textAnchor="middle">DEPARTMENT OF AGRICULTURE</text>
     </g>
   </svg>
 );

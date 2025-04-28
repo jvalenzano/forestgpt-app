@@ -56,7 +56,8 @@ export const forestRegions: ForestRegion[] = [
     stateFacts: [
       {
         state: 'CO',
-        fact: 'Colorado has more land above 10,000 feet than any other state, with the Forest Service managing 11.3 million acres of high-elevation forests and alpine tundra.'
+        fact: 'Colorado has more land above 10,000 feet than any other state, with the Forest Service managing 11.3 million acres of high-elevation forests and alpine tundra.',
+        link: 'https://www.fs.usda.gov/main/r2/home'
       },
       {
         state: 'KS',
@@ -145,11 +146,13 @@ export const forestRegions: ForestRegion[] = [
     stateFacts: [
       {
         state: 'OR',
-        fact: 'Oregon\'s Deschutes National Forest contains Newberry National Volcanic Monument, featuring a 500-foot-deep obsidian flow - the largest in the United States.'
+        fact: 'Oregon\'s Deschutes National Forest contains Newberry National Volcanic Monument, featuring a 500-foot-deep obsidian flow - the largest in the United States.',
+        link: 'https://www.fs.usda.gov/deschutes/'
       },
       {
         state: 'WA',
-        fact: 'Washington\'s Olympic National Forest receives nearly 150 inches of annual rainfall in some areas, making it home to the only temperate rainforest in the continental United States.'
+        fact: 'Washington\'s Olympic National Forest receives nearly 150 inches of annual rainfall in some areas, making it home to the only temperate rainforest in the continental United States.',
+        link: 'https://www.fs.usda.gov/olympic/'
       }
     ]
   },
@@ -216,7 +219,8 @@ export const forestRegions: ForestRegion[] = [
       },
       {
         state: 'PR',
-        fact: 'Puerto Rico\'s El Yunque National Forest is the only tropical rainforest in the U.S. National Forest System, receiving over 200 inches of rainfall annually and hosting unique species like the coquí frog.'
+        fact: 'Puerto Rico\'s El Yunque National Forest is the only tropical rainforest in the U.S. National Forest System, receiving over 200 inches of rainfall annually and hosting unique species like the coquí frog.',
+        link: 'https://www.fs.usda.gov/elyunque'
       }
     ]
   },
@@ -266,7 +270,8 @@ export const forestRegions: ForestRegion[] = [
       },
       {
         state: 'MN',
-        fact: 'Minnesota\'s Superior National Forest contains the Boundary Waters Canoe Area Wilderness, with over 1,200 miles of canoe routes and more than 1,000 lakes.'
+        fact: 'Minnesota\'s Superior National Forest contains the Boundary Waters Canoe Area Wilderness, with over 1,200 miles of canoe routes and more than 1,000 lakes.',
+        link: 'https://www.fs.usda.gov/superior/'
       },
       {
         state: 'MO',

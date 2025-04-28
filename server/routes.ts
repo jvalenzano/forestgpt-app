@@ -1,4 +1,4 @@
-import type { Express, Request, Response } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
@@ -8,6 +8,7 @@ import { scrapRelevantContent } from "./services/scraper";
 import { processContent } from "./services/processor";
 import { generateResponse } from "./services/llm";
 import { testScrapeForestService } from "./services/test";
+import { setupAuth } from "./auth";
 
 // Session management - in memory for simplicity
 const sessions = new Map<string, { debugMode: boolean }>();
@@ -27,7 +28,10 @@ function ensureSession(req: Request, res: Response, next: Function) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Apply session middleware
+  // Set up authentication
+  setupAuth(app);
+  
+  // Apply session middleware for the chat functionality
   app.use(ensureSession);
   
   // Chat endpoint

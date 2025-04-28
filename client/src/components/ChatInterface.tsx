@@ -9,6 +9,7 @@ import { sendChatMessage } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useTrivia } from "@/hooks/use-trivia";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ForestServiceLogo } from "@/assets/forest_service_logo";
 
 interface ChatInterfaceProps {
   debugMode: boolean;
@@ -141,21 +142,7 @@ export default function ChatInterface({
         <div className="border-b border-green-800 pb-4 mb-6">
           <div className="flex items-center mb-2">
             <div className="w-14 h-14 mr-3">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 200 200" 
-                width="100%" 
-                height="100%"
-              >
-                {/* Shield shape */}
-                <path d="M100,10 L175,45 L175,155 L100,190 L25,155 L25,45 Z" fill="#234d20" stroke="#e7bf60" strokeWidth="5" />
-                
-                {/* Pine tree silhouette */}
-                <path d="M100,30 L120,70 L110,70 L130,110 L115,110 L140,150 L60,150 L85,110 L70,110 L90,70 L80,70 Z" fill="#e7bf60" />
-                
-                {/* USFS text */}
-                <text x="100" y="180" fill="#e7bf60" fontSize="14" fontFamily="serif" textAnchor="middle">USFS</text>
-              </svg>
+              <ForestServiceLogo />
             </div>
             <div>
               <h2 className="text-2xl forest-gradient-text">

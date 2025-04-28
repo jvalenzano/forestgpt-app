@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ForestServiceLogo } from "@/assets/forest_service_logo";
 
 interface HeaderProps {
   debugMode: boolean;
@@ -31,11 +32,9 @@ export default function Header({ debugMode, onToggleDebug }: HeaderProps) {
     <header className="bg-forest-800 text-white shadow-md">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-forest-100">
-            <path d="M17 22v-8h4l-6-8-6 8h4v8z" />
-            <path d="M13 2v5l-4-4" />
-            <path d="M11 2v5l4-4" />
-          </svg>
+          <div className="w-6 h-6">
+            <ForestServiceLogo />
+          </div>
           <h1 className="text-xl font-bold">ForestGPT</h1>
         </div>
         <div className="flex items-center space-x-4">

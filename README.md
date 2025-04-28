@@ -1,10 +1,10 @@
-# 🌲 ForestGPT Application
+# ForestGPT Application
 
 An AI-powered web application that allows users to interact with environmental and forestry information through a conversational chatbot interface, powered by Replit Agent, NeonDB, Node.js, and React.
 
 ---
 
-## 🚀 Tech Stack Overview
+## Tech Stack Overview
 
 | Technology | Purpose |
 |:-----------|:--------|
@@ -20,21 +20,32 @@ An AI-powered web application that allows users to interact with environmental a
 
 ---
 
-## 📦 Project Structure
+## Project Structure
 
 ```plaintext
 forestgpt-app/
-├── client/         # Frontend React app
-│   └── src/
-├── server/         # Backend Node.js app
-│   └── services/   # API services and LLM interaction
-├── shared/         # Shared TypeScript types
-├── attached_assets/ # AI outputs, images (ignored by Git)
-├── logos/          # Technology logos for documentation
-├── README.md       # This file
-├── package.json    # Project configuration and dependencies
-├── tsconfig.json   # TypeScript compiler options
-├── vite.config.ts  # Vite bundler configuration
-├── tailwind.config.ts # TailwindCSS configuration
-├── .gitignore      # Files and folders ignored by Git
-└── .env            # Environment variables (NOT committed)
+├── client/             # Frontend React app
+│   └── src/            # React components and pages
+├── server/             # Backend Node.js app
+│   └── services/       # API routes and LLM interactions
+├── shared/             # Shared TypeScript types/interfaces
+├── attached_assets/    # AI outputs, images (ignored by Git)
+├── logos/              # Technology logos for documentation
+├── README.md           # This file
+├── package.json        # Project configuration and dependencies
+├── tsconfig.json       # TypeScript compiler options
+├── vite.config.ts      # Vite build tool configuration for frontend
+├── tailwind.config.ts  # TailwindCSS configuration
+├── .gitignore          # Files and folders ignored by Git
+├── .replit             # (Optional) Replit run settings
+└── .env                # Environment variables (NOT committed)
+```
+Getting Started
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/forestgpt-app.git
+cd forestgpt-app
+npm install
+npm run dev
+✅ Your app will be available locally at http://localhost:3000/ (or as configured).

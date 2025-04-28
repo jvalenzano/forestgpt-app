@@ -141,7 +141,7 @@ export default function ChatInterface({
         <div className="border-b border-green-800 pb-4 mb-6">
           <div className="flex items-center mb-2">
             <div className="bot-avatar w-12 h-12 forest-element mr-3">
-              <i className="fas fa-tree text-lg"></i>
+              <i className="fas fa-hiking text-lg"></i>
               <div className="leaf"></div>
               <div className="leaf"></div>
               <div className="leaf"></div>
@@ -188,7 +188,7 @@ export default function ChatInterface({
         {messages.length === 0 && (
           <div className="flex items-start space-x-3 mb-6">
             <div className="bot-avatar forest-element">
-              <i className="fas fa-tree"></i>
+              <i className="fas fa-hiking"></i>
               <div className="leaf"></div>
               <div className="leaf"></div>
               <div className="leaf"></div>

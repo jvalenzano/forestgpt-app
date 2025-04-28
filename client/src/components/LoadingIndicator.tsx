@@ -35,14 +35,14 @@ export default function LoadingIndicator() {
     }
   };
   
-  // Colors for the dots
+  // Colors for the dots - updated to lighter green shades
   const dotColors = [
     // Light green
     ["#a7f3d0", "#6ee7b7", "#a7f3d0"],
-    // Leaf green to yellow
-    ["#84cc16", "#facc15", "#84cc16"],
-    // Forest green to emerald
-    ["#166534", "#10b981", "#166534"],
+    // Light green to yellow-green
+    ["#86efac", "#bef264", "#86efac"],
+    // Medium green
+    ["#4ade80", "#34d399", "#4ade80"],
   ];
   
   const dotVariants = (colorSet: string[]) => ({
@@ -72,7 +72,7 @@ export default function LoadingIndicator() {
       animate="animate"
       variants={containerVariants}
     >
-      <div className="w-10 h-10 bg-green-700 rounded-full flex items-center justify-center text-white">
+      <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M17 22v-8h4l-6-8-6 8h4v8z" />
           <path d="M13 2v5l-4-4" />
@@ -80,7 +80,7 @@ export default function LoadingIndicator() {
         </svg>
       </div>
       <motion.div 
-        className="bg-forest-700 text-white px-6 py-4 rounded-lg shadow-md flex items-center"
+        className="bg-green-600 text-white px-6 py-4 rounded-lg shadow-md flex items-center"
         variants={messageVariants}
       >
         <span className="mr-3">Searching forests</span>

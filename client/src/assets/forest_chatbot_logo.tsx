@@ -1,3 +1,4 @@
+
 import React from "react";
 
 export const ForestChatbotLogo = () => (
@@ -13,27 +14,22 @@ export const ForestChatbotLogo = () => (
     strokeLinejoin="round" 
     className="forest-chatbot-logo"
   >
-    {/* Robot head shape - rounded rectangle */}
-    <rect x="3" y="4" width="18" height="12" rx="2" ry="2" className="text-forest-100" />
+    {/* Robot head - more rounded shape */}
+    <path d="M4,6 Q4,4 6,4 L18,4 Q20,4 20,6 L20,16 Q20,18 18,18 L6,18 Q4,18 4,16 Z" className="text-forest-100" />
     
-    {/* Eyes */}
-    <circle cx="9" cy="9" r="1" fill="currentColor" className="text-forest-100" />
-    <circle cx="15" cy="9" r="1" fill="currentColor" className="text-forest-100" />
+    {/* Digital eyes */}
+    <rect x="8" y="8" width="2" height="2" fill="currentColor" className="text-forest-100" />
+    <rect x="14" y="8" width="2" height="2" fill="currentColor" className="text-forest-100" />
     
-    {/* Small tree on top of head */}
-    <path d="M12,2 L14,4 L13,4 L15,6 L9,6 L11,4 L10,4 Z" fill="currentColor" className="text-green-400" />
+    {/* Antenna */}
+    <circle cx="12" cy="2" r="1" className="text-green-400" />
+    <line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" className="text-green-400" />
     
-    {/* Antenna/stem */}
-    <line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" className="text-green-400" strokeWidth="1" />
+    {/* Digital smile */}
+    <path d="M9,12 L10,13 L14,13 L15,12" className="text-forest-100" />
     
-    {/* Chat bubble */}
-    <path 
-      d="M12,16 L12,19 L9,16 L3,16 L3,20 C3,21.1 3.9,22 5,22 L19,22 C20.1,22 21,21.1 21,20 L21,16 L12,16" 
-      className="text-forest-100" 
-    />
-    
-    {/* Mouth - a happy curve */}
-    <path d="M9,12 C9,13.5 15,13.5 15,12" className="text-forest-100" fill="none" />
+    {/* Chat indicator */}
+    <path d="M12,18 L12,20 L9,18 L6,18 L6,22 L18,22 L18,18" className="text-forest-100" />
   </svg>
 );
 

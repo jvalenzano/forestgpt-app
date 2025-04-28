@@ -17,7 +17,7 @@ interface ForestRegion {
   stateFacts?: StateFactData[]; // Interesting facts about states in this region
 }
 
-const forestRegions: ForestRegion[] = [
+export const forestRegions: ForestRegion[] = [
   {
     id: 'northern',
     name: 'Northern Region (R1)',

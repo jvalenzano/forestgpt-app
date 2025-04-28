@@ -140,11 +140,12 @@ export default function ChatInterface({
         <div className="leaf"></div>
         <div className="border-b border-green-800 pb-4 mb-6">
           <div className="flex items-center mb-2">
-            <div className="bot-avatar w-12 h-12 forest-element mr-3">
-              <i className="fas fa-hiking text-lg"></i>
-              <div className="leaf"></div>
-              <div className="leaf"></div>
-              <div className="leaf"></div>
+            <div className="w-14 h-14 mr-3">
+              <img 
+                src="/src/assets/forest_service_logo.svg" 
+                alt="US Forest Service Logo" 
+                className="w-full h-full"
+              />
             </div>
             <div>
               <h2 className="text-2xl forest-gradient-text">
@@ -166,6 +167,18 @@ export default function ChatInterface({
                 <i className={`fas fa-toggle-${isTriviaEnabled ? 'on' : 'off'} ${isTriviaEnabled ? 'text-amber-300' : 'text-gray-400'} mr-1`}></i>
                 <span className={isMobile ? "sr-only" : ""}>Trivia</span>
               </button>
+              
+              {/* USFS Website link */}
+              <a 
+                href="https://www.fs.usda.gov/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs bg-green-800 hover:bg-green-700 text-green-100 py-1 px-3 rounded-full flex items-center space-x-1 transition-colors"
+                title="Visit the official US Forest Service website"
+              >
+                <i className="fas fa-external-link-alt text-green-300 mr-1"></i>
+                <span className={isMobile ? "sr-only" : ""}>USFS Website</span>
+              </a>
               
               {/* Regions map button */}
               <button 

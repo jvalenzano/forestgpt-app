@@ -1,11 +1,12 @@
 import { useState } from "react";
-import Header from "@/components/Header";
 import ChatInterface from "@/components/ChatInterface";
 import DebugPanel from "@/components/DebugPanel";
 import Footer from "@/components/Footer";
 import { DebugInformation } from "@/lib/types";
 import { toggleDebugMode } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Bug } from "lucide-react";
 
 export default function Home() {
   const [debugMode, setDebugMode] = useState(false);
@@ -39,13 +40,20 @@ export default function Home() {
   };
   
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 font-sans text-gray-800">
-      <Header 
-        debugMode={debugMode} 
-        onToggleDebug={handleToggleDebug} 
-      />
+    <div className="flex flex-col min-h-screen bg-gray-800 font-sans text-gray-100">
+      <div className="absolute top-2 right-2 flex items-center space-x-2 z-10">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleToggleDebug}
+          className={`text-white ${debugMode ? 'bg-forest-600' : 'hover:bg-forest-700'}`}
+        >
+          <Bug className="h-4 w-4 mr-2" />
+          Debug
+        </Button>
+      </div>
       
-      <main className="flex-grow container mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
+      <main className="flex-grow container mx-auto px-4 py-2 flex flex-col md:flex-row gap-6">
         <ChatInterface 
           debugMode={debugMode}
           onUpdateDebugInfo={handleUpdateDebugInfo}

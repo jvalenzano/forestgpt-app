@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface StateFactData {
   state: string;
   fact: string;
+  link?: string; // Optional link to state-specific Forest Service website
 }
 
 interface ForestRegion {
@@ -28,7 +29,8 @@ export const forestRegions: ForestRegion[] = [
     stateFacts: [
       {
         state: 'MT',
-        fact: 'Montana is home to the Bob Marshall Wilderness Complex, spanning over 1.5 million acres, one of the largest wilderness areas in the continental United States.'
+        fact: 'Montana is home to the Bob Marshall Wilderness Complex, spanning over 1.5 million acres, one of the largest wilderness areas in the continental United States.',
+        link: 'https://www.fs.usda.gov/main/bdnf/home'
       },
       {
         state: 'ID',
@@ -124,7 +126,8 @@ export const forestRegions: ForestRegion[] = [
     stateFacts: [
       {
         state: 'CA',
-        fact: 'California\'s Sequoia National Forest contains some of the largest trees on Earth, including the General Sherman Tree, the largest tree by volume at 52,500 cubic feet.'
+        fact: 'California\'s Sequoia National Forest contains some of the largest trees on Earth, including the General Sherman Tree, the largest tree by volume at 52,500 cubic feet.',
+        link: 'https://www.fs.usda.gov/main/sequoia/home'
       },
       {
         state: 'HI',
@@ -168,7 +171,8 @@ export const forestRegions: ForestRegion[] = [
       },
       {
         state: 'FL',
-        fact: 'Florida\'s Ocala National Forest contains the largest contiguous sand pine scrub forest in the world, a unique ecosystem adapted to fire and drought.'
+        fact: 'Florida\'s Ocala National Forest contains the largest contiguous sand pine scrub forest in the world, a unique ecosystem adapted to fire and drought.',
+        link: 'https://www.fs.usda.gov/ocala/'
       },
       {
         state: 'GA',
@@ -316,7 +320,8 @@ export const forestRegions: ForestRegion[] = [
     stateFacts: [
       {
         state: 'AK',
-        fact: 'Alaska\'s Tongass National Forest is the largest national forest in the United States at 16.7 million acres and contains the world\'s largest intact temperate rainforest.'
+        fact: 'Alaska\'s Tongass National Forest is the largest national forest in the United States at 16.7 million acres and contains the world\'s largest intact temperate rainforest.',
+        link: 'https://www.fs.usda.gov/tongass/'
       }
     ]
   },
@@ -331,11 +336,13 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
   const [selectedRegion, setSelectedRegion] = useState<ForestRegion | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [fact, setFact] = useState<string | null>(null);
+  const [factLink, setFactLink] = useState<string | null>(null);
 
   const handleRegionClick = (region: ForestRegion) => {
     setSelectedRegion(region);
     setSelectedState(null); // Reset selected state when a new region is selected
     setFact(null); // Reset fact when a new region is selected
+    setFactLink(null); // Reset fact link when a new region is selected
   };
 
   const handleStateClick = (state: string) => {
@@ -346,8 +353,10 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
       const stateFact = selectedRegion.stateFacts.find(sf => sf.state === state);
       if (stateFact) {
         setFact(stateFact.fact);
+        setFactLink(stateFact.link || null);
       } else {
         setFact(null);
+        setFactLink(null);
       }
     }
   };
@@ -599,6 +608,19 @@ const ForestRegionMap: React.FC<ForestRegionMapProps> = ({ isVisible, onClose })
                             <div>
                               <h5 className="font-bold text-yellow-200 text-sm">Did you know?</h5>
                               <p className="text-green-100 text-xs mt-1">{fact}</p>
+                              {factLink && (
+                                <div className="mt-2">
+                                  <a 
+                                    href={factLink} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-xs text-green-300 hover:text-green-200 transition-colors"
+                                  >
+                                    <i className="fas fa-external-link-alt text-[10px]"></i>
+                                    Learn more about this forest
+                                  </a>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </motion.div>

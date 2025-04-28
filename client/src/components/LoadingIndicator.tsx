@@ -35,17 +35,35 @@ export default function LoadingIndicator() {
     }
   };
   
-  const dotVariants = {
-    initial: { y: 0 },
+  // Colors for the dots
+  const dotColors = [
+    // Light green
+    ["#a7f3d0", "#6ee7b7", "#a7f3d0"],
+    // Leaf green to yellow
+    ["#84cc16", "#facc15", "#84cc16"],
+    // Forest green to emerald
+    ["#166534", "#10b981", "#166534"],
+  ];
+  
+  const dotVariants = (colorSet: string[]) => ({
+    initial: { y: 0, backgroundColor: colorSet[0] },
     animate: {
       y: [0, -10, 0],
+      backgroundColor: colorSet,
       transition: {
-        repeat: Infinity,
-        duration: 1,
-        ease: "easeInOut"
+        y: {
+          repeat: Infinity,
+          duration: 1,
+          ease: "easeInOut"
+        },
+        backgroundColor: {
+          repeat: Infinity,
+          duration: 1,
+          ease: "easeInOut"
+        }
       }
     }
-  };
+  });
 
   return (
     <motion.div 
@@ -72,18 +90,19 @@ export default function LoadingIndicator() {
           variants={dotsContainerVariants}
         >
           <motion.div
-            className="w-2 h-2 rounded-full bg-white"
-            variants={dotVariants}
+            className="w-3 h-3 rounded-full"
+            custom={dotColors[0]}
+            variants={dotVariants(dotColors[0])}
           />
           <motion.div
-            className="w-2 h-2 rounded-full bg-white"
-            variants={dotVariants}
-            style={{ animationDelay: '0.2s' }}
+            className="w-3 h-3 rounded-full"
+            custom={dotColors[1]}
+            variants={dotVariants(dotColors[1])}
           />
           <motion.div
-            className="w-2 h-2 rounded-full bg-white"
-            variants={dotVariants}
-            style={{ animationDelay: '0.4s' }}
+            className="w-3 h-3 rounded-full"
+            custom={dotColors[2]}
+            variants={dotVariants(dotColors[2])}
           />
         </motion.div>
       </motion.div>

@@ -225,6 +225,38 @@ export const forestRegions: ForestRegion[] = [
     position: { x: 70, y: 28 },
     stateFacts: [
       {
+        state: 'CT',
+        fact: 'Connecticut\'s forests have rebounded dramatically since the early 1900s, with forest cover increasing from about 30% to over 60% of the state\'s land area today.'
+      },
+      {
+        state: 'DE',
+        fact: 'Delaware\'s Blackbird State Forest spans over 6,000 acres and is home to the state\'s largest stand of old-growth hardwood trees, some of which are over 200 years old.'
+      },
+      {
+        state: 'IL',
+        fact: 'Illinois\'s Shawnee National Forest in the southern part of the state contains unique geological features including the Garden of the Gods, a series of sandstone formations over 320 million years old.'
+      },
+      {
+        state: 'IN',
+        fact: 'Indiana\'s Hoosier National Forest covers over 200,000 acres and protects some of the most biologically diverse hardwood ecosystems in the central United States.'
+      },
+      {
+        state: 'IA',
+        fact: 'Iowa\'s forests were historically fire-maintained oak savannas, and the Forest Service now uses controlled burns to restore these rare ecosystems that support unique wildlife.'
+      },
+      {
+        state: 'ME',
+        fact: 'Maine\'s White Mountain National Forest includes the headwaters of several major rivers and features 45 miles of the Appalachian Trail, including some of its most challenging terrain.'
+      },
+      {
+        state: 'MD',
+        fact: 'Maryland forests face threats from over 280 invasive plant species, and the Forest Service leads research efforts to protect the state\'s valuable oak and hickory forests.'
+      },
+      {
+        state: 'MA',
+        fact: 'Massachusetts has 3.2 million acres of forests covering 63% of the state, with the Forest Service helping manage these areas against climate change impacts.'
+      },
+      {
         state: 'MI',
         fact: 'Michigan\'s Hiawatha National Forest spans nearly one million acres between the shores of Lake Superior, Lake Michigan, and Lake Huron, with over 100 miles of shoreline.'
       },
@@ -233,12 +265,44 @@ export const forestRegions: ForestRegion[] = [
         fact: 'Minnesota\'s Superior National Forest contains the Boundary Waters Canoe Area Wilderness, with over 1,200 miles of canoe routes and more than 1,000 lakes.'
       },
       {
+        state: 'MO',
+        fact: 'Missouri\'s Mark Twain National Forest contains over 1.5 million acres and features North America\'s largest continuous tract of shortleaf pine forest east of the Mississippi.'
+      },
+      {
         state: 'NH',
         fact: 'New Hampshire\'s White Mountain National Forest is home to Mount Washington, which holds the record for the highest wind speed ever recorded on Earth\'s surface at 231 mph.'
       },
       {
+        state: 'NJ',
+        fact: 'New Jersey\'s forests are the most densely populated with people in the United States, yet still maintain incredible biodiversity with over 2,000 native plant species.'
+      },
+      {
+        state: 'NY',
+        fact: 'New York contains the 6-million-acre Adirondack Park, the largest park in the contiguous United States and the largest National Historic Landmark.'
+      },
+      {
+        state: 'OH',
+        fact: 'Ohio\'s Wayne National Forest is restoring former coal mining land to create new forests and wildlife habitat across more than 240,000 acres in the Appalachian foothills.'
+      },
+      {
+        state: 'PA',
+        fact: 'Pennsylvania\'s Allegheny National Forest contains over 513,000 acres and was established in 1923 to help reforest areas that had been clear-cut by the timber industry.'
+      },
+      {
+        state: 'RI',
+        fact: 'Rhode Island may be the smallest state, but 56% of it is forested, with the Forest Service helping conserve urban forests that reduce summer temperatures by up to 10 degrees.'
+      },
+      {
+        state: 'VT',
+        fact: 'Vermont\'s Green Mountain National Forest encompasses more than 400,000 acres and provides habitat for black bears, moose, and other wildlife that require large, connected forest areas.'
+      },
+      {
         state: 'WV',
         fact: 'West Virginia\'s Monongahela National Forest contains the highest point in the state and the headwaters of six major river systems, earning it the nickname "the birthplace of rivers."'
+      },
+      {
+        state: 'WI',
+        fact: 'Wisconsin\'s Chequamegon-Nicolet National Forest spans more than 1.5 million acres and contains over 1,200 lakes, 1,500 miles of streams, and 324,000 acres of wetlands.'
       }
     ]
   },

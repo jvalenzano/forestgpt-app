@@ -9,7 +9,7 @@ import { sendChatMessage } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useTrivia } from "@/hooks/use-trivia";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { ForestServiceLogo } from "@/assets/forest_service_logo";
+import { ForestChatbotLogo } from "@/assets/forest_chatbot_logo";
 
 interface ChatInterfaceProps {
   debugMode: boolean;
@@ -141,8 +141,8 @@ export default function ChatInterface({
         <div className="leaf"></div>
         <div className="border-b border-green-800 pb-4 mb-6">
           <div className="flex items-center mb-2">
-            <div className="w-14 h-14 mr-3">
-              <ForestServiceLogo />
+            <div className="w-14 h-14 mr-3 text-forest-100">
+              <ForestChatbotLogo />
             </div>
             <div>
               <h2 className="text-2xl forest-gradient-text">

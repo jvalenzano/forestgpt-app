@@ -83,7 +83,8 @@ export const forestRegions: ForestRegion[] = [
     stateFacts: [
       {
         state: 'AZ',
-        fact: 'Arizona\'s Coconino National Forest contains the largest contiguous ponderosa pine forest in the world, spanning over 1.8 million acres.'
+        fact: 'Arizona\'s Coconino National Forest contains the largest contiguous ponderosa pine forest in the world, spanning over 1.8 million acres.',
+        link: 'https://www.fs.usda.gov/coconino/'
       },
       {
         state: 'NM',
@@ -101,7 +102,8 @@ export const forestRegions: ForestRegion[] = [
     stateFacts: [
       {
         state: 'ID',
-        fact: 'The Sawtooth National Forest in Idaho contains over 700 alpine lakes and 40 peaks that rise above 10,000 feet in elevation.'
+        fact: 'The Sawtooth National Forest in Idaho contains over 700 alpine lakes and 40 peaks that rise above 10,000 feet in elevation.',
+        link: 'https://www.fs.usda.gov/sawtooth/'
       },
       {
         state: 'NV',
@@ -109,7 +111,8 @@ export const forestRegions: ForestRegion[] = [
       },
       {
         state: 'UT',
-        fact: 'Utah\'s Ashley National Forest is home to Flaming Gorge, one of the most scenic reservoirs in America, with ancient rock formations dating back over 150 million years.'
+        fact: 'Utah\'s Ashley National Forest is home to Flaming Gorge, one of the most scenic reservoirs in America, with ancient rock formations dating back over 150 million years.',
+        link: 'https://www.fs.usda.gov/ashley/'
       },
       {
         state: 'WY',
@@ -132,7 +135,8 @@ export const forestRegions: ForestRegion[] = [
       },
       {
         state: 'HI',
-        fact: 'Hawaii\'s tropical forests are home to more endangered species than any other state, with the Forest Service helping preserve over 55,000 acres of critical habitat.'
+        fact: 'Hawaii\'s tropical forests are home to more endangered species than any other state, with the Forest Service helping preserve over 55,000 acres of critical habitat.',
+        link: 'https://www.fs.usda.gov/main/r5/home'
       }
     ]
   },
@@ -179,7 +183,8 @@ export const forestRegions: ForestRegion[] = [
       },
       {
         state: 'GA',
-        fact: 'Georgia\'s Chattahoochee-Oconee National Forest protects the headwaters of several major river systems that provide drinking water to millions across the Southeast.'
+        fact: 'Georgia\'s Chattahoochee-Oconee National Forest protects the headwaters of several major river systems that provide drinking water to millions across the Southeast.',
+        link: 'https://www.fs.usda.gov/conf'
       },
       {
         state: 'KY',
@@ -242,7 +247,8 @@ export const forestRegions: ForestRegion[] = [
       },
       {
         state: 'IL',
-        fact: 'Illinois\'s Shawnee National Forest in the southern part of the state contains unique geological features including the Garden of the Gods, a series of sandstone formations over 320 million years old.'
+        fact: 'Illinois\'s Shawnee National Forest in the southern part of the state contains unique geological features including the Garden of the Gods, a series of sandstone formations over 320 million years old.',
+        link: 'https://www.fs.usda.gov/shawnee/'
       },
       {
         state: 'IN',
@@ -279,7 +285,8 @@ export const forestRegions: ForestRegion[] = [
       },
       {
         state: 'NH',
-        fact: 'New Hampshire\'s White Mountain National Forest is home to Mount Washington, which holds the record for the highest wind speed ever recorded on Earth\'s surface at 231 mph.'
+        fact: 'New Hampshire\'s White Mountain National Forest is home to Mount Washington, which holds the record for the highest wind speed ever recorded on Earth\'s surface at 231 mph.',
+        link: 'https://www.fs.usda.gov/whitemountain/'
       },
       {
         state: 'NJ',

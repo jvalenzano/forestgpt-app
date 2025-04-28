@@ -40,7 +40,7 @@ forestgpt-app/
 ├── .replit             # (Optional) Replit run settings
 └── .env                # Environment variables (NOT committed)
 ```
-Getting Started
+## Getting Started
 Clone the repository and install dependencies:
 
 ```bash
@@ -48,4 +48,19 @@ git clone https://github.com/YOUR_USERNAME/forestgpt-app.git
 cd forestgpt-app
 npm install
 npm run dev
+```
 ✅ Your app will be available locally at http://localhost:3000/ (or as configured).
+
+## License
+This project is licensed under the MIT License.
+
+## Contributing
+Contributions are welcome! To contribute:
+
+1. Fork the repository
+2. Create a new branch (git checkout -b feature/your-feature-name)
+3. Commit your changes (git commit -m "Add your feature")
+4. Push to the branch (git push origin feature/your-feature-name)
+5. Open a Pull Request describing your changes
+
+Thank you for helping improve ForestGPT!
